@@ -3,6 +3,8 @@ package com.meetEverywhere.common;
 import java.io.Serializable;
 import java.util.List;
 
+import android.graphics.Bitmap;
+
 /**
  * Klasa User zawiera dane dotycz¹ce u¿ytkownika. Objekty tej klasy mog¹ byæ
  * serializowane i wysy³ane za pomoc¹ InsecureRFCOMM lub sk³adowane lokalnie
@@ -12,15 +14,19 @@ import java.util.List;
  * @author marekmagik
  * 
  */
+
+
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -437242741203572594L;
 	private List<String> hashTags;
 	private final String nickname;
-
-	public User(String nickname, List<String> hashTags) {
+	private Bitmap picture;
+	
+	public User(String nickname, List<String> hashTags, Bitmap picture) {
 		this.setHashTags(hashTags);
 		this.nickname = nickname;
+		this.setPicture(picture);
 	}
 
 	public String getNickname() {
@@ -43,6 +49,14 @@ public class User implements Serializable {
 			}
 		}
 		return false;
+	}
+
+	public Bitmap getPicture() {
+		return picture;
+	}
+
+	public void setPicture(Bitmap picture) {
+		this.picture = picture;
 	}
 
 }

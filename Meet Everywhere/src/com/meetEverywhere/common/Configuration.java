@@ -31,7 +31,7 @@ public class Configuration implements Runnable{
 		List<String> hashtags = new ArrayList<String>();
 		hashtags.add("pi³ka no¿na");
 		hashtags.add("strzelectwo");
-		user = new User("marek" + (new Random().nextInt(100000)), hashtags);
+		user = new User("marek" + (new Random().nextInt(100000)), hashtags, null);
 	}
 
 	private void storageConfiguration() {
