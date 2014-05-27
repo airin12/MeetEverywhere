@@ -33,6 +33,9 @@
     <string name="put_your_name_hint">Put your name</string>
     <string name="put_your_description_hint">Write your description (optional)</string>
     
+    <string name="ErrorDialog.errorWarning">Error!</string>
+    <string name="ErrorDialog.okButton">OK</string>
+    
     <string name="ActivityLogin.login">Login</string>
     
     <!-- ************************************************************************************************* -->
