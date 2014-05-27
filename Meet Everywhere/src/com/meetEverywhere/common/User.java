@@ -1,4 +1,4 @@
-package com.meetEverywhere;
+package com.meetEverywhere.common;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.meetEverywhere.bluetooth;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import com.meetEverywhere.R;
 

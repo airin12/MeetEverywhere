@@ -4,11 +4,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import com.meetEverywhere.Configuration;
-import com.meetEverywhere.TextMessage;
-import com.meetEverywhere.User;
 
 import com.meetEverywhere.R;
+import com.meetEverywhere.common.Configuration;
+import com.meetEverywhere.common.TextMessage;
+import com.meetEverywhere.common.User;
+
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.os.Handler;

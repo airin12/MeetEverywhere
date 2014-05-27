@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
-import com.meetEverywhere.Configuration;
-import com.meetEverywhere.TextMessage;
-import com.meetEverywhere.User;
+import com.meetEverywhere.common.Configuration;
+import com.meetEverywhere.common.TextMessage;
+import com.meetEverywhere.common.User;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;

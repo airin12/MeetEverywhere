@@ -19,14 +19,14 @@ import android.widget.Toast;
 public abstract class TagsView extends Activity {
 
 	private ListView tagListView;
-	private List<Contact> tags = new ArrayList<Contact>();
-	private List<Contact> deletedTags = new ArrayList<Contact>();
-	private ArrayAdapter<Contact> listAdapter;
+	private List<Tag> tags = new ArrayList<Tag>();
+	private List<Tag> deletedTags = new ArrayList<Tag>();
+	private ArrayAdapter<Tag> listAdapter;
 
 	private DatabaseAdapter myDBAdapter;
 
-	private List<Contact> getTagsFromDatabase() {
-		List<Contact> list = new ArrayList<Contact>();
+	private List<Tag> getTagsFromDatabase() {
+		List<Tag> list = new ArrayList<Tag>();
 
 		Cursor dbCursor = myDBAdapter
 				.getAllTags(DatabaseAdapter.TagType.SEARCH);
@@ -98,15 +98,15 @@ public abstract class TagsView extends Activity {
 		
 		for (String tag : newTags) {
 			if (!TextUtils.isEmpty(tag) && !tagsListContains(tag))
-				tags.add(new Contact(tag));
+				tags.add(new Tag(tag));
 		}
 
 		putTagsIntoList(tags);
 	}
 
-	private void putTagsIntoList(List<Contact> tags2) {
+	private void putTagsIntoList(List<Tag> tags2) {
 		listAdapter = new MyCustomAdapter(this, R.layout.content_info,
-				(ArrayList<Contact>) tags2);
+				(ArrayList<Tag>) tags2);
 
 		// listAdapter = new ArrayAdapter<String>(getApplicationContext(),
 		// android.R.layout.simple_list_item_1, tags);
@@ -117,7 +117,7 @@ public abstract class TagsView extends Activity {
 
 	private boolean tagsListContains(String tag) {
 
-		for (Contact contact : tags) {
+		for (Tag contact : tags) {
 			if (contact.getName().equals(tag))
 				return true;
 		}
@@ -137,9 +137,9 @@ public abstract class TagsView extends Activity {
 	}
 
 	public void deleteTags(View view) {
-		List<Contact> newTags = new ArrayList<Contact>();
+		List<Tag> newTags = new ArrayList<Tag>();
 
-		for (Contact tag : tags) {
+		for (Tag tag : tags) {
 			if (!tag.isChecked())
 				newTags.add(tag);
 		}

@@ -1,20 +1,24 @@
-package com.meetEverywhere;
+package com.meetEverywhere.common;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
 /**
- * Klasa jest Singletonem i stanowi kontener na dane m. in. na objekt klasy User
+ * Klasa jest Singletonem i stanowi kontener na dane m. in. na objekt klasy User.
+ * Rozwa¿yæ czy bêdzie nam potrzebna lista ulubionych.
  * 
  * @author marekmagik
  *
  */
 public class Configuration implements Runnable{
 	private static Configuration instance;
-	private long bluetoothMillisToReconnectAttempt = 10000;
+	private final int SECOND_FROM_MILLIS= 1000;
+	private long bluetoothMillisToReconnectAttempt = 10 * SECOND_FROM_MILLIS;
 	private List<User> favourites;
 	private User user;
+	private long sessionToken;
 	
 	private Configuration(){
 		loadConfiguration();
@@ -56,6 +60,14 @@ public class Configuration implements Runnable{
 	public void setBluetoothMillisToReconnectAttempt(
 			long bluetoothMillisToReconnectAttempt) {
 		this.bluetoothMillisToReconnectAttempt = bluetoothMillisToReconnectAttempt;
+	}
+
+	public long getSessionToken() {
+		return sessionToken;
+	}
+
+	public void setSessionToken(long sessionToken) {
+		this.sessionToken = sessionToken;
 	}
 	
 	
