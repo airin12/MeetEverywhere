@@ -7,6 +7,7 @@ import java.net.PasswordAuthentication;
 import com.meetEverywhere.bluetooth.BluetoothChooseDeviceActivity;
 import com.meetEverywhere.bluetooth.BluetoothDispatcher;
 import com.meetEverywhere.bluetooth.BluetoothService;
+import com.meetEverywhere.common.Configuration;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -58,12 +59,15 @@ public class MeetEverywhere extends Activity {
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	Configuration configuration = Configuration.getInstance();
     	BluetoothDispatcher dispatcher = BluetoothDispatcher.getInstance();
     	dispatcher.setHandler(new Handler(getMainLooper()));
     	dispatcher.setTempContextHolder(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-       
+        
+        
+        
 		Authenticator.setDefault (new Authenticator() {
 		    protected PasswordAuthentication getPasswordAuthentication() {
 		        return new PasswordAuthentication (userName, password.toCharArray());
@@ -138,6 +142,9 @@ public class MeetEverywhere extends Activity {
     protected void onResume() {
         super.onResume();
         
+        //userImage = (ImageView)findViewById(R.id.userImage);
+        //userImage.setImageBitmap(BitmapFactory.decodeFile("/res/drawable-hdpi/ic_launcher.png"));
+        
         String description = userSettings.getString(SharedPreferencesKeys.userDescription, null);
         if(description != null)
         	((TextView)findViewById(R.id.userDescription)).setText(description);
@@ -145,6 +152,7 @@ public class MeetEverywhere extends Activity {
         String image = userSettings.getString(SharedPreferencesKeys.userImage, null);
         if(image != null)
         	new ImageLoader().execute(image);
+        
     }
     
     private class ImageLoader extends AsyncTask<String, Object, Bitmap>{

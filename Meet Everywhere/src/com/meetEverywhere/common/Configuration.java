@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 
 /**
  * Klasa jest Singletonem i stanowi kontener na dane m. in. na objekt klasy User.
@@ -19,6 +22,7 @@ public class Configuration implements Runnable{
 	private List<User> favourites;
 	private User user;
 	private long sessionToken;
+	private boolean isApplicationOnline;
 	
 	private Configuration(){
 		loadConfiguration();
@@ -31,7 +35,8 @@ public class Configuration implements Runnable{
 		List<String> hashtags = new ArrayList<String>();
 		hashtags.add("pi³ka no¿na");
 		hashtags.add("strzelectwo");
-		user = new User("marek" + (new Random().nextInt(100000)), hashtags, null);
+		Bitmap picture = BitmapFactory.decodeFile("ic_launcher-web.png");
+		user = new User("marek" + (new Random().nextInt(100000)), hashtags, picture);
 	}
 
 	private void storageConfiguration() {
@@ -68,6 +73,14 @@ public class Configuration implements Runnable{
 
 	public void setSessionToken(long sessionToken) {
 		this.sessionToken = sessionToken;
+	}
+
+	public boolean isApplicationOnline() {
+		return isApplicationOnline;
+	}
+
+	public void setApplicationOnline(boolean isApplicationOnline) {
+		this.isApplicationOnline = isApplicationOnline;
 	}
 	
 	
