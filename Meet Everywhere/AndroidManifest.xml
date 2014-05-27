@@ -74,6 +74,9 @@
             android:name="com.meetEverywhere.SearchTagsEdition"
             android:windowSoftInputMode="adjustPan" >
         </activity>
+        <activity
+            android:name="com.meetEverywhere.FoundTagsActivity">
+        </activity>
 
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"

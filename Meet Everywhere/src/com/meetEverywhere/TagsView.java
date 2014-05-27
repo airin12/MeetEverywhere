@@ -8,7 +8,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 //import android.widget.AdapterView;
 //import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -50,7 +54,10 @@ public abstract class TagsView extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.search_tags_edition_layout);
+		setContentView(getLayout());
+		
+		View view = findViewById(R.id.tags_view);
+		setupUI(view);
 
 		myDBAdapter = new DatabaseAdapter(getApplicationContext());
 		myDBAdapter.open();
@@ -67,6 +74,35 @@ public abstract class TagsView extends Activity {
 		registerForContextMenu(tagListView);
 	}
 
+	public abstract int getLayout();
+	
+	private void setupUI(View view) {
+		if(!(view instanceof EditText)) {
+
+	        view.setOnTouchListener(new OnTouchListener() {
+
+	            public boolean onTouch(View v, MotionEvent event) {
+	                hideSoftKeyboard(TagsView.this);
+	                return false;
+	            }
+
+				
+
+	        });
+	    }
+
+	    //If a layout container, iterate over children and seed recursion.
+	    if (view instanceof ViewGroup) {
+
+	        for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+
+	            View innerView = ((ViewGroup) view).getChildAt(i);
+
+	            setupUI(innerView);
+	        }
+	    }
+	}
+
 	@Override
 	protected void onDestroy() {
 		Toast.makeText(getApplicationContext(), "Czy zapisaæ?",
@@ -74,6 +110,11 @@ public abstract class TagsView extends Activity {
 
 		myDBAdapter.close();
 		super.onDestroy();
+	}
+	
+	public void hideSoftKeyboard(Activity activity) {
+	    InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+	    inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
 	}
 
 	public void backToMainMenu(View view) {
@@ -125,7 +166,7 @@ public abstract class TagsView extends Activity {
 		return false;
 	}
 
-	public abstract void saveTags(View view);
+	
 
 	private String[] parseInput(String message) {
 		String[] tags = message.split(",");
@@ -148,5 +189,17 @@ public abstract class TagsView extends Activity {
 
 		putTagsIntoList(newTags);
 	}
+	
+	public ArrayList<String> getTagsAsStrings(){
+		ArrayList<String> stringTags = new ArrayList<String>();
+		
+		for(Tag tag : tags){
+			stringTags.add(tag.getName());
+		}
+		
+		return stringTags;
+	}
+	
+	
 
 }

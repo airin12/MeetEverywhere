@@ -24,6 +24,8 @@
     <string name="tag_save_text">Save</string>
     <string name="error_tags_required">This field is required</string>
     <string name="tag_delete_text">Delete</string>
+    <string name="desc">Photo</string>
+    <string name="tag_search_text">Search</string>
     
    	<!-- ************************************************************************************************* -->
     <!-- ************************************* Common strings *************************************** -->
