@@ -11,7 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:layout_gravity="center" >
 
         <EditText
             android:id="@+id/ActivityRegistration_userName"
@@ -26,8 +27,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginTop="@dimen/spacing_between_items"
             android:ems="10"
-            android:hint="@string/put_your_description_hint" >
+            android:hint="@string/put_your_description_hint"
+            android:minLines="4"
+            android:scrollHorizontally="true" >
 
             <requestFocus />
         </EditText>
@@ -35,13 +39,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:gravity="center" >
 
             <Button
                 android:id="@+id/button1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Attach your profile pic" />
+                android:layout_marginTop="@dimen/spacing_between_items"
+                android:text="@string/attach_picture"
+                android:gravity="center_vertical" />
+            
 
         </LinearLayout>
 
