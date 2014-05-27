@@ -27,23 +27,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:layout_gravity="center"
                 android:gravity="center" >
 
                 <EditText
                     android:id="@+id/ActivityRegistration_userName"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
                     android:ems="10"
                     android:text="@string/user_name" />
 
                 <Button
-                    android:id="@+id/ErrorDialog_OKButton"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/ProfileEditionActivity.attachPictureButton"
+                    android:layout_width="@dimen/ProfileEditionActivity.attachPictureButtonWidth"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_between_items"
-                    android:layout_weight="1"
-                    android:text="@string/attach_picture" />
+                    android:text="@string/attach_picture"
+                    android:gravity="center_vertical" />
 
             </LinearLayout>
 
@@ -55,7 +57,9 @@
 	            android:layout_height="wrap_content"
 	            android:layout_marginTop="@dimen/spacing_between_items"
 	            android:ems="10"
-	            android:hint="@string/initialUserDiscription" >
+	            android:minLines="4"
+	            android:scrollHorizontally="true"
+	            android:hint="@string/put_your_description_hint" >
 	
 	            <requestFocus />
 	        </EditText>
@@ -65,9 +69,9 @@
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:layout_marginTop="@dimen/spacing_between_items"
-	            android:text="Save settings" />
+	            android:text="@string/save_settings"
+	            android:gravity="center_vertical" />
         
      </LinearLayout>
     
 </ScrollView>
-

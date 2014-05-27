@@ -64,17 +64,17 @@ public class LoginActivity extends Activity {
 				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 					public boolean onEditorAction(TextView textView, int id,
 							KeyEvent keyEvent) {
-						if (id == R.id.login || id == EditorInfo.IME_NULL) {
-							attemptLogin();
-							return true;
-						}
+//						if (id == R.id.login || id == EditorInfo.IME_NULL) {
+//							attemptLogin();
+//							return true;
+//						}
 						return false;
 					}
 				});
 
 		mLoginFormView = findViewById(R.id.login_form);
-		mLoginStatusView = findViewById(R.id.login_status);
-		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+//		mLoginStatusView = findViewById(R.id.login_status);
+//		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
 		findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {

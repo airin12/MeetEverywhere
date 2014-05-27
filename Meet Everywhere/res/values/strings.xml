@@ -30,15 +30,21 @@
    	<!-- ************************************************************************************************* -->
     <!-- ************************************* Common strings *************************************** -->
     <!-- ************************************************************************************************* -->
-    <string name="user_name">Nick uzytkownika</string>
-    <string name="user_description">Opis uzytkownika</string>
+    <string name="user_name">Username</string>
+    <string name="user_description">User description</string>
     <string name="put_your_name_hint">Put your name</string>
     <string name="put_your_description_hint">Write your description (optional)</string>
-    
+    <string name="save_settings">Save settings</string>
     <string name="ErrorDialog.errorWarning">Error!</string>
     <string name="ErrorDialog.okButton">OK</string>
     
+    <!-- ************************************************************************************************* -->
+    <!-- ************************************* Login *************************************** -->
+    <!-- ************************************************************************************************* -->
+    
     <string name="ActivityLogin.login">Login</string>
+    <string name="ActivityLogin.signIn">Sign in</string>
+    <string name="ActivityLogin.password">Password</string>
     
     <!-- ************************************************************************************************* -->
     <!-- ************************************* Profile Edition *************************************** -->
