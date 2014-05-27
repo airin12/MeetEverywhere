@@ -1,4 +1,4 @@
-package com.meetEverywhere;
+package com.meetEverywhere.common;
 
 import android.widget.Checkable;
 
@@ -34,6 +34,11 @@ public class Tag implements Checkable{
 		else
 			checked=true;
 		
+	}
+	
+	@Override
+	public String toString(){
+		return name;
 	}
 	
 }

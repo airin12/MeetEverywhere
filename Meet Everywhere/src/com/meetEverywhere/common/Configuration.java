@@ -32,9 +32,9 @@ public class Configuration implements Runnable{
 	private void loadConfiguration() {
 		// TODO metoda do wczytywania danych z przestrzeni lokalnej
 		// MOCK:
-		List<String> hashtags = new ArrayList<String>();
-		hashtags.add("pi³ka no¿na");
-		hashtags.add("strzelectwo");
+		List<Tag> hashtags = new ArrayList<Tag>();
+		hashtags.add(new Tag("pi³ka no¿na"));
+		hashtags.add(new Tag("strzelectwo"));
 		Bitmap picture = BitmapFactory.decodeFile("ic_launcher-web.png");
 		user = new User("marek" + (new Random().nextInt(100000)), hashtags, picture);
 	}

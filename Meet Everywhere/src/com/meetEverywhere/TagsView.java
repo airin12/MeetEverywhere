@@ -3,6 +3,8 @@ package com.meetEverywhere;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.meetEverywhere.common.Tag;
+
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;

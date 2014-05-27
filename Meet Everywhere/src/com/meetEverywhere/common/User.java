@@ -19,12 +19,12 @@ import android.graphics.Bitmap;
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -437242741203572594L;
-	private List<String> hashTags;
+	private List<Tag> hashTags;
 	private final String nickname;
 	private Bitmap picture;
 	
-	public User(String nickname, List<String> hashTags, Bitmap picture) {
-		this.setHashTags(hashTags);
+	public User(String nickname, List<Tag> hashTags, Bitmap picture) {
+		this.hashTags = hashTags;
 		this.nickname = nickname;
 		this.setPicture(picture);
 	}
@@ -33,11 +33,11 @@ public class User implements Serializable {
 		return nickname;
 	}
 
-	public List<String> getHashTags() {
+	public List<Tag> getHashTags() {
 		return hashTags;
 	}
 
-	public void setHashTags(List<String> hashTags) {
+	public void setHashTags(List<Tag> hashTags) {
 		this.hashTags = hashTags;
 	}
 

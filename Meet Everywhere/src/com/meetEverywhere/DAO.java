@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.meetEverywhere.common.ServUser;
+import com.meetEverywhere.common.Tag;
 
 /**
  * Klasa stanowi Data Access Object do komunikacji z serwerem.

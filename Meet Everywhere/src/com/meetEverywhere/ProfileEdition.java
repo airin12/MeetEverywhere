@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -38,10 +39,10 @@ public class ProfileEdition extends Activity {
         descriptionEditor = (EditText) findViewById(R.id.userDescriptionEdition);
         if(description != null)
         	descriptionEditor.setText(description);
-        
+                
         userImage = (ImageView)findViewById(R.id.userImage);
         //userImage.setImageResource(R.drawable.ic_launcher);
-        
+        Log.i("WIADOMOSC", "JESTEM");
         userImage.setOnClickListener(new OnClickListener() {
 	        //@Override
 	        public void onClick(View arg0) {

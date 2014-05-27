@@ -2,7 +2,6 @@ package com.meetEverywhere.common;
 
 import java.util.List;
 
-import com.meetEverywhere.Tag;
 
 import android.graphics.Bitmap;
 

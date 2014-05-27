@@ -2,6 +2,8 @@ package com.meetEverywhere;
 
 import java.util.ArrayList;
 
+import com.meetEverywhere.common.Tag;
+
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
