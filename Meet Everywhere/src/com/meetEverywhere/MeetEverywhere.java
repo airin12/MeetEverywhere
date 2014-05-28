@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +46,8 @@ public class MeetEverywhere extends Activity {
 	
 	private SharedPreferences userSettings;
 	private ImageView userImage;
+	private Configuration configuration;
+	
 	
 	private boolean isTrackingServiceRunning() {
 	    ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -59,13 +62,12 @@ public class MeetEverywhere extends Activity {
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	Configuration configuration = Configuration.getInstance();
-    	BluetoothDispatcher dispatcher = BluetoothDispatcher.getInstance();
-    	dispatcher.setHandler(new Handler(getMainLooper()));
-    	dispatcher.setTempContextHolder(getApplicationContext());
+    	prepareConfigAndBluetoothDispatcher();
+ 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-        
+        refreshDisplayedUserName();
+
         
         
 		Authenticator.setDefault (new Authenticator() {
@@ -74,7 +76,7 @@ public class MeetEverywhere extends Activity {
 		    }
 		});
 
-        ((Button)findViewById(R.id.minimizeButton)).setOnClickListener(new OnClickListener() {
+        ((FrameLayout)findViewById(R.id.bluetooth_button)).setOnClickListener(new OnClickListener() {
 	        //@Override
 	        public void onClick(View arg0) {
 	            //finish();
@@ -82,7 +84,7 @@ public class MeetEverywhere extends Activity {
 	        }
 	    });
         
-        ((Button)findViewById(R.id.closeButton)).setOnClickListener(new OnClickListener() {
+        ((FrameLayout)findViewById(R.id.close_button)).setOnClickListener(new OnClickListener() {
 	        //@Override
 	        public void onClick(View arg0) {
 	            stopService(new Intent(MeetEverywhere.this, PositionTracker.class));
@@ -101,15 +103,16 @@ public class MeetEverywhere extends Activity {
         
         userImage = (ImageView)findViewById(R.id.userImage);
         userImage.setOnClickListener(userSettingsOnClickListener);
-        ((TextView)findViewById(R.id.userDescription)).setOnClickListener(userSettingsOnClickListener);
+//        ((TextView)findViewById(R.id.userDescription)).setOnClickListener(userSettingsOnClickListener);
         
-        ((Button)findViewById(R.id.tagListsEdit)).setOnClickListener(new OnClickListener() {
+        ((FrameLayout)findViewById(R.id.profile_edition_button)).setOnClickListener(new OnClickListener() {
 	        //@Override
 	        public void onClick(View arg0) {
 	        	startActivity(new Intent(MeetEverywhere.this, TagsEdition.class));
 	        }
 	    });
         
+        /*
         ((Button)findViewById(R.id.searchTagListsEdit)).setOnClickListener(new OnClickListener() {
 	        //@Override
 	        public void onClick(View arg0) {
@@ -117,12 +120,15 @@ public class MeetEverywhere extends Activity {
 	        }
 	    });
         
+        */
+        /*
         ((Button)findViewById(R.id.friendsListEdit)).setOnClickListener(new OnClickListener() {
 	        //@Override
 	        public void onClick(View arg0) {
 	        	startActivity(new Intent(MeetEverywhere.this, FriendsEdition.class));
 	        }
 	    });
+        */
         
         userSettings = getSharedPreferences(SharedPreferencesKeys.preferencesName, Activity.MODE_PRIVATE);
         boolean initialized = userSettings.getBoolean(SharedPreferencesKeys.initialization, false);
@@ -138,16 +144,28 @@ public class MeetEverywhere extends Activity {
                 
     }
 
-    @Override
+    private void refreshDisplayedUserName() {
+        TextView user =  ((TextView)findViewById(R.id.logged_as));
+        user.setText(configuration.getUser().getNickname());		
+	}
+
+	private void prepareConfigAndBluetoothDispatcher() {
+       	configuration = Configuration.getInstance();
+    	BluetoothDispatcher dispatcher = BluetoothDispatcher.getInstance();
+    	dispatcher.setHandler(new Handler(getMainLooper()));
+    	dispatcher.setTempContextHolder(getApplicationContext());		
+	}
+
+	@Override
     protected void onResume() {
         super.onResume();
-        
+        refreshDisplayedUserName();
         //userImage = (ImageView)findViewById(R.id.userImage);
         //userImage.setImageBitmap(BitmapFactory.decodeFile("/res/drawable-hdpi/ic_launcher.png"));
         
         String description = userSettings.getString(SharedPreferencesKeys.userDescription, null);
-        if(description != null)
-        	((TextView)findViewById(R.id.userDescription)).setText(description);
+//        if(description != null)
+//        	((TextView)findViewById(R.id.userDescription)).setText(description);
         
         String image = userSettings.getString(SharedPreferencesKeys.userImage, null);
         if(image != null)

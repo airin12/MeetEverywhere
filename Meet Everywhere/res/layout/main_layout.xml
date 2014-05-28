@@ -2,29 +2,229 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-    
-    <ImageView
-        android:id="@+id/userImage"
+
+    <FrameLayout
+        android:id="@+id/main_layout_top_panel"
         android:layout_width="fill_parent"
-        android:layout_height="220dp"
-        android:layout_above="@+id/userDescription"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:scaleType="fitCenter"
-        android:src="@android:drawable/sym_def_app_icon" />
-    
+        android:layout_height="35dp"
+        android:background="@android:color/background_dark"
+        android:textAlignment="center" >
+
+        <TextView
+            android:id="@+id/status_label"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="@string/main_layout_status_offline"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/main_layout_user_panel"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_below="@+id/main_layout_top_panel" >
+
+        <ImageView
+            android:id="@+id/userImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginRight="10dp"
+            android:contentDescription="@string/main_layout_user"
+            android:scaleType="fitCenter"
+            android:src="@android:drawable/sym_def_app_icon" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/main_layout_user_stats"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/main_layout_top_panel"
+        android:layout_toRightOf="@+id/main_layout_user_panel" >
+
+        <TextView
+            android:id="@+id/main_layout_logged_as_text"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/main_layout_logged_as"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/logged_as"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+     		android:layout_marginLeft="25dp"
+            android:layout_gravity="center_vertical"
+            android:text="@string/main_layout_user"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="normal" />
+    </FrameLayout>
+
+       
     <TextView
         android:id="@+id/userDescription"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout1"
+        android:layout_below="@+id/main_layout_user_panel"
         android:layout_alignParentLeft="true"
         android:gravity="center"
-        android:lines="4"
+        android:lines="2"
         android:singleLine="false"
         android:text="@string/initialUserDiscription" />
+
+   
     
+    <FrameLayout
+        android:id="@+id/bluetooth_button"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_below="@+id/userDescription">
+
+        <ImageView
+            android:id="@+id/bluetooth_button_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/icon_bluetooth" />
+
+        <TextView
+            android:id="@+id/bluetooth_button_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/main_layout_start_bt_activity"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/gps_button"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_below="@+id/bluetooth_button" >
+
+        <ImageView
+            android:id="@+id/gps_button_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/gps_icon"
+            android:src="@drawable/icon_gps" />
+
+        <TextView
+            android:id="@+id/bluetooth_gps_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="70dp"
+            android:text="@string/main_layout_start_gps_activity"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+
+	<FrameLayout
+        android:id="@+id/profile_edition_button"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_below="@+id/gps_button" >
+        	
+        <ImageView
+            android:id="@+id/profile_edition_button_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/profile_icon"
+            android:src="@drawable/hashtags" />
+
+        <TextView
+            android:id="@+id/profile_edition_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="70dp"
+            android:text="@string/main_layout_start_profile_edition_activity"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+
+	<FrameLayout
+        android:id="@+id/settings_button"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_below="@+id/profile_edition_button" >
+        	
+        <ImageView
+            android:id="@+id/settings_button_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/settings_icon"
+            android:src="@drawable/settings" />
+
+        <TextView
+            android:id="@+id/settings_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="70dp"
+            android:text="@string/main_layout_start_settings_activity"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+	
+
+	<FrameLayout
+        android:id="@+id/close_button"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_below="@+id/settings_button" >
+        	
+        <ImageView
+            android:id="@+id/close_button_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/close_icon"
+            android:src="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/close_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="70dp"
+            android:text="@string/main_layout_shutdown"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+		
+	
+	
+	
+	
+	
+	
+
+
+<!-- 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
@@ -32,8 +232,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:orientation="vertical" >
-
+        android:orientation="vertical" 
+        android:layout_below="@+id/profile_edition_button">
+ 
         <Button
             android:id="@+id/tagListsEdit"
             android:layout_width="match_parent"
@@ -45,7 +246,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Edytuj listę poszukiwanych tagów" />
-                
+
         <Button
             android:id="@+id/friendsListEdit"
             android:layout_width="match_parent"
@@ -57,13 +258,6 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/minimizeButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Bluetooth" />
-
-            <Button
                 android:id="@+id/closeButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,5 +265,5 @@
                 android:text="@string/close" />
         </LinearLayout>
     </LinearLayout>
-
+-->
 </RelativeLayout>
