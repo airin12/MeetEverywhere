@@ -86,23 +86,18 @@ public class BluetoothChooseDeviceActivity extends Activity implements Runnable{
 			discoveringThread = this;
 			broadcastReceiver = new BroadcastReceiverImpl(this);
 			setStartRefreshingImmediately(false);
+			IntentFilter ifilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+			this.registerReceiver(broadcastReceiver, ifilter);
 			(new Thread(discoveringThread)).start();
 		}else{
 			setStartRefreshingImmediately(true);
 		}
 		
-		IntentFilter ifilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-		this.registerReceiver(broadcastReceiver, ifilter);
-		
+
 	}
 
 	@Override
 	public void onPause() {
-		try {
-			this.unregisterReceiver(broadcastReceiver);
-		} catch (IllegalArgumentException e) {
-			// Nie rób nic.
-		}
 		super.onPause();
 	}
 
@@ -117,6 +112,7 @@ public class BluetoothChooseDeviceActivity extends Activity implements Runnable{
 			if (bluetoothAdapter.isDiscovering()) {
 				bluetoothAdapter.cancelDiscovery();
 			}
+			//showToast("budze service");
 			bluetoothAdapter.startDiscovery();
 			while(counter < configuration.getBluetoothMillisRefreshingTime()){
 				try {
@@ -130,6 +126,7 @@ public class BluetoothChooseDeviceActivity extends Activity implements Runnable{
 				bluetoothAdapter.cancelDiscovery();
 			}
 			counter = 0;
+			//showToast("usypiam service");
 			while(!isStartRefreshingImmediately() && counter < configuration.getBluetoothMillisTimeBetweenRefreshing()){
 				try {
 					Thread.sleep(1000);
@@ -142,6 +139,14 @@ public class BluetoothChooseDeviceActivity extends Activity implements Runnable{
 		}
 	}
 	
+	public void showToast(final String text) {
+		BluetoothDispatcher.getInstance().getHandler().post(new Runnable() {
+			public void run() {
+				Toast.makeText(getApplicationContext(), text,
+						Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
 
 	public boolean isStartRefreshingImmediately() {
 		return startRefreshingImmediately;

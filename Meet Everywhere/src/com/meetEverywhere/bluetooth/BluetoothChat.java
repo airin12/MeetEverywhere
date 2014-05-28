@@ -58,6 +58,7 @@ public class BluetoothChat extends Activity {
 						text.setText("");
 					} catch (IOException e) {
 						Toast.makeText(getBaseContext(), "Wiadomoœæ nie zosta³a wys³ana!", Toast.LENGTH_SHORT).show();
+						actualConnection.setStatus(BluetoothConnectionStatus.INACTIVE);
 					}				
 				}
 			}
