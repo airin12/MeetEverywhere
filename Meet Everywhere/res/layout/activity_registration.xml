@@ -15,7 +15,7 @@
         android:layout_gravity="center" >
 
         <EditText
-            android:id="@+id/ActivityRegistration_userName"
+            android:id="@+id/ActivityRegistration.userNameEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -23,7 +23,7 @@
             android:hint="@string/put_your_name_hint" />
 
         <EditText
-            android:id="@+id/ActivityRegistration_userDescription"
+            android:id="@+id/ActivityRegistration.userDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,6 +36,26 @@
             <requestFocus />
         </EditText>
 
+        <EditText
+            android:id="@+id/ActivityRegistration.passwordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_between_items"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="@string/UserRegistration.password" />
+
+        <EditText
+            android:id="@+id/ActivityRegistration.confirmPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_between_items"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="@string/UserRegistration.confirmPassword" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,13 +63,45 @@
             android:gravity="center" >
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/ActivityRegistration.attachPictureButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_between_items"
                 android:text="@string/attach_picture"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:onClick="attachPictureAction" />
             
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/profilePicture"
+                android:layout_width="160dp"
+                android:layout_height="240dp"
+                android:layout_marginTop="@dimen/spacing_between_items"
+                android:layout_weight="1"
+                android:src="@drawable/ic_launcher" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <Button
+                android:id="@+id/ActivityRegistration.registerButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_between_items"
+                android:text="@string/UserRegistration.register"
+                android:onClick="goToMeetEverywhereActivityAction" />
 
         </LinearLayout>
 

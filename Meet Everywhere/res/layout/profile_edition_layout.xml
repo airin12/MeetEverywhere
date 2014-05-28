@@ -18,9 +18,9 @@
             android:layout_height="wrap_content" >
 
             <ImageView
-                android:id="@+id/ActivityRegistration_profilePicture"
-                android:layout_width="80dp"
-                android:layout_height="120dp"
+                android:id="@+id/profilePicture"
+                android:layout_width="160dp"
+                android:layout_height="240dp"
                 android:src="@drawable/ic_launcher" />
 
             <LinearLayout
@@ -32,7 +32,7 @@
 
                 <EditText
                     android:id="@+id/ActivityRegistration_userName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="10dp"
@@ -45,7 +45,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_between_items"
                     android:text="@string/attach_picture"
-                    android:gravity="center_vertical" />
+                    android:gravity="center_vertical"
+                    android:onClick="attachNewProfilePictureAction" />
 
             </LinearLayout>
 
@@ -70,8 +71,10 @@
 	            android:layout_height="wrap_content"
 	            android:layout_marginTop="@dimen/spacing_between_items"
 	            android:text="@string/save_settings"
-	            android:gravity="center_vertical" />
+	            android:gravity="center_vertical"
+	            android:onClick="saveSettingsAndGoBackAction" />
         
      </LinearLayout>
     
 </ScrollView>
+

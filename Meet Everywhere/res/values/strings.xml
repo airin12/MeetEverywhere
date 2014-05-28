@@ -78,6 +78,8 @@
     <string name="attach_picture">Attach picture</string>
     <string name="UserRegistration.put_picture_label">Choose your profile picture (optional)</string>
     <string name="UserRegistration.register">Register</string>
+    <string name="UserRegistration.password">Password</string>
+    <string name="UserRegistration.confirmPassword">Confirm password</string>
 
     
     <!-- ************************************************************************************************* -->

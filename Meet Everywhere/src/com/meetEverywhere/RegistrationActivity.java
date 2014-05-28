@@ -1,5 +1,7 @@
 package com.meetEverywhere;
 
+import com.meetEverywhere.common.Configuration;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,11 +16,14 @@ import android.widget.ImageView;
 public class RegistrationActivity extends Activity {
 	
 	private static int RESULT_LOAD_IMAGE = 1;
+	private ImageView userImage;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_registration);
+		
+		userImage = (ImageView) findViewById(R.id.profilePicture);
 	}
 
 	@Override
@@ -49,9 +54,15 @@ public class RegistrationActivity extends Activity {
 			String picturePath = cursor.getString(columnIndex);
 			cursor.close();
 			
-			ImageView imageView = (ImageView) findViewById(R.id.ActivityRegistration_profilePicture);
+			ImageView imageView = (ImageView) findViewById(R.id.profilePicture);
 			imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+			
+			Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));
 		}
+	}
+	
+	public void goToMeetEverywhereActivityAction(View view) {
+		startActivity(new Intent(this, MeetEverywhere.class));
 	}
 
 }

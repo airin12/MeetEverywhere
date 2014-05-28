@@ -102,6 +102,9 @@ public class MeetEverywhere extends Activity {
         };
         
         userImage = (ImageView)findViewById(R.id.userImage);
+        userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
+        
+        
         userImage.setOnClickListener(userSettingsOnClickListener);
 //        ((TextView)findViewById(R.id.userDescription)).setOnClickListener(userSettingsOnClickListener);
         
@@ -163,13 +166,7 @@ public class MeetEverywhere extends Activity {
         //userImage = (ImageView)findViewById(R.id.userImage);
         //userImage.setImageBitmap(BitmapFactory.decodeFile("/res/drawable-hdpi/ic_launcher.png"));
         
-        String description = userSettings.getString(SharedPreferencesKeys.userDescription, null);
-//        if(description != null)
-//        	((TextView)findViewById(R.id.userDescription)).setText(description);
-        
-        String image = userSettings.getString(SharedPreferencesKeys.userImage, null);
-        if(image != null)
-        	new ImageLoader().execute(image);
+        realoadMeetEveywhere();
         
     }
     
@@ -189,5 +186,9 @@ public class MeetEverywhere extends Activity {
 			if(param != null)
 				userImage.setImageBitmap(param);
 		}
+    }
+    
+    public void realoadMeetEveywhere() {
+    	userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
     }
 }
