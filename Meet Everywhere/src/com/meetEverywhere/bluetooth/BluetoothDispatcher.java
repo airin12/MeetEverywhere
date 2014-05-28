@@ -81,7 +81,9 @@ public class BluetoothDispatcher {
 		if (socket == null) {
 			socket = device.createInsecureRfcommSocketToServiceRecord(UUID
 					.fromString(ownUUID));
-			bluetoothAdapter.cancelDiscovery();
+			if(bluetoothAdapter.isDiscovering()){
+				bluetoothAdapter.cancelDiscovery();
+			}
 			socket.connect();
 		}
 		BluetoothConnection connection = new BluetoothConnection(context,
@@ -103,7 +105,9 @@ public class BluetoothDispatcher {
 		if (socket == null) {
 			socket = device.createInsecureRfcommSocketToServiceRecord(UUID
 					.fromString(ownUUID));
-			bluetoothAdapter.cancelDiscovery();
+			if(bluetoothAdapter.isDiscovering()){
+				bluetoothAdapter.cancelDiscovery();
+			}
 			socket.connect();
 		}
 		connection.setReconnectedSocket(socket);
@@ -171,5 +175,6 @@ public class BluetoothDispatcher {
 			BluetoothListAdapter bluetoothListAdapter) {
 		this.bluetoothListAdapter = bluetoothListAdapter;
 	}
+
 
 }

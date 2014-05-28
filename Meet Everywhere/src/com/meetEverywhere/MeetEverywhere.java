@@ -66,7 +66,7 @@ public class MeetEverywhere extends Activity {
  
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
-        refreshDisplayedUserName();
+        refreshDisplayedUserNameAndDescription();
 
         
         
@@ -79,7 +79,6 @@ public class MeetEverywhere extends Activity {
         ((FrameLayout)findViewById(R.id.bluetooth_button)).setOnClickListener(new OnClickListener() {
 	        //@Override
 	        public void onClick(View arg0) {
-	            //finish();
 	        	startActivity(new Intent(MeetEverywhere.this, BluetoothChooseDeviceActivity.class));
 	        }
 	    });
@@ -147,9 +146,11 @@ public class MeetEverywhere extends Activity {
                 
     }
 
-    private void refreshDisplayedUserName() {
+    private void refreshDisplayedUserNameAndDescription() {
         TextView user =  ((TextView)findViewById(R.id.logged_as));
-        user.setText(configuration.getUser().getNickname());		
+        user.setText(configuration.getUser().getNickname());
+        TextView description =  ((TextView)findViewById(R.id.userDescription));
+        description.setText(configuration.getUser().getDescription());
 	}
 
 	private void prepareConfigAndBluetoothDispatcher() {
@@ -162,7 +163,7 @@ public class MeetEverywhere extends Activity {
 	@Override
     protected void onResume() {
         super.onResume();
-        refreshDisplayedUserName();
+        refreshDisplayedUserNameAndDescription();
         //userImage = (ImageView)findViewById(R.id.userImage);
         //userImage.setImageBitmap(BitmapFactory.decodeFile("/res/drawable-hdpi/ic_launcher.png"));
         

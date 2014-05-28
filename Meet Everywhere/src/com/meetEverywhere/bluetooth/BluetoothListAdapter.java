@@ -6,6 +6,7 @@ import com.meetEverywhere.R;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,16 +39,8 @@ public class BluetoothListAdapter extends ArrayAdapter<BluetoothConnection> {
 	        ImageView imageView = (ImageView) row.findViewById(R.id.bluetooth_thumb);
 	                                                                                                                    
 	        textView.setText(getNickname(position));
-	        // Change the icon for Windows and iPhone
-	        String s = getNickname(position);
-	        
-/*  		if (s.startsWith("something") || s.startsWith("something")
-	            || s.startsWith("something")) {
-	          imageView.setImageResource(R.drawable.no);
-	        } else {
-	          imageView.setImageResource(R.drawable.ok);
-	        }
-*/
+	        imageView.setImageBitmap(getThumb(position));
+
 	        
 	        return row;
 	        
@@ -55,14 +48,15 @@ public class BluetoothListAdapter extends ArrayAdapter<BluetoothConnection> {
 	}
 
 	public String getNickname(int position) {
-/*		
-		return BluetoothDispatcher.getInstance().getConnections().get(((BluetoothDevice) connections.keySet().toArray()[position]))
-				.getUser().getNickname();
-*/
 		return connections
 				.get(((BluetoothDevice) connections.keySet().toArray()[position]))
 				.getUser().getNickname();
-
 	}
 
+	public Bitmap getThumb(int position) {
+		return connections
+				.get(((BluetoothDevice) connections.keySet().toArray()[position]))
+				.getUser().getPicture();
+	}
+	
 }

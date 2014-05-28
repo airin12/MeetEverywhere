@@ -17,7 +17,6 @@ public class BluetoothService extends Service implements Runnable {
 
 	private Handler handler;
 
-
 	@SuppressLint("ShowToast")
 	@Override
 	public void onCreate() {
@@ -83,28 +82,39 @@ public class BluetoothService extends Service implements Runnable {
 						public void run() {
 							BluetoothConnection connection = null;
 							try {
-								connection = tempDispatcher.getConnections().get(tempSocket.getRemoteDevice());
-								if(connection != null){
-									tempDispatcher.activateConnection(tempDispatcher.getTempContextHolder(), connection, tempSocket.getRemoteDevice(), tempSocket);
+								connection = tempDispatcher.getConnections()
+										.get(tempSocket.getRemoteDevice());
+								if (connection != null) {
+									tempDispatcher.activateConnection(
+											tempDispatcher
+													.getTempContextHolder(),
+											connection, tempSocket
+													.getRemoteDevice(),
+											tempSocket);
 									showToast("Przywrócono po³¹czenie z: "
-											+ connection.getUser().getNickname());
-								}else{
-								
-								connection = new BluetoothConnection(
-										getApplicationContext(), tempSocket);
-								tempDispatcher.addConnection(null,
-										tempSocket.getRemoteDevice(),
-										connection);
-								if (tempDispatcher.getBluetoothListAdapter() == null) {
-									tempDispatcher
-											.setBluetoothListAdapter(new BluetoothListAdapter(
-													getApplicationContext(), 0));
+											+ connection.getUser()
+													.getNickname());
+								} else {
+
+									connection = new BluetoothConnection(
+											getApplicationContext(), tempSocket);
+									tempDispatcher.addConnection(null,
+											tempSocket.getRemoteDevice(),
+											connection);
+									if (tempDispatcher
+											.getBluetoothListAdapter() == null) {
+										tempDispatcher
+												.setBluetoothListAdapter(new BluetoothListAdapter(
+														getApplicationContext(),
+														0));
+									}
+									tempDispatcher.getBluetoothListAdapter()
+											.add(connection);
+									showToast("Nawi¹zano po³¹czenie z: "
+											+ connection.getUser()
+													.getNickname());
 								}
-								tempDispatcher.getBluetoothListAdapter().add(
-										connection);
-								showToast("Nawi¹zano po³¹czenie z: "
-										+ connection.getUser().getNickname());
-								}} catch (Exception e) {
+							} catch (Exception e) {
 								e.printStackTrace();
 							}
 						}

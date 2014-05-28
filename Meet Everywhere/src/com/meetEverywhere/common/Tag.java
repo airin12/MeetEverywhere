@@ -1,8 +1,10 @@
 package com.meetEverywhere.common;
 
+import java.io.Serializable;
+
 import android.widget.Checkable;
 
-public class Tag implements Checkable{
+public class Tag implements Checkable, Serializable{
 
 	private String name;
 	private boolean checked=false;

@@ -1,6 +1,7 @@
 package com.meetEverywhere.bluetooth;
 
 import com.meetEverywhere.R;
+import com.meetEverywhere.common.Configuration;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -16,13 +17,15 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class BluetoothChooseDeviceActivity extends Activity {
+public class BluetoothChooseDeviceActivity extends Activity implements Runnable{
 
 	private BluetoothAdapter bluetoothAdapter;
+	private Configuration configuration;
+	private boolean startRefreshingImmediately;
+	private static BluetoothChooseDeviceActivity discoveringThread = null;
 	private static BroadcastReceiverImpl broadcastReceiver = null;
 
 	private ListView listView;
-	// private ArrayAdapter<BluetoothDevice> adapter;
 	private BluetoothListAdapter adapter;
 
 	public void addToList(BluetoothConnection connection) {
@@ -33,7 +36,8 @@ public class BluetoothChooseDeviceActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.bluetooth_choose_layout);
-
+		configuration = Configuration.getInstance();
+		
 		if (BluetoothDispatcher.getInstance().getBluetoothListAdapter() == null) {
 			BluetoothDispatcher.getInstance().setBluetoothListAdapter(
 					new BluetoothListAdapter(getApplicationContext(), 0));
@@ -41,10 +45,6 @@ public class BluetoothChooseDeviceActivity extends Activity {
 
 		adapter = BluetoothDispatcher.getInstance().getBluetoothListAdapter();
 
-		/*
-		 * adapter = new ArrayAdapter<BluetoothDevice>(this,
-		 * android.R.layout.simple_list_item_1);
-		 */
 		listView = (ListView) findViewById(R.id.chatListView);
 		listView.setAdapter(adapter);
 		getAdapter().notifyDataSetChanged();
@@ -82,18 +82,18 @@ public class BluetoothChooseDeviceActivity extends Activity {
 			Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableBT, 0xDEADBEEF);
 		}
-		// Zatrzymaj wyszukiwanie urz¹dzeñ.
-		if (bluetoothAdapter.isDiscovering()) {
-			bluetoothAdapter.cancelDiscovery();
+		if(discoveringThread == null){
+			discoveringThread = this;
+			broadcastReceiver = new BroadcastReceiverImpl(this);
+			setStartRefreshingImmediately(false);
+			(new Thread(discoveringThread)).start();
+		}else{
+			setStartRefreshingImmediately(true);
 		}
-		// Rozpocznij wyszukiwanie urz¹dzeñ.
-		bluetoothAdapter.startDiscovery();
-
-		// let's make a broadcast receiver to register our things
-
-		broadcastReceiver = new BroadcastReceiverImpl(this);
+		
 		IntentFilter ifilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		this.registerReceiver(broadcastReceiver, ifilter);
+		
 	}
 
 	@Override
@@ -108,6 +108,47 @@ public class BluetoothChooseDeviceActivity extends Activity {
 
 	public BluetoothListAdapter getAdapter() {
 		return adapter;
+	}
+
+	public void run() {
+		long counter = 0;
+		while(true){
+			counter = 0;
+			if (bluetoothAdapter.isDiscovering()) {
+				bluetoothAdapter.cancelDiscovery();
+			}
+			bluetoothAdapter.startDiscovery();
+			while(counter < configuration.getBluetoothMillisRefreshingTime()){
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				counter += 1000;
+			}
+			if(bluetoothAdapter.isDiscovering()){
+				bluetoothAdapter.cancelDiscovery();
+			}
+			counter = 0;
+			while(!isStartRefreshingImmediately() && counter < configuration.getBluetoothMillisTimeBetweenRefreshing()){
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				counter += 1000;
+			}
+			setStartRefreshingImmediately(false);
+		}
+	}
+	
+
+	public boolean isStartRefreshingImmediately() {
+		return startRefreshingImmediately;
+	}
+
+	public void setStartRefreshingImmediately(boolean startRefreshingImmediately) {
+		discoveringThread.startRefreshingImmediately = startRefreshingImmediately;
 	}
 
 }
