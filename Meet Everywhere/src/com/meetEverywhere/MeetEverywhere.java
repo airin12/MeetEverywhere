@@ -112,15 +112,15 @@ public class MeetEverywhere extends Activity {
         userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
         
         
-        userImage.setOnClickListener(userSettingsOnClickListener);
+//        userImage.setOnClickListener(userSettingsOnClickListener);
 //        ((TextView)findViewById(R.id.userDescription)).setOnClickListener(userSettingsOnClickListener);
-        
-        ((FrameLayout)findViewById(R.id.profile_edition_button)).setOnClickListener(new OnClickListener() {
-	        //@Override
-	        public void onClick(View arg0) {
-	        	startActivity(new Intent(MeetEverywhere.this, TagsEdition.class));
-	        }
-	    });
+//        
+//        ((FrameLayout)findViewById(R.id.profile_edition_button)).setOnClickListener(new OnClickListener() {
+//	        //@Override
+//	        public void onClick(View arg0) {
+//	        	startActivity(new Intent(MeetEverywhere.this, TagsEdition.class));
+//	        }
+//	    });
         
         /*
         ((Button)findViewById(R.id.searchTagListsEdit)).setOnClickListener(new OnClickListener() {
@@ -199,5 +199,9 @@ public class MeetEverywhere extends Activity {
     
     public void realoadMeetEveywhere() {
     	userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
+    }
+    
+    public void goToProfileEditionActivityAction(View view) {
+    	startActivity(new Intent(MeetEverywhere.this, ProfileEdition.class));
     }
 }

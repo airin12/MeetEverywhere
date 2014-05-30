@@ -64,6 +64,7 @@
     <string name="ActivityLogin.login">Login</string>
     <string name="ActivityLogin.signIn">Sign in</string>
     <string name="ActivityLogin.password">Password</string>
+    <string name="ActivityLogin.registerIfNotAccount">Nie masz konta? Zarejestruj się!</string>
     
     <!-- ************************************************************************************************* -->
     <!-- ************************************* Profile Edition *************************************** -->
