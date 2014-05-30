@@ -64,9 +64,9 @@ public class DAO {
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 			//Bitmap bitmap = BitmapFactory.decodeFile("/ic_launcher-web.png", options);
-			Bitmap bitmap = null;
+			//Bitmap bitmap = null;
 			
-			ServUser user = new ServUser(nick,perc,bitmap,desc,tags);
+			ServUser user = new ServUser(nick,perc,null,desc,tags);
 			list.add(user);
 		}
 		

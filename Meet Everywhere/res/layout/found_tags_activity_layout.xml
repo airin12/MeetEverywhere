@@ -13,12 +13,65 @@
 
     </ListView>
         
+	 <LinearLayout
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="refresh"
+      android:layout_marginBottom="5dp"
+      android:layout_marginTop="5dp">
+      
+       <ImageView
+            android:id="@+id/refresh_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/refresh_icon" />
+     
+      <TextView
+            android:id="@+id/refresh_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/tag_refresh_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      
+      </LinearLayout>
    
-      <Button
-        android:id="@+id/foundUsersBackButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tag_cancel_text" 
-        android:onClick="back"/>
+      <LinearLayout
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="back"
+      android:layout_marginBottom="5dp"
+      android:layout_marginTop="5dp">
+      
+       <ImageView
+            android:id="@+id/back_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/back_icon" />
+     
+      <TextView
+            android:id="@+id/back_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/tag_cancel_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      
+      </LinearLayout>
+      
+     
+      
     
 </LinearLayout>

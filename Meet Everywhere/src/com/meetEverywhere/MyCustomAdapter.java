@@ -52,10 +52,6 @@ public class MyCustomAdapter extends ArrayAdapter<Tag> {
      public void onClick(View v) { 
       CheckBox cb = (CheckBox) v ; 
       Tag country = (Tag) cb.getTag(); 
-      /*Toast.makeText(activity.getApplicationContext(),
-       "Clicked on Checkbox: " + cb.getText() +
-       " is " + cb.isChecked(),
-       Toast.LENGTH_LONG).show();*/
       if(country!=null)
     	  country.setChecked(cb.isChecked());
      } 
@@ -74,6 +70,10 @@ public class MyCustomAdapter extends ArrayAdapter<Tag> {
  
    return convertView;
  
+  }
+  
+  public void changeCheckBox(int index){
+	  countryList.get(index).toggle();
   }
  
  }

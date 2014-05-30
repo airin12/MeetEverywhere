@@ -14,44 +14,125 @@
 
     </ListView>
     
-     <EditText
-        android:id="@+id/tagsTextField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/tags_edition_text"
-        android:inputType="text">
-    </EditText>
-    
    
-      <Button
-        android:id="@+id/tagAddingButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tag_add_text" 
-        android:onClick="addTags"/>
+    <LinearLayout
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="addTags">
       
-      <Button
-        android:id="@+id/tagDeleteButton"
-        android:layout_width="match_parent"
+        <EditText
+        android:id="@+id/tagsTextField"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/tag_delete_text" 
-        android:onClick="deleteTags"/>
+        android:layout_weight="1"
+        android:hint="@string/tags_edition_text"
+        android:inputType="text"
+        android:layout_marginLeft="5dp">
+    </EditText>
+      
+       <ImageView
+            android:id="@+id/add_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/add_icon" 
+            android:layout_marginRight="5dp"/>
+     
+      
+      </LinearLayout>
+      
+      <LinearLayout
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="deleteTags"
+      android:layout_marginBottom="5dp"
+      android:layout_marginTop="5dp">
+      
+       <ImageView
+            android:id="@+id/delete_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/delete_icon" />
+     
+      <TextView
+            android:id="@+id/delete_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/tag_delete_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      
+      </LinearLayout>
+      
+       <LinearLayout
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="saveTags"
+      android:layout_marginBottom="5dp"
+      android:layout_marginTop="5dp">
+      
+       <ImageView
+            android:id="@+id/save_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/save_icon" />
+     
+      <TextView
+            android:id="@+id/save_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/tag_save_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      
+      </LinearLayout>
+      
+        <LinearLayout
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="backToMainMenu"
+      android:layout_marginBottom="5dp"
+      android:layout_marginTop="5dp">
+      
+       <ImageView
+            android:id="@+id/back_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/back_icon" />
+     
+      <TextView
+            android:id="@+id/back_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/tag_cancel_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      
+      </LinearLayout>
+      
 
-    <Button
-        android:id="@+id/tagSavingButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tag_save_text"
-        android:onClick="saveTags"/>
 
-   
-    
-     <Button
-        android:id="@+id/cancelButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="backToMainMenu"
-        android:text="@string/tag_cancel_text" />
 
     
     

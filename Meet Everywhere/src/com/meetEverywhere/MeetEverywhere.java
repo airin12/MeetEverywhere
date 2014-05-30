@@ -83,6 +83,14 @@ public class MeetEverywhere extends Activity {
 	        }
 	    });
         
+        
+        ((FrameLayout)findViewById(R.id.gps_button)).setOnClickListener(new OnClickListener() {
+	        //@Override
+	        public void onClick(View arg0) {
+	        	startActivity(new Intent(MeetEverywhere.this, SearchTagsEdition.class));
+	        }
+	    });
+        
         ((FrameLayout)findViewById(R.id.close_button)).setOnClickListener(new OnClickListener() {
 	        //@Override
 	        public void onClick(View arg0) {
