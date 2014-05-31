@@ -1,7 +1,6 @@
 package com.meetEverywhere.bluetooth;
 
 import com.meetEverywhere.R;
-import com.meetEverywhere.common.Configuration;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -9,7 +8,6 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,14 +15,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class BluetoothChooseDeviceActivity extends Activity implements Runnable{
+public class BluetoothChooseDeviceActivity extends Activity {
 
+	private BluetoothDispatcher dispatcher;
 	private BluetoothAdapter bluetoothAdapter;
-	private Configuration configuration;
-	private boolean startRefreshingImmediately;
-	private static BluetoothChooseDeviceActivity discoveringThread = null;
-	private static BroadcastReceiverImpl broadcastReceiver = null;
-
+	private static boolean discoveringServiceActivated = false;
 	private ListView listView;
 	private BluetoothListAdapter adapter;
 
@@ -36,8 +31,8 @@ public class BluetoothChooseDeviceActivity extends Activity implements Runnable{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.bluetooth_choose_layout);
-		configuration = Configuration.getInstance();
-		
+		dispatcher = BluetoothDispatcher.getInstance();
+
 		if (BluetoothDispatcher.getInstance().getBluetoothListAdapter() == null) {
 			BluetoothDispatcher.getInstance().setBluetoothListAdapter(
 					new BluetoothListAdapter(getApplicationContext(), 0));
@@ -47,9 +42,8 @@ public class BluetoothChooseDeviceActivity extends Activity implements Runnable{
 
 		listView = (ListView) findViewById(R.id.chatListView);
 		listView.setAdapter(adapter);
-		getAdapter().notifyDataSetChanged();
+		adapter.notifyDataSetChanged();
 
-		
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -82,93 +76,45 @@ public class BluetoothChooseDeviceActivity extends Activity implements Runnable{
 			Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableBT, 0xDEADBEEF);
 		}
-		if(discoveringThread == null){
-			discoveringThread = this;
-			broadcastReceiver = new BroadcastReceiverImpl(this);
-			setStartRefreshingImmediately(false);
-			IntentFilter ifilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-			this.registerReceiver(broadcastReceiver, ifilter);
-			(new Thread(discoveringThread)).start();
-		}else{
-			setStartRefreshingImmediately(true);
+		if (discoveringServiceActivated == false) {
+			discoveringServiceActivated = true;
+			
+			startService(new Intent(BluetoothChooseDeviceActivity.this, BluetoothDeviceSearchService.class));
+		} else {
+			setStartRefreshingImmediately(true);	
 		}
+
 		
-
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-	}
-
-	public BluetoothListAdapter getAdapter() {
-		return adapter;
-	}
-
-	public void run() {
-		long counter = 0;
-		while(true){
-			counter = 0;
-			if (bluetoothAdapter.isDiscovering()) {
-				bluetoothAdapter.cancelDiscovery();
-			}
-			//showToast("budze service");
-			bluetoothAdapter.startDiscovery();
-			while(counter < configuration.getBluetoothMillisRefreshingTime()){
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				counter += 1000;
-			}
-			if(bluetoothAdapter.isDiscovering()){
-				bluetoothAdapter.cancelDiscovery();
-			}
-			counter = 0;
-			//showToast("usypiam service");
-			while(!isStartRefreshingImmediately() && counter < configuration.getBluetoothMillisTimeBetweenRefreshing()){
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				counter += 1000;
-			}
-			setStartRefreshingImmediately(false);
-		}
+		
 	}
 	
 	public void showToast(final String text) {
 		BluetoothDispatcher.getInstance().getHandler().post(new Runnable() {
 			public void run() {
-				Toast.makeText(getApplicationContext(), text,
+				Toast.makeText(dispatcher.getTempContextHolder(), text,
 						Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
 
-	public boolean isStartRefreshingImmediately() {
-		return startRefreshingImmediately;
-	}
-
 	public void setStartRefreshingImmediately(boolean startRefreshingImmediately) {
-		discoveringThread.startRefreshingImmediately = startRefreshingImmediately;
+		dispatcher.setFlagStartDiscoveryImmediateliy(startRefreshingImmediately);
 	}
 
 }
 
 class BroadcastReceiverImpl extends BroadcastReceiver {
-	private final BluetoothChooseDeviceActivity bluetoothChooseDev;
-	private final BluetoothDispatcher dispatcher = BluetoothDispatcher.getInstance();
+	private boolean flagDiscoveryExceptionOccured = false;
+	private final BluetoothDispatcher dispatcher = BluetoothDispatcher
+			.getInstance();
+	private final BluetoothListAdapter adapter;
 	
-	public BroadcastReceiverImpl(
-			BluetoothChooseDeviceActivity bluetoothChooseDev) {
-		this.bluetoothChooseDev = bluetoothChooseDev;
+	public BroadcastReceiverImpl(BluetoothListAdapter adapter) {
+		this.adapter = adapter;
 	}
 
 	@Override
-	public void onReceive(Context context, Intent intent) {
+	public synchronized void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
 		if (BluetoothDevice.ACTION_FOUND.equals(action)) {
 			// Pobierz object BluetoothDevice.
@@ -176,24 +122,53 @@ class BroadcastReceiverImpl extends BroadcastReceiver {
 					.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 			BluetoothConnection connection;
 			try {
-				if (!dispatcher.getConnections().keySet()
-						.contains(device)) {
+				if (dispatcher.getDevicesUnabledToConnect().contains(device)) {
+//					bluetoothChooseDev.showToast("onReceive: " + device.getName() + "jest na liœcie blokowanych");
+					return;
+				}
+//				bluetoothChooseDev.showToast("onReceive: " + device.getName());
+				if (!dispatcher.getConnections().keySet().contains(device)) {
 					connection = dispatcher
 							.establishConnection(context, device);
-					bluetoothChooseDev.addToList(connection);
-				}else{
-					BluetoothConnection conn = dispatcher.getBluetoothConnectionForDevice(device);
-					if(conn != null && conn.getStatus().equals(BluetoothConnectionStatus.INACTIVE)){
-						dispatcher.activateConnection(context, conn, device, null);
+					adapter.add(connection);
+				} else {
+					BluetoothConnection conn = dispatcher
+							.getBluetoothConnectionForDevice(device);
+					if (conn != null
+							&& conn.getStatus().equals(
+									BluetoothConnectionStatus.INACTIVE)) {
+						dispatcher.activateConnection(context, conn, device,
+								null);
 					}
 				}
 			} catch (Exception e) {
+				flagDiscoveryExceptionOccured = true;
 				e.printStackTrace();
+				dispatcher.getDevicesUnabledToConnect().add(device);
 				return;
 			}
 
-			bluetoothChooseDev.getAdapter().notifyDataSetChanged();
-
+			adapter.notifyDataSetChanged();
+		}
+		if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
+//			showToast("Wyszukiwanie zakoñczone");
+			if(flagDiscoveryExceptionOccured){
+				flagDiscoveryExceptionOccured = false;
+				BluetoothAdapter.getDefaultAdapter().startDiscovery();
+			}else{
+				dispatcher.getDevicesUnabledToConnect().clear();
+				dispatcher.setFlagDiscoveryFinished(true);
+			}
 		}
 	}
+	
+	public void showToast(final String text) {
+		BluetoothDispatcher.getInstance().getHandler().post(new Runnable() {
+			public void run() {
+				Toast.makeText(dispatcher.getTempContextHolder(), text,
+						Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+	
 }

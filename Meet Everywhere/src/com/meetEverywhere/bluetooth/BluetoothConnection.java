@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-
 import com.meetEverywhere.R;
 import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.TextMessage;
 import com.meetEverywhere.common.User;
+import com.meetEverywhere.common.TextMessageACK;
 
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
@@ -28,6 +28,7 @@ public class BluetoothConnection implements Runnable {
 	private BluetoothConnectionStatus status;
 	private User user;
 	private Handler handler;
+	private TextMessageACK messageACK = null;
 
 	public BluetoothConnection(Context context, BluetoothSocket socket)
 			throws IOException, ClassNotFoundException, InterruptedException {
@@ -37,7 +38,7 @@ public class BluetoothConnection implements Runnable {
 
 		outputStream = new ObjectOutputStream(socket.getOutputStream());
 		outputStream.flush();
-		Thread.sleep(100);
+		Thread.sleep(10);
 
 		inputStream = new ObjectInputStream(socket.getInputStream());
 
@@ -55,7 +56,7 @@ public class BluetoothConnection implements Runnable {
 
 		outputStream = new ObjectOutputStream(socket.getOutputStream());
 		outputStream.flush();
-		Thread.sleep(100);
+		Thread.sleep(10);
 
 		inputStream = new ObjectInputStream(socket.getInputStream());
 
@@ -88,15 +89,21 @@ public class BluetoothConnection implements Runnable {
 	public void run() {
 		Object receivedObject;
 		while (true) {
-				try {
-					while ((receivedObject = inputStream.readObject()) != null) {
-						if (receivedObject instanceof TextMessage) {
-							addMessage((TextMessage) receivedObject);
+			try {
+				while ((receivedObject = inputStream.readObject()) != null) {
+					if (receivedObject instanceof TextMessage) {
+						addMessage((TextMessage) receivedObject);
+					}
+					if (receivedObject instanceof TextMessageACK) {
+						if (((TextMessageACK) receivedObject)
+								.equals(messageACK)) {
+							messageACK = null;
 						}
 					}
-				} catch (Exception e) {
-					status = BluetoothConnectionStatus.INACTIVE;
 				}
+			} catch (Exception e) {
+				status = BluetoothConnectionStatus.INACTIVE;
+			}
 
 			handler.post(new Runnable() {
 				public void run() {
@@ -120,9 +127,23 @@ public class BluetoothConnection implements Runnable {
 		}
 	}
 
-	public void addMessage(final TextMessage message) throws IOException {
+	public void addMessage(final TextMessage message) throws IOException,
+			InterruptedException, ClassNotFoundException {
 		if (message.isLocal()) {
-			outputStream.writeObject(message);
+			synchronized (this) {
+				messageACK = new TextMessageACK(message.hashCode());
+				outputStream.writeObject(message);
+				int maxWaitingPeriod = 2000;
+				while (messageACK != null && maxWaitingPeriod > 0) {
+					Thread.sleep(30);
+					maxWaitingPeriod -= 30;
+				}
+				if (messageACK != null) {
+					throw new IOException("Acknowledge not acquired!");
+				}
+			}
+		} else {
+			outputStream.writeObject(new TextMessageACK(message.hashCode()));
 		}
 
 		handler.post(new Runnable() {

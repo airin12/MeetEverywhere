@@ -56,10 +56,14 @@ public class BluetoothChat extends Activity {
 					try {
 						actualConnection.addMessage(message);
 						text.setText("");
-					} catch (IOException e) {
+					} catch (Exception e) {
 						Toast.makeText(getBaseContext(), "Wiadomoœæ nie zosta³a wys³ana!", Toast.LENGTH_SHORT).show();
+						try {
+							actualConnection.getBluetoothSocket().close();
+						} catch (IOException e1) {
+						}
 						actualConnection.setStatus(BluetoothConnectionStatus.INACTIVE);
-					}				
+					}			
 				}
 			}
 		});

@@ -1,7 +1,6 @@
 package com.meetEverywhere.bluetooth;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -52,9 +51,9 @@ public class BluetoothService extends Service implements Runnable {
 		}
 
 		// Zatrzymaj wyszukiwanie urz¹dzeñ.
-		if (bluetoothAdapter.isDiscovering()) {
+//		if (bluetoothAdapter.isDiscovering()) {
 			bluetoothAdapter.cancelDiscovery();
-		}
+//		}
 
 		// Uruchom w¹tek us³ugi, który akceptuje po³¹czenia.
 		(new Thread(this)).start();
@@ -72,7 +71,7 @@ public class BluetoothService extends Service implements Runnable {
 				serverSocket = adapter
 						.listenUsingInsecureRfcommWithServiceRecord(
 								"MeetEverywhere",
-								UUID.fromString(dispatcher.getUUID()));
+								dispatcher.getUUID());
 
 				while ((socket = serverSocket.accept()) != null) {
 

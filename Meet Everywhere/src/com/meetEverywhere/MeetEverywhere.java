@@ -87,9 +87,7 @@ public class MeetEverywhere extends Activity {
 	        //@Override
 	        public void onClick(View arg0) {
 	            stopService(new Intent(MeetEverywhere.this, PositionTracker.class));
-	            
-	            System.exit(0);
-	            finish();	       
+	            finish();
 	        }
 	    });
         

@@ -19,7 +19,6 @@ public class Configuration implements Runnable{
 	private static Configuration instance;
 	private final int SECOND_FROM_MILLIS= 1000;
 	private long bluetoothMillisToReconnectAttempt = 2 * SECOND_FROM_MILLIS;
-	private long bluetoothMillisRefreshingTime = 15 * SECOND_FROM_MILLIS;
 	private long bluetoothMillisTimeBetweenRefreshing = 20 * SECOND_FROM_MILLIS;
 	private List<User> favourites;
 	private User user;
@@ -84,15 +83,6 @@ public class Configuration implements Runnable{
 
 	public void setApplicationOnline(boolean isApplicationOnline) {
 		this.isApplicationOnline = isApplicationOnline;
-	}
-
-	public long getBluetoothMillisRefreshingTime() {
-		return bluetoothMillisRefreshingTime;
-	}
-
-	public void setBluetoothMillisRefreshingTime(
-			long bluetoothMillisRefreshingTime) {
-		this.bluetoothMillisRefreshingTime = bluetoothMillisRefreshingTime;
 	}
 
 	public long getBluetoothMillisTimeBetweenRefreshing() {
