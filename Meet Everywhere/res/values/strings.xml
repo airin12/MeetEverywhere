@@ -29,13 +29,14 @@
     <string name="title_activity_profile_details">ProfileDetails</string>
     
     <string name="tags_edition_text">Wpisz tagi oddzielone przecinkiem</string>
-    <string name="tag_add_text">Add</string>
-    <string name="tag_cancel_text">Back</string>
-    <string name="tag_save_text">Save</string>
+    <string name="tag_add_text">Dodaj tagi</string>
+    <string name="tag_cancel_text">Powrót</string>
+    <string name="tag_save_text">Zapisz</string>
     <string name="error_tags_required">This field is required</string>
-    <string name="tag_delete_text">Delete</string>
+    <string name="tag_delete_text">Usuń tagi</string>
     <string name="desc">Photo</string>
-    <string name="tag_search_text">Search</string>
+    <string name="tag_search_text">Szukaj</string>
+    <string name="tag_refresh_text">Odświerz listę</string>
 	
 	
 	<string name="close_icon">close_icon</string>    
@@ -63,6 +64,7 @@
     <string name="ActivityLogin.login">Login</string>
     <string name="ActivityLogin.signIn">Sign in</string>
     <string name="ActivityLogin.password">Password</string>
+    <string name="ActivityLogin.registerIfNotAccount">Nie masz konta? Zarejestruj się!</string>
     
     <!-- ************************************************************************************************* -->
     <!-- ************************************* Profile Edition *************************************** -->

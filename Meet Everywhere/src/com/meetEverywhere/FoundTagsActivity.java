@@ -1,6 +1,7 @@
 package com.meetEverywhere;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
@@ -32,6 +33,7 @@ public class FoundTagsActivity extends Activity{
 		handler = new Handler(){
 			  @Override
 			  public void handleMessage(Message msg) {
+				  Collections.sort(users,new ServUser.ServUserComparator ());
 				  loadAdapterWithNewList(users);
 			  }
 			};
@@ -62,6 +64,10 @@ public class FoundTagsActivity extends Activity{
 		refresher.stopThread();
 	}
 	
+	public void refresh(View view){
+		refresher.refresh();
+	}
+	
 	
 	public class UsersListRefresher extends Thread{
 		private boolean shouldRun = true;
@@ -69,6 +75,12 @@ public class FoundTagsActivity extends Activity{
 		
 		public UsersListRefresher(){
 			dao = new DAO();
+		}
+		
+		public void refresh(){
+			users = dao.getUsersFromServer();
+			Message msg = handler.obtainMessage();
+			handler.sendMessage(msg);
 		}
 		
 		@Override
@@ -92,4 +104,5 @@ public class FoundTagsActivity extends Activity{
 		}
 
 	}
+	
 }

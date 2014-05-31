@@ -3,10 +3,7 @@ package com.meetEverywhere;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.meetEverywhere.common.Tag;
-
 import android.app.Activity;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,18 +12,21 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 //import android.widget.AdapterView;
 //import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import com.meetEverywhere.common.Tag;
 
 public abstract class TagsView extends Activity {
 
 	private ListView tagListView;
 	private List<Tag> tags = new ArrayList<Tag>();
-	private List<Tag> deletedTags = new ArrayList<Tag>();
 	private ArrayAdapter<Tag> listAdapter;
 
 	private DatabaseAdapter myDBAdapter;
@@ -34,21 +34,7 @@ public abstract class TagsView extends Activity {
 	private List<Tag> getTagsFromDatabase() {
 		List<Tag> list = new ArrayList<Tag>();
 
-		Cursor dbCursor = myDBAdapter
-				.getAllTags(DatabaseAdapter.TagType.SEARCH);
-		startManagingCursor(dbCursor);
-		dbCursor.requery();
-
-		if (dbCursor.moveToFirst()) {
-			do {
-				int id = dbCursor.getInt(myDBAdapter.ID_COLUMN);
-				String tag = dbCursor.getString(myDBAdapter.TAG_COLUMN);
-				int checkedInt = dbCursor.getInt(myDBAdapter.ACTIVE_TAG_COLUMN);
-
-				// list.add(new Contact(id, tag, checkedInt != 0,
-				// Contact.Status.SAVED, false));
-			} while (dbCursor.moveToNext());
-		}
+		
 
 		return list;
 	}
@@ -67,10 +53,18 @@ public abstract class TagsView extends Activity {
 		tagListView = (ListView) findViewById(R.id.tagsListView);
 		tagListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		tags = getTagsFromDatabase();
-		// listAdapter = new MyCustomAdapter(this,
-		// R.layout.content_info,(ArrayList<Contact>) tags);
+
 		
 		tagListView.setAdapter(listAdapter);
+		tagListView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                    long id) {
+            	CheckBox cb = (CheckBox) view.findViewById(R.id.checkBox1);
+            	cb.toggle();
+                ((MyCustomAdapter)listAdapter).changeCheckBox(position);
+            }
+        });
+		
 		putTagsIntoList(tags);
 
 		registerForContextMenu(tagListView);
@@ -93,7 +87,7 @@ public abstract class TagsView extends Activity {
 	        });
 	    }
 
-	    //If a layout container, iterate over children and seed recursion.
+	    
 	    if (view instanceof ViewGroup) {
 
 	        for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
@@ -107,8 +101,6 @@ public abstract class TagsView extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		Toast.makeText(getApplicationContext(), "Czy zapisaæ?",
-				Toast.LENGTH_LONG).show();
 
 		myDBAdapter.close();
 		super.onDestroy();
@@ -151,10 +143,7 @@ public abstract class TagsView extends Activity {
 		listAdapter = new MyCustomAdapter(this, R.layout.content_info,
 				(ArrayList<Tag>) tags2);
 
-		// listAdapter = new ArrayAdapter<String>(getApplicationContext(),
-		// android.R.layout.simple_list_item_1, tags);
 		tagListView.setAdapter(listAdapter);
-		// listAdapter.notifyDataSetChanged();
 
 	}
 

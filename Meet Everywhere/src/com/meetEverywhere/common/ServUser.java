@@ -1,7 +1,7 @@
 package com.meetEverywhere.common;
 
+import java.util.Comparator;
 import java.util.List;
-
 
 import android.graphics.Bitmap;
 
@@ -34,4 +34,12 @@ public class ServUser {
 		return percentage+"";
 	}
 
+	
+	public static class ServUserComparator implements Comparator<ServUser>
+	 {
+	     public int compare(ServUser s1, ServUser s2)
+	     {
+	         return Integer.parseInt(s2.getPercentage())-Integer.parseInt(s1.getPercentage());
+	     }
+	 }
 }

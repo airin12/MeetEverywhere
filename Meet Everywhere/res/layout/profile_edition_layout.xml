@@ -17,53 +17,76 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <ImageView
-                android:id="@+id/profilePicture"
-                android:layout_width="160dp"
-                android:layout_height="240dp"
-                android:src="@drawable/ic_launcher" />
+            <RelativeLayout
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/Frame.Margin"
+                android:background="@drawable/shape_frame_black"
+                android:layout_marginLeft="20dp"
+                android:gravity="center" >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/profilePicture"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+
+                    android:src="@drawable/ic_launcher" />
+
+            </RelativeLayout>
+
+            <RelativeLayout 
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_gravity="center"
-                android:gravity="center" >
+                android:layout_margin="@dimen/Frame.Margin"
+                android:background="@drawable/shape_frame_black" >
+                
+                <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
 
                 <EditText
                     android:id="@+id/ActivityRegistration_userName"
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
-                    android:ems="10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
                     android:text="@string/user_name" />
+
+                <EditText
+                    android:id="@+id/userDescriptionEdition"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_between_items"
+                    android:layout_marginLeft="20dp"
+                    android:minLines="3"
+                    android:scrollHorizontally="true"
+                    android:text="@string/user_description" />
 
                 <Button
                     android:id="@+id/ProfileEditionActivity.attachPictureButton"
                     android:layout_width="@dimen/ProfileEditionActivity.attachPictureButtonWidth"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="@dimen/spacing_between_items"
-                    android:text="@string/attach_picture"
                     android:gravity="center_vertical"
-                    android:onClick="attachNewProfilePictureAction" />
+                    android:onClick="attachNewProfilePictureAction"
+                    android:text="@string/attach_picture" />
+
 
             </LinearLayout>
+                
+            </RelativeLayout>
+
 
         </LinearLayout>
-	
-	        <EditText
-	            android:id="@+id/userDescriptionEdition"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="@dimen/spacing_between_items"
-	            android:ems="10"
-	            android:minLines="4"
-	            android:scrollHorizontally="true"
-	            android:hint="@string/put_your_description_hint" >
-	
-	            <requestFocus />
-	        </EditText>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+        </LinearLayout>
 	
 	        <Button
 	            android:id="@+id/saveUserSettingsButton"
@@ -77,4 +100,7 @@
      </LinearLayout>
     
 </ScrollView>
+
+
+
 

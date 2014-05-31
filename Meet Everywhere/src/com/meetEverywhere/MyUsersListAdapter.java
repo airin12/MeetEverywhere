@@ -6,6 +6,7 @@ import com.meetEverywhere.common.ServUser;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,9 +55,12 @@ public class MyUsersListAdapter extends ArrayAdapter<ServUser>{
 			 
 			   if(usersList.size()>0){
 				   ServUser user = usersList.get(position);
-				   holder.photo.setImageBitmap(user.getBitmap());
+				   //holder.photo.setImageBitmap(user.getBitmap());
 				   holder.nick.setText(user.getNick());
-				   holder.percentage.setText(user.getPercentage());
+				   holder.percentage.setText(user.getPercentage()+"%");
+				   double perc = Double.parseDouble(user.getPercentage())/100;
+				   int color = Color.rgb((int)(255-255*perc), (int)(0+255*perc), 0);
+				   holder.percentage.setTextColor(color);
 			   }
 			 
 			   return convertView;

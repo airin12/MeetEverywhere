@@ -12,7 +12,8 @@
         <LinearLayout
             style="@style/LoginFormContainer"
             android:orientation="vertical"
-            android:layout_gravity="center" >
+            android:layout_gravity="center"
+            android:gravity="center" >
 
             <EditText
                 android:id="@+id/ActivityLogin_userName"
@@ -47,8 +48,20 @@
                     android:gravity="center_vertical" />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_between_items"
+                android:text="@string/ActivityLogin.registerIfNotAccount"
+                android:clickable="true"
+                android:onClick="registerIfNoAccountAction"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
         </LinearLayout>
     </ScrollView>
 
 </merge>
+
 
