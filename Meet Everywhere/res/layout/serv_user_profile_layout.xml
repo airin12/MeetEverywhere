@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+    
+     <ImageView
+        android:id="@+id/photo_profile"
+        
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
+        android:src="@drawable/user"
+        android:layout_margin="5dp"
+        android:contentDescription="@string/desc" 
+        />
+    
+     <TextView
+        android:id="@+id/user_desc_profile"
+        android:layout_weight="1"
+        android:layout_width="fill_parent"
+        android:layout_margin="20dp"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"/>
+
+     </LinearLayout>
+     
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginLeft="20dp"
+        android:text="@string/tags_profile"/>
+    
+     <TextView
+        android:id="@+id/tags_profile"
+        android:layout_width="fill_parent"
+        android:layout_margin="20dp"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"/>
+     
+        <LinearLayout
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="sendInvite"
+      android:layout_marginBottom="5dp"
+      android:layout_marginTop="5dp">
+      
+       <ImageView
+            android:id="@+id/add_icon_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/add_user_icon" />
+     
+      <TextView
+            android:id="@+id/add_text_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/add_user_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      
+      </LinearLayout>
+      
+      <LinearLayout
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="backToMainMenu"
+      android:layout_marginBottom="5dp"
+      android:layout_marginTop="5dp">
+      
+       <ImageView
+            android:id="@+id/back_icon_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/back_icon" />
+     
+      <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/tag_cancel_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      
+      </LinearLayout>
+      
+</LinearLayout>

@@ -54,6 +54,7 @@ public abstract class TagsView extends Activity {
 		tagListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		tags = getTagsFromDatabase();
 
+		additionalConfig();
 		
 		tagListView.setAdapter(listAdapter);
 		tagListView.setOnItemClickListener(new OnItemClickListener() {
@@ -69,6 +70,8 @@ public abstract class TagsView extends Activity {
 
 		registerForContextMenu(tagListView);
 	}
+
+	abstract public void additionalConfig();
 
 	public abstract int getLayout();
 	

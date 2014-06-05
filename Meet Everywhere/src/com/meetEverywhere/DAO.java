@@ -50,7 +50,7 @@ public class DAO {
 		// TODO
 	}
 	
-	public List<ServUser> getUsersFromServer() {
+	public List<ServUser> getUsersFromServer(List<String> tags2, int percentage) {
 		List<ServUser> list = new ArrayList<ServUser>();
 		
 		Random random = new Random();
@@ -58,16 +58,19 @@ public class DAO {
 		
 		for(int i=0;i<count;i++){
 			String nick="marek"+random.nextInt(100);
-			String desc=" jestem marek ";
+			String desc=" jestem marek z Wloszczowy, pozdrawiam Tarnow";
 			List<Tag> tags = new ArrayList<Tag>();
+			tags.add(new Tag("siatkowka"));
+			tags.add(new Tag("szachy"));
 			int perc = random.nextInt(100);
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inPreferredConfig = Bitmap.Config.ARGB_8888;
 			//Bitmap bitmap = BitmapFactory.decodeFile("/ic_launcher-web.png", options);
 			//Bitmap bitmap = null;
 			
-			ServUser user = new ServUser(nick,perc,null,desc,tags);
-			list.add(user);
+			ServUser user = new ServUser(nick,perc,null,desc,tags,0);
+			if(perc>=percentage)
+				list.add(user);
 		}
 		
 		

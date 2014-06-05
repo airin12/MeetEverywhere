@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -22,6 +24,8 @@ public class FoundTagsActivity extends Activity{
 	private ListView usersListView;
 	private ListAdapter listAdapter;
 	private Handler handler;
+	private int percentage;
+	private List<String> tags;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -29,6 +33,15 @@ public class FoundTagsActivity extends Activity{
 		setContentView(R.layout.found_tags_activity_layout);
 		
 		usersListView = (ListView) findViewById(R.id.foundUsersList);
+		usersListView.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                    long id) {
+            	ServUser user = ((MyUsersListAdapter)listAdapter).getUserFromIndex(position);
+            	Intent intent = new Intent(FoundTagsActivity.this, ServUserProfileActivity.class);
+            	intent.putExtra("user", user);
+            	startActivity(intent);
+            }
+        });
 		
 		handler = new Handler(){
 			  @Override
@@ -43,7 +56,8 @@ public class FoundTagsActivity extends Activity{
 		refresher.start();
 		
 		Intent intent = getIntent();
-		List<String> tags = intent.getStringArrayListExtra("tags");
+		tags = intent.getStringArrayListExtra("tags");
+		percentage = intent.getIntExtra("perc", 50);
 	}
 
 	public void back(View view) {
@@ -78,7 +92,7 @@ public class FoundTagsActivity extends Activity{
 		}
 		
 		public void refresh(){
-			users = dao.getUsersFromServer();
+			users = dao.getUsersFromServer(tags,percentage);
 			Message msg = handler.obtainMessage();
 			handler.sendMessage(msg);
 		}
@@ -86,7 +100,7 @@ public class FoundTagsActivity extends Activity{
 		@Override
 		public void run(){
 			while(shouldRun){
-				users = dao.getUsersFromServer();
+				users = dao.getUsersFromServer(tags,percentage);
 				Message msg = handler.obtainMessage();
 				handler.sendMessage(msg);
 				

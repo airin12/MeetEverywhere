@@ -78,6 +78,9 @@
         <activity
             android:name="com.meetEverywhere.FoundTagsActivity">
         </activity>
+        <activity
+            android:name="com.meetEverywhere.ServUserProfileActivity">
+        </activity>
 
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"

@@ -37,6 +37,9 @@
     <string name="desc">Photo</string>
     <string name="tag_search_text">Szukaj</string>
     <string name="tag_refresh_text">Odświerz listę</string>
+    <string name="perc_text">Minimalna zgodność tagów: 0%</string>
+    <string name="tags_profile">Tagi</string>
+    <string name="add_user_text">Wyślij zaproszenie</string>
 	
 	
 	<string name="close_icon">close_icon</string>    

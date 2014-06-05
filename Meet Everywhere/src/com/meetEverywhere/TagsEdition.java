@@ -19,6 +19,11 @@ public class TagsEdition extends TagsView {
 		return R.layout.tags_edition_layout;
 	}
 
+	@Override
+	public void additionalConfig() {
+		
+	}
+
 	
   
 }

@@ -66,4 +66,8 @@ public class MyUsersListAdapter extends ArrayAdapter<ServUser>{
 			   return convertView;
 		 
 		  }
+		  
+		  public ServUser getUserFromIndex(int index){
+			  return usersList.get(index);
+		  }
 }
