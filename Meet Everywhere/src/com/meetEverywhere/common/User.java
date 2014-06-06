@@ -20,6 +20,8 @@ public class User implements Serializable {
 
 	private static final long serialVersionUID = -437242741203572594L;
 	private final String nickname;
+	private long userToken;
+	private long userID;
 	private List<Tag> hashTags;
 	private String description;
 	private byte[] picture;
@@ -79,6 +81,22 @@ public class User implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public long getUserToken() {
+		return userToken;
+	}
+
+	public void setUserToken(long userToken) {
+		this.userToken = userToken;
+	}
+
+	public long getUserID() {
+		return userID;
+	}
+
+	public void setUserID(long userID) {
+		this.userID = userID;
 	}
 
 }

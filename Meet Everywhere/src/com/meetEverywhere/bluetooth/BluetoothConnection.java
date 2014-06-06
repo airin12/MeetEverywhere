@@ -10,7 +10,6 @@ import com.meetEverywhere.common.TextMessage;
 import com.meetEverywhere.common.User;
 import com.meetEverywhere.common.TextMessageACK;
 
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.os.Handler;
@@ -47,16 +46,14 @@ public class BluetoothConnection implements Runnable {
 				.writeObject(BluetoothDispatcher.getInstance().getOwnData());
 		user = (User) inputStream.readObject();
 		handler = dispatcher.getHandler();
-//		setStatus(BluetoothConnectionStatus.ACTIVE);
 		Log.i("bluetoothConnection", "connection activated");
-//		(new Thread(this)).start();
 	}
 
-	public void launchConnectionThread(){
+	public void launchConnectionThread() {
 		setStatus(BluetoothConnectionStatus.ACTIVE);
 		(new Thread(this)).start();
 	}
-	
+
 	public void setReconnectedSocket(BluetoothSocket socket)
 			throws IOException, InterruptedException, ClassNotFoundException {
 		bluetoothSocket = socket;
@@ -137,12 +134,11 @@ public class BluetoothConnection implements Runnable {
 	public void addMessage(final TextMessage message) throws IOException,
 			InterruptedException, ClassNotFoundException {
 		if (message.isLocal()) {
-			Log.i("GOT MESSAGE:", message.getText());
 			synchronized (this) {
 				messageACK = new TextMessageACK(message.hashCode());
 				outputStream.writeObject(message);
 				int maxWaitingPeriod = 3000;
-/*
+
 				while (messageACK != null && maxWaitingPeriod > 0) {
 					Thread.sleep(100);
 					maxWaitingPeriod -= 100;
@@ -150,40 +146,14 @@ public class BluetoothConnection implements Runnable {
 				if (messageACK != null) {
 					throw new IOException("Acknowledge not acquired!");
 				}
-*/
+
 			}
 		} else {
-/*			
-			boolean resetDiscovery = false;
-			if(dispatcher.isFlagDiscoveryFinished() == false){
-				BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-				resetDiscovery = true;
-			}
 			outputStream.writeObject(new TextMessageACK(message.hashCode()));
-			if(resetDiscovery){
-				dispatcher.setFlagStartDiscoveryImmediateliy(true);
-			}
-*/			
 		}
 
 		handler.post(new Runnable() {
 			public void run() {
-				
-				if(!message.isLocal()){
-					boolean resetDiscovery = false;
-					if(dispatcher.isFlagDiscoveryFinished() == false){
-						BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-						resetDiscovery = true;
-					}
-					try {
-						outputStream.writeObject(new TextMessageACK(message.hashCode()));
-					} catch (IOException e) {
-					}
-					if(resetDiscovery){
-						dispatcher.setFlagStartDiscoveryImmediateliy(true);
-					}				
-				}
-				
 				messagesAdapter.add(message);
 			}
 		});

@@ -20,10 +20,13 @@ public class Configuration implements Runnable{
 	private final int SECOND_FROM_MILLIS= 1000;
 	private long bluetoothMillisToReconnectAttempt = 2 * SECOND_FROM_MILLIS;
 	private long bluetoothMillisTimeBetweenRefreshing = 20 * SECOND_FROM_MILLIS;
+	private long serverMillisTimeBetweenRefreshing = 30 * SECOND_FROM_MILLIS;
+	private List<Tag> tagsToSearchApartFromUserTags;
 	private List<User> favourites;
 	private User user;
-	private long sessionToken;
 	private boolean isApplicationOnline;
+	private int desiredTagsCompatibility;
+	
 	
 	private Configuration(){
 		loadConfiguration();
@@ -38,6 +41,7 @@ public class Configuration implements Runnable{
 		hashtags.add(new Tag("strzelectwo"));
 		String description = "Mistrz wszechœwiata i okolic. Pozdrawiam!";
 		Bitmap picture = BitmapFactory.decodeFile("ic_launcher-web.png");
+		desiredTagsCompatibility = 60;
 		user = new User("marek" + (new Random().nextInt(100000)), hashtags, description, picture);
 	}
 
@@ -69,14 +73,6 @@ public class Configuration implements Runnable{
 		this.bluetoothMillisToReconnectAttempt = bluetoothMillisToReconnectAttempt;
 	}
 
-	public long getSessionToken() {
-		return sessionToken;
-	}
-
-	public void setSessionToken(long sessionToken) {
-		this.sessionToken = sessionToken;
-	}
-
 	public boolean isApplicationOnline() {
 		return isApplicationOnline;
 	}
@@ -93,6 +89,34 @@ public class Configuration implements Runnable{
 			long bluetoothMillisTimeBetweenRefreshing) {
 		this.bluetoothMillisTimeBetweenRefreshing = bluetoothMillisTimeBetweenRefreshing;
 	}
+
+	public int getDesiredTagsCompatibility() {
+		return desiredTagsCompatibility;
+	}
+
+	public void setDesiredTagsCompatibility(int desiredTagsCompatibility) {
+		this.desiredTagsCompatibility = desiredTagsCompatibility;
+	}
+
+	public long getServerMillisTimeBetweenRefreshing() {
+		return serverMillisTimeBetweenRefreshing;
+	}
+
+	public void setServerMillisTimeBetweenRefreshing(
+			long serverMillisTimeBetweenRefreshing) {
+		this.serverMillisTimeBetweenRefreshing = serverMillisTimeBetweenRefreshing;
+	}
+
+	public List<Tag> getTagsToSearchApartFromUserTags() {
+		return tagsToSearchApartFromUserTags;
+	}
+
+	public void setTagsToSearchApartFromUserTags(
+			List<Tag> tagsToSearchApartFromUserTags) {
+		this.tagsToSearchApartFromUserTags = tagsToSearchApartFromUserTags;
+	}
+	
+	
 	
 	
 }
