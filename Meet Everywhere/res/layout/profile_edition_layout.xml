@@ -13,74 +13,87 @@
         android:gravity="center"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/Frame.Margin"
+            android:background="@drawable/shape_frame_black"
+            android:layout_marginLeft="20dp" >
 
-            <RelativeLayout
-                android:layout_width="170dp"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/Frame.Margin"
-                android:background="@drawable/shape_frame_black"
-                android:layout_marginLeft="20dp"
-                android:gravity="center" >
-
-                <ImageView
-                    android:id="@+id/profilePicture"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-
-                    android:src="@drawable/ic_launcher" />
-
-            </RelativeLayout>
-
-            <RelativeLayout 
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_margin="@dimen/Frame.Margin"
-                android:background="@drawable/shape_frame_black" >
-                
-                <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
-                <EditText
-                    android:id="@+id/ActivityRegistration_userName"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/user_name" />
+                    android:layout_height="wrap_content" >
 
-                <EditText
-                    android:id="@+id/userDescriptionEdition"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_between_items"
-                    android:layout_marginLeft="20dp"
-                    android:minLines="3"
-                    android:scrollHorizontally="true"
-                    android:text="@string/user_description" />
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/Frame.Margin"
+                		android:background="@drawable/shape_frame_black"
+                		android:gravity="center" >
 
-                <Button
-                    android:id="@+id/ProfileEditionActivity.attachPictureButton"
-                    android:layout_width="@dimen/ProfileEditionActivity.attachPictureButtonWidth"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="@dimen/spacing_between_items"
-                    android:gravity="center_vertical"
-                    android:onClick="attachNewProfilePictureAction"
-                    android:text="@string/attach_picture" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center" >
 
+                            <ImageView
+                                android:id="@+id/profilePicture"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:layout_marginTop="5dp"
+                                android:contentDescription="@string/main_layout_user"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/ic_launcher" />
+
+                            <Button
+                                android:id="@+id/ProfileEditionActivity.attachPictureButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/spacing_between_items"
+                                android:gravity="center_vertical"
+                                android:onClick="attachNewProfilePictureAction"
+                                android:text="@string/attach_picture" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="10dp" >
+
+	                    <EditText
+	                    android:id="@+id/ProfileEdition.userName"
+	                    android:layout_width="match_parent"
+	                    android:layout_height="wrap_content"
+	                    android:layout_marginTop="10dp"
+	                    android:text="@string/user_name" />
+
+		                <EditText
+		                    android:id="@+id/ProfileEditionActivity.description"
+		                    android:layout_width="match_parent"
+		                    android:layout_height="wrap_content"
+		                    android:layout_marginTop="@dimen/spacing_between_items"
+		                    android:minLines="3"
+		                    android:scrollHorizontally="true"
+		                    android:text="@string/user_description" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
-                
-            </RelativeLayout>
 
-
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

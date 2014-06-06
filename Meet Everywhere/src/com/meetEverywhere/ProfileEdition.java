@@ -40,7 +40,7 @@ public class ProfileEdition extends Activity {
         userSettings = getSharedPreferences(SharedPreferencesKeys.preferencesName, Activity.MODE_PRIVATE);
         String description = userSettings.getString(SharedPreferencesKeys.userDescription, null);
         
-        descriptionEditor = (EditText) findViewById(R.id.userDescriptionEdition);
+        descriptionEditor = (EditText) findViewById(R.id.ProfileEditionActivity_description);
         if(description != null)
         	descriptionEditor.setText(description);
         
