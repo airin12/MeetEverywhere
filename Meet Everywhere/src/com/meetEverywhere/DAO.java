@@ -62,6 +62,14 @@ public class DAO {
 			List<Tag> tags = new ArrayList<Tag>();
 			tags.add(new Tag("siatkowka"));
 			tags.add(new Tag("szachy"));
+			tags.add(new Tag("szachy"));
+			tags.add(new Tag("szachy"));
+			tags.add(new Tag("szachy"));
+			tags.add(new Tag("szachy"));
+			tags.add(new Tag("szachy"));
+			tags.add(new Tag("szachy"));
+			tags.add(new Tag("szachy"));
+			tags.add(new Tag("szachy"));
 			int perc = random.nextInt(100);
 			BitmapFactory.Options options = new BitmapFactory.Options();
 			options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -76,6 +84,10 @@ public class DAO {
 		
 		
 		return list;
+	}
+	
+	public void sendInvite(String userId, String message){
+		
 	}
 	
 }

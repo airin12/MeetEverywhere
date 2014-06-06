@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -30,6 +36,33 @@
 
      </LinearLayout>
      
+    <LinearLayout 
+        android:id="@+id/invited_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+    
+    <ImageView
+            android:id="@+id/send_icon_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="right"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/send_icon" />
+    
+    <TextView
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/msg_sent_profile"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:textSize="20sp"/>
+     
+    </LinearLayout>
+    
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -40,7 +73,8 @@
      <TextView
         android:id="@+id/tags_profile"
         android:layout_width="fill_parent"
-        android:layout_margin="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="15dp"
         android:layout_height="wrap_content"
         android:textSize="20sp"/>
      
@@ -48,7 +82,7 @@
       android:orientation="horizontal" 
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:onClick="sendInvite"
+      android:onClick="showMoreFromView"
       android:layout_marginBottom="5dp"
       android:layout_marginTop="5dp">
       
@@ -69,9 +103,61 @@
             android:layout_marginLeft="75dp"
             android:text="@string/add_user_text"
             android:textSize="20sp"
+            android:textStyle="bold"
+            android:onClick="sendInvite" />
+      
+      </LinearLayout>
+      
+        <EditText
+           android:id="@+id/invite_message"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:visibility="gone"
+           android:hint="@string/invite_hint"
+           />
+        
+         <ImageView
+            android:id="@+id/send_icon2_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="right"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/send_icon" 
+            android:visibility="gone"
+            android:onClick="sendInvite"/>
+      
+       <LinearLayout
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="openChat"
+      android:layout_marginBottom="5dp"
+      android:layout_marginTop="5dp">
+      
+       <ImageView
+            android:id="@+id/chat_icon_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/chat_icon" />
+     
+      <TextView
+            android:id="@+id/chat_text_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/chat_text"
+            android:textSize="20sp"
             android:textStyle="bold" />
       
       </LinearLayout>
+      
+       
+       
       
       <LinearLayout
       android:orientation="horizontal" 
@@ -102,3 +188,5 @@
       </LinearLayout>
       
 </LinearLayout>
+
+</ScrollView>

@@ -14,6 +14,7 @@ public class ServUser implements Serializable{
 	private Bitmap photo;
 	private String description;
 	private List<Tag> tags;
+	private boolean invited;
 
 	public ServUser(String nick, int percentage, Bitmap image,
 			String description, List<Tag> tags, int id) {
@@ -23,6 +24,7 @@ public class ServUser implements Serializable{
 		this.description=description;
 		this.tags=tags;
 		this.id=id;
+		this.invited=false;
 	}
 
 	public Bitmap getBitmap() {
@@ -53,5 +55,16 @@ public class ServUser implements Serializable{
 
 	public List<Tag> getTags() {
 		return tags;
+	}
+	
+	public boolean getInvited(){
+		return invited;
+	}
+	
+	public void changeInvited(){
+		if(invited)
+			invited=false;
+		else
+			invited=true;
 	}
 }

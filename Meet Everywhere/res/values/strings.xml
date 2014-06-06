@@ -40,6 +40,9 @@
     <string name="perc_text">Minimalna zgodność tagów: 0%</string>
     <string name="tags_profile">Tagi</string>
     <string name="add_user_text">Wyślij zaproszenie</string>
+    <string name="chat_text">Wyślij wiadomość</string>
+    <string name="invite_hint">Wpisz dodatkową wiadomość</string>   
+    <string name="msg_sent_profile">Zaproszenie wysłane</string>
 	
 	
 	<string name="close_icon">close_icon</string>    
