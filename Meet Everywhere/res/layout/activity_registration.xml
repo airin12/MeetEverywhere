@@ -6,7 +6,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".RegistrationActivity" >
+    tools:context=".RegistrationActivity"
+    android:windowSoftInputMode="stateUnchanged" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,10 +31,9 @@
             android:layout_marginTop="@dimen/spacing_between_items"
             android:ems="10"
             android:hint="@string/put_your_description_hint"
-            android:minLines="4"
+            android:minLines="3"
             android:scrollHorizontally="true" >
 
-            <requestFocus />
         </EditText>
 
         <EditText
