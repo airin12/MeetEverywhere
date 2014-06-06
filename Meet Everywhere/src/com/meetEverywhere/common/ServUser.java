@@ -67,4 +67,8 @@ public class ServUser implements Serializable{
 		else
 			invited=true;
 	}
+
+	public String getId() {
+		return id+"";
+	}
 }

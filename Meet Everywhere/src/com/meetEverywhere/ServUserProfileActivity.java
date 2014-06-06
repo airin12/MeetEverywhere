@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.meetEverywhere.common.ServUser;
 import com.meetEverywhere.common.Tag;
@@ -68,6 +69,8 @@ public class ServUserProfileActivity extends Activity{
 		visible=false;
 		inviteMessage.setVisibility(EditText.GONE);
 		image.setVisibility(EditText.GONE);
+		DAO dao = new DAO();
+		dao.sendInvite(user.getId(), inviteMessage.getText().toString());
 	}
 	
 	public void openChat(View view) {
@@ -75,15 +78,19 @@ public class ServUserProfileActivity extends Activity{
 	}
 	
 	public void showMoreFromView(View view) {
-		if(visible){
-			inviteMessage.setVisibility(EditText.GONE);
-			image.setVisibility(EditText.GONE);
-			visible=false;
-		}
+		if(user.getInvited())
+			Toast.makeText(getApplicationContext(), "Zaproszenie zosta³o ju¿ wys³ane", Toast.LENGTH_SHORT).show();
 		else{
-			inviteMessage.setVisibility(EditText.VISIBLE);
-			image.setVisibility(EditText.VISIBLE);
-			visible=true;
+			if(visible){
+				inviteMessage.setVisibility(EditText.GONE);
+				image.setVisibility(EditText.GONE);
+				visible=false;
+			}
+			else{
+				inviteMessage.setVisibility(EditText.VISIBLE);
+				image.setVisibility(EditText.VISIBLE);
+				visible=true;
+			}
 		}
 	}
 
