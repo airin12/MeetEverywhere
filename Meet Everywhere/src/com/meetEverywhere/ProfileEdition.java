@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.ContactsContract.CommonDataKinds.Nickname;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -28,7 +29,8 @@ public class ProfileEdition extends Activity {
 	private static int RESULT_LOAD_IMAGE = 1;
 	
 	private SharedPreferences userSettings;
-	private EditText descriptionEditor;
+	private EditText descriptionText;
+	private EditText usernameText;
 	private ImageView userImage;
 	private String imageUri;
 	private String picturePath;
@@ -39,42 +41,21 @@ public class ProfileEdition extends Activity {
         setContentView(R.layout.profile_edition_layout);
         
         userSettings = getSharedPreferences(SharedPreferencesKeys.preferencesName, Activity.MODE_PRIVATE);
-        String description = userSettings.getString(SharedPreferencesKeys.userDescription, null);
+        descriptionText = (EditText) findViewById(R.id.ProfileEditionActivity_description);
+        usernameText = (EditText) findViewById(R.id.ProfileEdition_userName);
+       
+        String description = Configuration.getInstance().getUser().getDescription();
+        if(description != null) {
+        	descriptionText.setText(description);
+        }
         
-        descriptionEditor = (EditText) findViewById(R.id.ProfileEditionActivity_description);
-        if(description != null)
-        	descriptionEditor.setText(description);
+        String username = Configuration.getInstance().getUser().getNickname();
+        if(username != null) {
+        	usernameText.setText(username);
+        }
         
         userImage = (ImageView)findViewById(R.id.profilePicture);
-        
         userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
-        //userImage.setImageResource(R.drawable.ic_launcher);
-        
-//        userImage.setOnClickListener(new OnClickListener() {
-//	        //@Override
-//	        public void onClick(View arg0) {
-//	        	Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-//	        	photoPickerIntent.setType("image/*");
-//	        	startActivityForResult(photoPickerIntent, USER_IMAGE_REQUEST_CODE);
-//	        	
-//	        	//startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), USER_IMAGE_REQUEST_CODE);
-//	        }
-//	    });
-        
-//        ((Button)findViewById(R.id.saveUserSettingsButton)).setOnClickListener(new OnClickListener() {
-//	        //@Override
-//	        public void onClick(View arg0) {
-//	        	SharedPreferences.Editor settingsEditor = userSettings.edit();
-//	        	settingsEditor.putString(SharedPreferencesKeys.userDescription, descriptionEditor.getText().toString());
-//	        	settingsEditor.putString(SharedPreferencesKeys.userImage, imageUri);
-//	        	settingsEditor.commit();
-//	        	
-//	        	if(!userSettings.getBoolean(SharedPreferencesKeys.initialization, false))
-//	        		startActivity(new Intent(ProfileEdition.this, InitialSettings.class));
-//	        	
-//	            finish();
-//	        }
-//	    });
         
     }
     
@@ -82,9 +63,6 @@ public class ProfileEdition extends Activity {
 		Intent intent = new Intent(Intent.ACTION_PICK, 
 				android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		startActivityForResult(intent, RESULT_LOAD_IMAGE);
-//    	Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-//    	photoPickerIntent.setType("image/*");
-//    	startActivityForResult(photoPickerIntent, USER_IMAGE_REQUEST_CODE);
 	}
 	
 	@Override
@@ -99,20 +77,18 @@ public class ProfileEdition extends Activity {
 			cursor.moveToFirst();
 			
 			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-			//String picturePath = cursor.getString(columnIndex);
 			picturePath = cursor.getString(columnIndex);
 			cursor.close();
 			
 			ImageView imageView = (ImageView) findViewById(R.id.profilePicture);
-			imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-			
-			//Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));	
-	
+			imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));	
 		}
 	}
 	
 	public void saveSettingsAndGoBackAction(View view) {
-		Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));	
+		Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));
+		Configuration.getInstance().getUser().setDescription(descriptionText.getText().toString());
+		Configuration.getInstance().getUser().setNickname(usernameText.getText().toString());
 		finish();
 	}
     
@@ -130,7 +106,6 @@ public class ProfileEdition extends Activity {
     	
 		@Override
 		protected void onPostExecute(Bitmap param){
-			//userImage.setImageURI(params[0]);
 			if(param != null)
 				userImage.setImageBitmap(param);
 		}
