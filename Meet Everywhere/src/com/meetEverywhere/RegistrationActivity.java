@@ -1,7 +1,5 @@
 package com.meetEverywhere;
 
-import com.meetEverywhere.common.Configuration;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,19 +9,26 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+
+import com.meetEverywhere.common.Configuration;
 
 public class RegistrationActivity extends Activity {
 	
 	private static int RESULT_LOAD_IMAGE = 1;
 	private ImageView userImage;
 	private String picturePath;
+	private EditText descriptionText;
+	private EditText usernameText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_registration);
 		
+        descriptionText = (EditText) findViewById(R.id.ProfileEditionActivity_description);
+        usernameText = (EditText) findViewById(R.id.ProfileEdition_userName);
 		userImage = (ImageView) findViewById(R.id.profilePicture);
 	}
 
