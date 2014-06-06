@@ -2,6 +2,7 @@ package com.meetEverywhere.common;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
 
 import android.graphics.Bitmap;
@@ -113,4 +114,10 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+	public static class UserComparator implements Comparator<User>{
+		public int compare(User s1, User s2) {
+			return CompatibilityAlgorithm.computePercentageValue(s1.getHashTags(), s2.getHashTags());
+		}
+	}
+	
 }

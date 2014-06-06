@@ -1,6 +1,5 @@
 package com.meetEverywhere;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,111 +11,128 @@ import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.meetEverywhere.common.ServUser;
+import com.meetEverywhere.bluetooth.BluetoothDispatcher;
+import com.meetEverywhere.common.Configuration;
+import com.meetEverywhere.common.User;
 
-public class FoundTagsActivity extends Activity{
-	
+public class FoundTagsActivity extends Activity {
+
 	private UsersListRefresher refresher;
-	private List<ServUser> users = new ArrayList<ServUser>();
+	private Configuration config = Configuration.getInstance();
 	private ListView usersListView;
-	private ListAdapter listAdapter;
-	private Handler handler;
+	private MyUsersListAdapter listAdapter;
+	private Handler handler = BluetoothDispatcher.getInstance().getHandler();
 	private int percentage;
 	private List<String> tags;
-	
+
 	@Override
-	public void onCreate(Bundle savedInstanceState){
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.found_tags_activity_layout);
-		
-		usersListView = (ListView) findViewById(R.id.foundUsersList);
-		usersListView.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                    long id) {
-            	ServUser user = ((MyUsersListAdapter)listAdapter).getUserFromIndex(position);
-            	Intent intent = new Intent(FoundTagsActivity.this, ServUserProfileActivity.class);
-            	intent.putExtra("user", user);
-            	startActivity(intent);
-            }
-        });
-		
-		handler = new Handler(){
-			  @Override
-			  public void handleMessage(Message msg) {
-				  Collections.sort(users,new ServUser.ServUserComparator ());
-				  loadAdapterWithNewList(users);
-			  }
-			};
 
-		loadAdapterWithNewList(users);
-		refresher = new UsersListRefresher();
-		refresher.start();
-		
 		Intent intent = getIntent();
 		tags = intent.getStringArrayListExtra("tags");
 		percentage = intent.getIntExtra("perc", 50);
+		String typeOfAdapter = intent.getStringExtra("typeOfAdapter");
+		if (typeOfAdapter.equals("byOwnTags")) {
+			if (config.getUsersFoundByOwnTagsAdapter() == null) {
+				config.setUsersFoundByOwnTagsAdapter(new MyUsersListAdapter(
+						getApplicationContext(),
+						R.layout.found_tags_content_info, true));
+			}
+			listAdapter = config.getUsersFoundByOwnTagsAdapter();
+
+		} else {
+			if (config.getUsersFoundBySpecifiedTagsAdapter() == null) {
+				config.setUsersFoundBySpecifiedTagsAdapter(new MyUsersListAdapter(
+						getApplicationContext(),
+						R.layout.found_tags_content_info));
+			}
+			listAdapter = config.getUsersFoundBySpecifiedTagsAdapter();
+		}
+
+		usersListView = (ListView) findViewById(R.id.foundUsersList);
+		usersListView.setAdapter(listAdapter);
+
+		usersListView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				User user = listAdapter.getUserFromIndex(position);
+				Intent intent = new Intent(FoundTagsActivity.this,
+						ServUserProfileActivity.class);
+				intent.putExtra("user", user);
+				startActivity(intent);
+			}
+		});
+
+		refresher = new UsersListRefresher();
+		refresher.start();
+
 	}
 
 	public void back(View view) {
 		finish();
 	}
-	
-	
-	public void loadAdapterWithNewList(List<ServUser> list) {
-		listAdapter = new MyUsersListAdapter(this, R.layout.found_tags_content_info,
-				(ArrayList<ServUser>) list);
-		usersListView.setAdapter(listAdapter);
+
+	public void loadAdapterWithNewList(List<User> usersList) {
+		listAdapter.setUsersList(usersList);
+		Collections.sort(listAdapter.getUsersList(), new User.UserComparator());
 
 	}
-	
+
 	@Override
-	public void onDestroy(){
+	public void onDestroy() {
 		super.onDestroy();
 		refresher.stopThread();
 	}
-	
-	public void refresh(View view){
+
+	public void refresh(View view) {
 		refresher.refresh();
 	}
-	
-	
-	public class UsersListRefresher extends Thread{
+
+	public class UsersListRefresher extends Thread {
 		private boolean shouldRun = true;
 		private DAO dao;
-		
-		public UsersListRefresher(){
+
+		public UsersListRefresher() {
 			dao = new DAO();
 		}
-		
-		public void refresh(){
-			users = dao.getUsersFromServer(tags,percentage);
-			Message msg = handler.obtainMessage();
-			handler.sendMessage(msg);
+
+		public void refresh() {
+			handler.post(new Runnable() {
+				public void run() {
+					listAdapter.setUsersList(dao.getUsersFromServer(tags,
+							percentage));
+				}
+			});
+
 		}
-		
+
 		@Override
-		public void run(){
-			while(shouldRun){
-				users = dao.getUsersFromServer(tags,percentage);
-				Message msg = handler.obtainMessage();
-				handler.sendMessage(msg);
-				
+		public void run() {
+			while (shouldRun) {
+				handler.post(new Runnable() {
+					public void run() {
+						listAdapter.setUsersList(dao.getUsersFromServer(tags,
+								percentage));
+					}
+				});
+
 				try {
-					Thread.currentThread();
+					//Thread.currentThread();
 					Thread.sleep(30000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		
-		public void stopThread(){
-			shouldRun=false;
+
+		public void stopThread() {
+			shouldRun = false;
 		}
 
 	}
-	
+
 }

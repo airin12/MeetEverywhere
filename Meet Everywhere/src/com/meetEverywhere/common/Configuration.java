@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.meetEverywhere.MyUsersListAdapter;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -22,6 +24,8 @@ public class Configuration implements Runnable{
 	private long bluetoothMillisTimeBetweenRefreshing = 20 * SECOND_FROM_MILLIS;
 	private long serverMillisTimeBetweenRefreshing = 30 * SECOND_FROM_MILLIS;
 	private List<Tag> tagsToSearchApartFromUserTags;
+	private MyUsersListAdapter usersFoundByOwnTags;
+	private MyUsersListAdapter usersFoundBySpecifiedTags;
 	private List<User> favourites;
 	private User user;
 	private boolean isApplicationOnline;
@@ -116,7 +120,21 @@ public class Configuration implements Runnable{
 		this.tagsToSearchApartFromUserTags = tagsToSearchApartFromUserTags;
 	}
 	
-	
+	public MyUsersListAdapter getUsersFoundByOwnTagsAdapter() {
+		return usersFoundByOwnTags;
+	}
+
+	public void setUsersFoundByOwnTagsAdapter(MyUsersListAdapter usersFoundByOwnTags) {
+		this.usersFoundByOwnTags = usersFoundByOwnTags;
+	}
+
+	public MyUsersListAdapter getUsersFoundBySpecifiedTagsAdapter() {
+		return usersFoundBySpecifiedTags;
+	}
+
+	public void setUsersFoundBySpecifiedTagsAdapter(MyUsersListAdapter usersFoundBySpecifiedTags) {
+		this.usersFoundBySpecifiedTags = usersFoundBySpecifiedTags;
+	}
 	
 	
 }

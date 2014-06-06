@@ -16,6 +16,7 @@ public class SearchTagsEdition extends TagsView {
 		Intent intent = new Intent(this, FoundTagsActivity.class);
     	intent.putStringArrayListExtra("tags", getTagsAsStrings());
     	intent.putExtra("perc", percentage);
+    	intent.putExtra("typeOfAdapter", "bySpecifiedTags");
     	startActivity(intent);
 		
 	}

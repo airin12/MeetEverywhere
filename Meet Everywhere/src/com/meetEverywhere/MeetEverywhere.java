@@ -78,7 +78,11 @@ public class MeetEverywhere extends Activity {
         ((FrameLayout)findViewById(R.id.bluetooth_button)).setOnClickListener(new OnClickListener() {
 	        //@Override
 	        public void onClick(View arg0) {
-	        	startActivity(new Intent(MeetEverywhere.this, BluetoothChooseDeviceActivity.class));
+	        	//startActivity(new Intent(MeetEverywhere.this, BluetoothChooseDeviceActivity.class));
+	    		Intent intent = new Intent(MeetEverywhere.this, FoundTagsActivity.class);
+	        	intent.putExtra("typeOfAdapter", "byOwnTags");
+	        	startActivity(intent);
+	        	
 	        }
 	    });
         
