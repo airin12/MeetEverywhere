@@ -122,9 +122,8 @@ public class User implements Serializable {
 		}
 	}
 
-
 	public boolean getInvited() {
-		return false;
+		return invited;
 	}
 	
 	public void setInvited(boolean isInvited){
