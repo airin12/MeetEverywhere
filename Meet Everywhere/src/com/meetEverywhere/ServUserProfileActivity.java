@@ -74,7 +74,8 @@ public class ServUserProfileActivity extends Activity{
 	}
 	
 	public void openChat(View view) {
-		
+		Intent intent = new Intent(this, GeneralChat.class);
+    	startActivity(intent);
 	}
 	
 	public void showMoreFromView(View view) {

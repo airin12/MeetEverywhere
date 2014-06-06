@@ -2,6 +2,7 @@ package com.meetEverywhere;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -23,21 +24,22 @@ public abstract class GeneralChat extends Activity{
 		setContentView(R.layout.general_chat_layout);
 		
 		onlineChat = new OnlineChat();
-		bluetoothChat = new BluetoothChat();
+		bluetoothChat = null;
 		
-		text = (EditText) this.findViewById(R.id.text);
+		text = (EditText) findViewById(R.id.text);
 		listView = (ListView) findViewById(R.id.messagesList);
 		//listView.setAdapter(messages);
 
 	}
 	
-	public void sendMessage(Bundle bundle){
+	public void sendMessage(View view){
 		setSource();
 		chat.sendMessage(text.getText().toString(),listView);
 	}
 
 	private void setSource() {
 		Configuration config = Configuration.getInstance();
+		
 		if(config.isApplicationOnline())
 			chat=onlineChat;
 		else
