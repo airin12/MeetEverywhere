@@ -31,6 +31,7 @@ public class ProfileEdition extends Activity {
 	private EditText descriptionEditor;
 	private ImageView userImage;
 	private String imageUri;
+	private String picturePath;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,18 +99,20 @@ public class ProfileEdition extends Activity {
 			cursor.moveToFirst();
 			
 			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-			String picturePath = cursor.getString(columnIndex);
+			//String picturePath = cursor.getString(columnIndex);
+			picturePath = cursor.getString(columnIndex);
 			cursor.close();
 			
 			ImageView imageView = (ImageView) findViewById(R.id.profilePicture);
 			imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 			
-			Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));	
+			//Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));	
 	
 		}
 	}
 	
 	public void saveSettingsAndGoBackAction(View view) {
+		Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));	
 		finish();
 	}
     
