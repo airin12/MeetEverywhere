@@ -2,9 +2,6 @@ package com.meetEverywhere.bluetooth;
 
 import java.io.IOException;
 
-import com.meetEverywhere.R;
-import com.meetEverywhere.common.TextMessage;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
@@ -16,7 +13,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class BluetoothChat extends Activity {
+import com.meetEverywhere.Chat;
+import com.meetEverywhere.R;
+import com.meetEverywhere.common.TextMessage;
+
+public class BluetoothChat extends Activity implements Chat{
 
 	private ListView listView;
 	private EditText text;
@@ -68,6 +69,11 @@ public class BluetoothChat extends Activity {
 			}
 		});
 
+	}
+
+	public void sendMessage(String message, ListView listView) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

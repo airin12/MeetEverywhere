@@ -80,6 +80,10 @@
         <activity
             android:name="com.meetEverywhere.ServUserProfileActivity">
         </activity>
+        
+        <activity
+            android:name="com.meetEverywhere.OnlineChat">
+        </activity>
 
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"
