@@ -11,38 +11,30 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center" >
+        android:layout_margin="@dimen/Frame.Margin" >
 
         <EditText
             android:id="@+id/ActivityRegistration.userNameEditText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
             android:hint="@string/put_your_name_hint" />
 
         <EditText
             android:id="@+id/ActivityRegistration.userDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="@dimen/spacing_between_items"
-            android:ems="10"
             android:hint="@string/put_your_description_hint"
             android:minLines="3"
-            android:scrollHorizontally="true" >
-
-        </EditText>
+            android:scrollHorizontally="true" />
 
         <EditText
             android:id="@+id/ActivityRegistration.passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_between_items"
-            android:layout_weight="1"
-            android:ems="10"
             android:inputType="textPassword"
             android:hint="@string/UserRegistration.password" />
 
@@ -51,15 +43,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_between_items"
-            android:layout_weight="1"
-            android:ems="10"
             android:inputType="textPassword"
             android:hint="@string/UserRegistration.confirmPassword" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center" >
 
             <Button
@@ -77,7 +66,6 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="@dimen/spacing_between_items"
             android:gravity="center"
             android:layout_gravity="center"
@@ -105,7 +93,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center" >
 
             <Button
