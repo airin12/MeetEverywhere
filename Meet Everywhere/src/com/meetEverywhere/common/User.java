@@ -27,6 +27,8 @@ public class User implements Serializable {
 	private String description;
 	private byte[] picture;
 	private String password;
+	private boolean invited;
+	private String id;
 
 	public User(String nickname, List<Tag> hashTags, String description,
 			Bitmap picture) {
@@ -118,6 +120,31 @@ public class User implements Serializable {
 		public int compare(User s1, User s2) {
 			return CompatibilityAlgorithm.computePercentageValue(s1.getHashTags(), s2.getHashTags());
 		}
+	}
+
+
+	public boolean getInvited() {
+		return false;
+	}
+	
+	public void setInvited(boolean isInvited){
+		this.invited = isInvited;
+	}
+	
+	public void changeInvited(){
+		if(invited){
+			invited = false;
+		}else{
+			invited = true;
+		}
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 }

@@ -10,23 +10,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.meetEverywhere.common.ServUser;
 import com.meetEverywhere.common.Tag;
+import com.meetEverywhere.common.User;
 
 public class ServUserProfileActivity extends Activity{
 	
-	EditText inviteMessage ;
-	ImageView image ;
-	LinearLayout layout;
-	ServUser user;
-	boolean visible;
+	private EditText inviteMessage ;
+	private ImageView image ;
+	private LinearLayout layout;
+	private User user;
+	private boolean visible;
 	
 	@Override
 	public void onCreate(Bundle bundle){
 		super.onCreate(bundle);
 		setContentView(R.layout.serv_user_profile_layout);
 		Intent intent = getIntent();
-		user = (ServUser) intent.getSerializableExtra("user");
+		user = (User) intent.getSerializableExtra("user");
 		layout = (LinearLayout) findViewById(R.id.invited_layout);
 		
 		image = (ImageView) findViewById(R.id.send_icon2_profile);
@@ -45,7 +45,7 @@ public class ServUserProfileActivity extends Activity{
 		StringBuffer buffer = new StringBuffer();
 		
 		boolean start = true;
-		for(Tag tag : user.getTags()){
+		for(Tag tag : user.getHashTags()){
 			
 			if(start)
 				start=false;
