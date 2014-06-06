@@ -1,5 +1,8 @@
 package com.meetEverywhere.bluetooth;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.meetEverywhere.R;
 
 import android.app.Activity;
@@ -8,6 +11,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -39,6 +43,7 @@ public class BluetoothChooseDeviceActivity extends Activity {
 		}
 
 		adapter = BluetoothDispatcher.getInstance().getBluetoothListAdapter();
+		adapter.notifyDataSetChanged();
 
 		listView = (ListView) findViewById(R.id.chatListView);
 		listView.setAdapter(adapter);
@@ -78,16 +83,15 @@ public class BluetoothChooseDeviceActivity extends Activity {
 		}
 		if (discoveringServiceActivated == false) {
 			discoveringServiceActivated = true;
-			
-			startService(new Intent(BluetoothChooseDeviceActivity.this, BluetoothDeviceSearchService.class));
+			dispatcher.setFlagDiscoveryFinished(true);
+			startService(new Intent(BluetoothChooseDeviceActivity.this,
+					BluetoothDeviceSearchService.class));
 		} else {
-			setStartRefreshingImmediately(true);	
+			setStartRefreshingImmediately(true);
 		}
 
-		
-		
 	}
-	
+
 	public void showToast(final String text) {
 		BluetoothDispatcher.getInstance().getHandler().post(new Runnable() {
 			public void run() {
@@ -98,17 +102,19 @@ public class BluetoothChooseDeviceActivity extends Activity {
 	}
 
 	public void setStartRefreshingImmediately(boolean startRefreshingImmediately) {
-		dispatcher.setFlagStartDiscoveryImmediateliy(startRefreshingImmediately);
+		dispatcher
+				.setFlagStartDiscoveryImmediateliy(startRefreshingImmediately);
 	}
 
 }
 
 class BroadcastReceiverImpl extends BroadcastReceiver {
-	private boolean flagDiscoveryExceptionOccured = false;
 	private final BluetoothDispatcher dispatcher = BluetoothDispatcher
 			.getInstance();
 	private final BluetoothListAdapter adapter;
-	
+	private int completedAsyncTasksCounter;
+	private static List<BluetoothDevice> devicesFound = new LinkedList<BluetoothDevice>();
+
 	public BroadcastReceiverImpl(BluetoothListAdapter adapter) {
 		this.adapter = adapter;
 	}
@@ -120,45 +126,70 @@ class BroadcastReceiverImpl extends BroadcastReceiver {
 			// Pobierz object BluetoothDevice.
 			BluetoothDevice device = intent
 					.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-			BluetoothConnection connection;
-			try {
-				if (dispatcher.getDevicesUnabledToConnect().contains(device)) {
-//					bluetoothChooseDev.showToast("onReceive: " + device.getName() + "jest na liœcie blokowanych");
-					return;
-				}
-//				bluetoothChooseDev.showToast("onReceive: " + device.getName());
-				if (!dispatcher.getConnections().keySet().contains(device)) {
-					connection = dispatcher
-							.establishConnection(context, device);
-					adapter.add(connection);
-				} else {
-					BluetoothConnection conn = dispatcher
-							.getBluetoothConnectionForDevice(device);
-					if (conn != null
-							&& conn.getStatus().equals(
-									BluetoothConnectionStatus.INACTIVE)) {
-						dispatcher.activateConnection(context, conn, device,
-								null);
-					}
-				}
-			} catch (Exception e) {
-				flagDiscoveryExceptionOccured = true;
-				e.printStackTrace();
-				dispatcher.getDevicesUnabledToConnect().add(device);
-				return;
-			}
 
-			adapter.notifyDataSetChanged();
-		}
-		if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
-//			showToast("Wyszukiwanie zakoñczone");
-			if(flagDiscoveryExceptionOccured){
-				flagDiscoveryExceptionOccured = false;
-				BluetoothAdapter.getDefaultAdapter().startDiscovery();
-			}else{
-				dispatcher.getDevicesUnabledToConnect().clear();
-				dispatcher.setFlagDiscoveryFinished(true);
+			if (!devicesFound.contains(device)) {
+				devicesFound.add(device);
+				showToast("onReceive: " + device.getName());
+
 			}
+		}
+		if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+			completedAsyncTasksCounter = 0;
+			for (final BluetoothDevice dev : devicesFound) {
+				showToast("Attempting to connect: " + dev.getName());
+				(new AsyncTask<Context, Void, Void>() {
+					BluetoothConnection connection;
+
+					@Override
+					protected Void doInBackground(Context... params) {
+						Context tempContext = params[0];
+						try {
+							if (!dispatcher.getConnections().keySet()
+									.contains(dev)) {
+								connection = dispatcher.establishConnection(
+										tempContext, dev);
+							} else {
+								BluetoothConnection conn = dispatcher
+										.getBluetoothConnectionForDevice(dev);
+								if (conn != null
+										&& conn.getStatus()
+												.equals(BluetoothConnectionStatus.INACTIVE)) {
+									dispatcher.activateConnection(tempContext,
+											conn, dev, null);
+								}
+							}
+							return (Void) null;
+						} catch (Exception e) {
+							return (Void) null;
+						}finally{
+							increaseAsyncTaskCounter();
+						}
+					}
+
+					@Override
+					public void onPostExecute(Void result) {
+						BluetoothDispatcher.getInstance().getHandler()
+								.post(new Runnable() {
+									public void run() {
+										if (connection != null) {
+											connection.launchConnectionThread();
+											adapter.add(connection);
+											adapter.notifyDataSetChanged();
+										}
+									}
+								});
+					}
+
+				}).execute(dispatcher.getTempServiceContextHolder());
+			}
+		}
+	}
+
+	public synchronized void increaseAsyncTaskCounter(){
+		completedAsyncTasksCounter++;
+		if(completedAsyncTasksCounter == devicesFound.size()){
+			devicesFound.clear();
+			dispatcher.setFlagDiscoveryFinished(true);
 		}
 	}
 	
@@ -170,5 +201,5 @@ class BroadcastReceiverImpl extends BroadcastReceiver {
 			}
 		});
 	}
-	
+
 }

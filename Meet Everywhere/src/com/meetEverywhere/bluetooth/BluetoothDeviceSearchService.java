@@ -18,7 +18,6 @@ public class BluetoothDeviceSearchService extends Service implements Runnable{
 	private Configuration configuration;
 	private BluetoothListAdapter adapter;
 	private BroadcastReceiverImpl broadcastReceiver;
-
 	
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -52,14 +51,13 @@ public class BluetoothDeviceSearchService extends Service implements Runnable{
 	public void run() {
 		long counter = 0;
 		while (true) {
-//			showToast("budze service");
 			dispatcher.setFlagDiscoveryFinished(false);
 			while(!bluetoothAdapter.startDiscovery()){ 
 				try {
-					Thread.sleep(50);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
 				}
-				showToast("blad uruchamiania wyszukiwania!");
+				showToast("B³¹d uruchamiania wyszukiwania!");
 			}
 			
 			while(!dispatcher.isFlagDiscoveryFinished()){
@@ -70,7 +68,6 @@ public class BluetoothDeviceSearchService extends Service implements Runnable{
 				}
 			}
 			counter = 0;
-//			showToast("usypiam service");
 			while (!isStartRefreshingImmediately()
 					&& counter < configuration
 							.getBluetoothMillisTimeBetweenRefreshing()) {

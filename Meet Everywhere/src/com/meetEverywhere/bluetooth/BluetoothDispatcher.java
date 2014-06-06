@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-
 import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.TextMessage;
 import com.meetEverywhere.common.User;
@@ -15,6 +14,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -33,11 +33,13 @@ public class BluetoothDispatcher {
 	private Handler handler;
 	private Context tempContextHolder;
 	private BluetoothSocket tempSocketHolder;
+	private Context tempServiceContextHolder;
+
 	private List<BluetoothDevice> devicesUnabledToConnect;
 	private boolean flagDiscoveryFinished;
 	private boolean flagStartDiscoveryImmediateliy;
-	private final UUID ownUUID =
-            UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
+	private final UUID ownUUID = UUID
+			.fromString("00001101-0000-1000-8000-00805f9b34fb");
 	private final LinkedHashMap<BluetoothDevice, BluetoothConnection> connections;
 	private BluetoothListAdapter bluetoothListAdapter = null;
 	private final BluetoothAdapter bluetoothAdapter = BluetoothAdapter
@@ -69,6 +71,8 @@ public class BluetoothDispatcher {
 				return null;
 			} catch (InterruptedException e) {
 				return null;
+			} catch (Exception e) {
+				return null;
 			}
 		}
 		return connections.get(device).getMessagesAdapter();
@@ -79,10 +83,9 @@ public class BluetoothDispatcher {
 		return connections.get(device);
 	}
 
-	public BluetoothConnection establishConnection(Context context,
-			BluetoothDevice device) throws IOException, ClassNotFoundException,
-			InterruptedException {
-
+	public synchronized BluetoothConnection establishConnection(
+			Context context, BluetoothDevice device) throws IOException,
+			ClassNotFoundException, Exception, InterruptedException {
 		BluetoothSocket socket = tempSocketHolder;
 		tempSocketHolder = null;
 
@@ -91,32 +94,28 @@ public class BluetoothDispatcher {
 			socket = device.createInsecureRfcommSocketToServiceRecord(ownUUID);
 			socket.connect();
 		}
+		Log.i("socket", " socket pod³¹czony");
 		BluetoothConnection connection = new BluetoothConnection(context,
 				socket);
 
-		Toast toast = Toast.makeText(context, "Nawi¹zano po³¹czenie z: "
-				+ connection.getUser().getNickname(), Toast.LENGTH_LONG);
-		toast.show();
-
+		showToast("Nawi¹zano po³¹czenie z: "
+				+ connection.getUser().getNickname());
 		addConnection(context, device, connection);
-
 		return connection;
 	}
 
-	public void activateConnection(Context context,
+	public synchronized void activateConnection(Context context,
 			BluetoothConnection connection, BluetoothDevice device,
-			BluetoothSocket socket) throws IOException, ClassNotFoundException,
-			InterruptedException {
+			BluetoothSocket socket) throws Exception {
 		if (socket == null) {
 			bluetoothAdapter.cancelDiscovery();
 			socket = device.createInsecureRfcommSocketToServiceRecord(ownUUID);
 			socket.connect();
 		}
 		connection.setReconnectedSocket(socket);
+		showToast("Przywrócono po³¹czenie z: "
+				+ connection.getUser().getNickname());
 
-		Toast toast = Toast.makeText(context, "Przywrócono po³¹czenie z: "
-				+ connection.getUser().getNickname(), Toast.LENGTH_LONG);
-		toast.show();
 	}
 
 	public void deactivateConnection(BluetoothConnection connection,
@@ -197,5 +196,23 @@ public class BluetoothDispatcher {
 	public void setFlagStartDiscoveryImmediateliy(
 			boolean flagStartDiscoveryImmediateliy) {
 		this.flagStartDiscoveryImmediateliy = flagStartDiscoveryImmediateliy;
+	}
+
+	public void setTempServiceContextHolder(Context applicationContext) {
+		this.tempServiceContextHolder = applicationContext;
+	}
+
+	public Context getTempServiceContextHolder() {
+		return tempServiceContextHolder;
+	}
+
+	public void showToast(final String text) {
+		handler.post(new Runnable() {
+
+			public void run() {
+				Toast.makeText(tempContextHolder, text, Toast.LENGTH_LONG)
+						.show();
+			}
+		});
 	}
 }
