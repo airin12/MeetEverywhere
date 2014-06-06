@@ -12,7 +12,7 @@
         android:layout_alignParentBottom="true">
 
         <EditText
-            android:id="@+id/text"
+            android:id="@+id/text_gen_chat"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_margin="5sp"
@@ -37,7 +37,7 @@
     </LinearLayout>
     
 	<ListView
-	    android:id="@+id/messagesList"
+	    android:id="@+id/messagesList_gen_chat"
 	    android:layout_width="fill_parent"
 	    android:layout_height="0dip"
 	    android:layout_above="@id/bottom_write_bar"
