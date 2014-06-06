@@ -19,12 +19,13 @@ import android.graphics.BitmapFactory;
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -437242741203572594L;
-	private final String nickname;
+	private String nickname;
 	private long userToken;
 	private long userID;
 	private List<Tag> hashTags;
 	private String description;
 	private byte[] picture;
+	private String password;
 
 	public User(String nickname, List<Tag> hashTags, String description,
 			Bitmap picture) {
@@ -37,6 +38,11 @@ public class User implements Serializable {
 	public String getNickname() {
 		return nickname;
 	}
+	
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
 
 	public List<Tag> getHashTags() {
 		return hashTags;
@@ -98,10 +104,13 @@ public class User implements Serializable {
 	public void setUserID(long userID) {
 		this.userID = userID;
 	}
-
-	public void setNickname(String string) {
-		// TODO Auto-generated method stub
-		
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 }
