@@ -9,7 +9,7 @@ import android.widget.ListView;
 import com.meetEverywhere.bluetooth.BluetoothChat;
 import com.meetEverywhere.common.Configuration;
 
-public abstract class GeneralChat extends Activity{
+public class GeneralChat extends Activity{
 	private Chat chat;
 	private EditText text;
 	private ListView listView;
