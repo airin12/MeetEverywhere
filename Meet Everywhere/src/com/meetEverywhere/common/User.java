@@ -99,4 +99,9 @@ public class User implements Serializable {
 		this.userID = userID;
 	}
 
+	public void setNickname(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
