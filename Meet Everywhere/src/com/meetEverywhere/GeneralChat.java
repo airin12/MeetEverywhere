@@ -19,15 +19,15 @@ public abstract class GeneralChat extends Activity{
 	
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.general_chat_layout);
 		
-		onlineChat = new OnlineChat();
-		bluetoothChat = null;
+		//onlineChat = new OnlineChat();
+		//bluetoothChat = null;
 		
-		text = (EditText) findViewById(R.id.text);
-		listView = (ListView) findViewById(R.id.messagesList);
+		//text = (EditText) findViewById(R.id.text);
+		//listView = (ListView) findViewById(R.id.messagesList);
 		//listView.setAdapter(messages);
 
 	}

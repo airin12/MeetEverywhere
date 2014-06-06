@@ -76,7 +76,7 @@
         </activity>
         
         <activity
-            android:name="com.meetEverywhere.OnlineChat">
+            android:name="com.meetEverywhere.GeneralChat">
         </activity>
 
         <receiver
