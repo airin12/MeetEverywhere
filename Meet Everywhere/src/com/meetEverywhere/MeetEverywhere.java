@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -95,9 +94,7 @@ public class MeetEverywhere extends Activity {
 	        //@Override
 	        public void onClick(View arg0) {
 	            stopService(new Intent(MeetEverywhere.this, PositionTracker.class));
-	            
-	            System.exit(0);
-	            finish();	       
+	            finish();
 	        }
 	    });
         
@@ -112,15 +109,15 @@ public class MeetEverywhere extends Activity {
         userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
         
         
-        userImage.setOnClickListener(userSettingsOnClickListener);
+//        userImage.setOnClickListener(userSettingsOnClickListener);
 //        ((TextView)findViewById(R.id.userDescription)).setOnClickListener(userSettingsOnClickListener);
-        
-        ((FrameLayout)findViewById(R.id.profile_edition_button)).setOnClickListener(new OnClickListener() {
-	        //@Override
-	        public void onClick(View arg0) {
-	        	startActivity(new Intent(MeetEverywhere.this, TagsEdition.class));
-	        }
-	    });
+//        
+//        ((FrameLayout)findViewById(R.id.profile_edition_button)).setOnClickListener(new OnClickListener() {
+//	        //@Override
+//	        public void onClick(View arg0) {
+//	        	startActivity(new Intent(MeetEverywhere.this, TagsEdition.class));
+//	        }
+//	    });
         
         /*
         ((Button)findViewById(R.id.searchTagListsEdit)).setOnClickListener(new OnClickListener() {
@@ -199,5 +196,9 @@ public class MeetEverywhere extends Activity {
     
     public void realoadMeetEveywhere() {
     	userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
+    }
+    
+    public void goToProfileEditionActivityAction(View view) {
+    	startActivity(new Intent(MeetEverywhere.this, ProfileEdition.class));
     }
 }

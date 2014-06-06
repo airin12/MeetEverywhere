@@ -1,7 +1,9 @@
 package com.meetEverywhere.bluetooth;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.meetEverywhere.R;
-import com.meetEverywhere.common.Configuration;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -9,7 +11,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,14 +19,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class BluetoothChooseDeviceActivity extends Activity implements Runnable{
+public class BluetoothChooseDeviceActivity extends Activity {
 
+	private BluetoothDispatcher dispatcher;
 	private BluetoothAdapter bluetoothAdapter;
-	private Configuration configuration;
-	private boolean startRefreshingImmediately;
-	private static BluetoothChooseDeviceActivity discoveringThread = null;
-	private static BroadcastReceiverImpl broadcastReceiver = null;
-
+	private static boolean discoveringServiceActivated = false;
 	private ListView listView;
 	private BluetoothListAdapter adapter;
 
@@ -36,20 +35,20 @@ public class BluetoothChooseDeviceActivity extends Activity implements Runnable{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.bluetooth_choose_layout);
-		configuration = Configuration.getInstance();
-		
+		dispatcher = BluetoothDispatcher.getInstance();
+
 		if (BluetoothDispatcher.getInstance().getBluetoothListAdapter() == null) {
 			BluetoothDispatcher.getInstance().setBluetoothListAdapter(
 					new BluetoothListAdapter(getApplicationContext(), 0));
 		}
 
 		adapter = BluetoothDispatcher.getInstance().getBluetoothListAdapter();
+		adapter.notifyDataSetChanged();
 
 		listView = (ListView) findViewById(R.id.chatListView);
 		listView.setAdapter(adapter);
-		getAdapter().notifyDataSetChanged();
+		adapter.notifyDataSetChanged();
 
-		
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -82,118 +81,125 @@ public class BluetoothChooseDeviceActivity extends Activity implements Runnable{
 			Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableBT, 0xDEADBEEF);
 		}
-		if(discoveringThread == null){
-			discoveringThread = this;
-			broadcastReceiver = new BroadcastReceiverImpl(this);
-			setStartRefreshingImmediately(false);
-			IntentFilter ifilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-			this.registerReceiver(broadcastReceiver, ifilter);
-			(new Thread(discoveringThread)).start();
-		}else{
+		if (discoveringServiceActivated == false) {
+			discoveringServiceActivated = true;
+			dispatcher.setFlagDiscoveryFinished(true);
+			startService(new Intent(BluetoothChooseDeviceActivity.this,
+					BluetoothDeviceSearchService.class));
+		} else {
 			setStartRefreshingImmediately(true);
 		}
-		
 
+	}
+
+	public void showToast(final String text) {
+		BluetoothDispatcher.getInstance().getHandler().post(new Runnable() {
+			public void run() {
+				Toast.makeText(dispatcher.getTempContextHolder(), text,
+						Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
+	public void setStartRefreshingImmediately(boolean startRefreshingImmediately) {
+		dispatcher
+				.setFlagStartDiscoveryImmediateliy(startRefreshingImmediately);
+	}
+
+}
+
+class BroadcastReceiverImpl extends BroadcastReceiver {
+	private final BluetoothDispatcher dispatcher = BluetoothDispatcher
+			.getInstance();
+	private final BluetoothListAdapter adapter;
+	private int completedAsyncTasksCounter;
+	private static List<BluetoothDevice> devicesFound = new LinkedList<BluetoothDevice>();
+
+	public BroadcastReceiverImpl(BluetoothListAdapter adapter) {
+		this.adapter = adapter;
 	}
 
 	@Override
-	public void onPause() {
-		super.onPause();
+	public synchronized void onReceive(Context context, Intent intent) {
+		String action = intent.getAction();
+		if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+			// Pobierz object BluetoothDevice.
+			BluetoothDevice device = intent
+					.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+			if (!devicesFound.contains(device)) {
+				devicesFound.add(device);
+				showToast("onReceive: " + device.getName());
+
+			}
+		}
+		if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+			completedAsyncTasksCounter = 0;
+			for (final BluetoothDevice dev : devicesFound) {
+				showToast("Attempting to connect: " + dev.getName());
+				(new AsyncTask<Context, Void, Void>() {
+					BluetoothConnection connection;
+
+					@Override
+					protected Void doInBackground(Context... params) {
+						Context tempContext = params[0];
+						try {
+							if (!dispatcher.getConnections().keySet()
+									.contains(dev)) {
+								connection = dispatcher.establishConnection(
+										tempContext, dev);
+							} else {
+								BluetoothConnection conn = dispatcher
+										.getBluetoothConnectionForDevice(dev);
+								if (conn != null
+										&& conn.getStatus()
+												.equals(BluetoothConnectionStatus.INACTIVE)) {
+									dispatcher.activateConnection(tempContext,
+											conn, dev, null);
+								}
+							}
+							return (Void) null;
+						} catch (Exception e) {
+							return (Void) null;
+						}finally{
+							increaseAsyncTaskCounter();
+						}
+					}
+
+					@Override
+					public void onPostExecute(Void result) {
+						BluetoothDispatcher.getInstance().getHandler()
+								.post(new Runnable() {
+									public void run() {
+										if (connection != null) {
+											connection.launchConnectionThread();
+											adapter.add(connection);
+											adapter.notifyDataSetChanged();
+										}
+									}
+								});
+					}
+
+				}).execute(dispatcher.getTempServiceContextHolder());
+			}
+		}
 	}
 
-	public BluetoothListAdapter getAdapter() {
-		return adapter;
-	}
-
-	public void run() {
-		long counter = 0;
-		while(true){
-			counter = 0;
-			if (bluetoothAdapter.isDiscovering()) {
-				bluetoothAdapter.cancelDiscovery();
-			}
-			//showToast("budze service");
-			bluetoothAdapter.startDiscovery();
-			while(counter < configuration.getBluetoothMillisRefreshingTime()){
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				counter += 1000;
-			}
-			if(bluetoothAdapter.isDiscovering()){
-				bluetoothAdapter.cancelDiscovery();
-			}
-			counter = 0;
-			//showToast("usypiam service");
-			while(!isStartRefreshingImmediately() && counter < configuration.getBluetoothMillisTimeBetweenRefreshing()){
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				counter += 1000;
-			}
-			setStartRefreshingImmediately(false);
+	public synchronized void increaseAsyncTaskCounter(){
+		completedAsyncTasksCounter++;
+		if(completedAsyncTasksCounter == devicesFound.size()){
+			devicesFound.clear();
+			dispatcher.setFlagDiscoveryFinished(true);
 		}
 	}
 	
 	public void showToast(final String text) {
 		BluetoothDispatcher.getInstance().getHandler().post(new Runnable() {
 			public void run() {
-				Toast.makeText(getApplicationContext(), text,
+				Toast.makeText(dispatcher.getTempContextHolder(), text,
 						Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
 
-	public boolean isStartRefreshingImmediately() {
-		return startRefreshingImmediately;
-	}
-
-	public void setStartRefreshingImmediately(boolean startRefreshingImmediately) {
-		discoveringThread.startRefreshingImmediately = startRefreshingImmediately;
-	}
-
-}
-
-class BroadcastReceiverImpl extends BroadcastReceiver {
-	private final BluetoothChooseDeviceActivity bluetoothChooseDev;
-	private final BluetoothDispatcher dispatcher = BluetoothDispatcher.getInstance();
-	
-	public BroadcastReceiverImpl(
-			BluetoothChooseDeviceActivity bluetoothChooseDev) {
-		this.bluetoothChooseDev = bluetoothChooseDev;
-	}
-
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		String action = intent.getAction();
-		if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-			// Pobierz object BluetoothDevice.
-			BluetoothDevice device = intent
-					.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-			BluetoothConnection connection;
-			try {
-				if (!dispatcher.getConnections().keySet()
-						.contains(device)) {
-					connection = dispatcher
-							.establishConnection(context, device);
-					bluetoothChooseDev.addToList(connection);
-				}else{
-					BluetoothConnection conn = dispatcher.getBluetoothConnectionForDevice(device);
-					if(conn != null && conn.getStatus().equals(BluetoothConnectionStatus.INACTIVE)){
-						dispatcher.activateConnection(context, conn, device, null);
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				return;
-			}
-
-			bluetoothChooseDev.getAdapter().notifyDataSetChanged();
-
-		}
-	}
 }

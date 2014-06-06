@@ -4,12 +4,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-
 import com.meetEverywhere.R;
 import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.TextMessage;
 import com.meetEverywhere.common.User;
+import com.meetEverywhere.common.TextMessageACK;
 
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.os.Handler;
@@ -28,6 +29,7 @@ public class BluetoothConnection implements Runnable {
 	private BluetoothConnectionStatus status;
 	private User user;
 	private Handler handler;
+	private TextMessageACK messageACK = null;
 
 	public BluetoothConnection(Context context, BluetoothSocket socket)
 			throws IOException, ClassNotFoundException, InterruptedException {
@@ -37,7 +39,7 @@ public class BluetoothConnection implements Runnable {
 
 		outputStream = new ObjectOutputStream(socket.getOutputStream());
 		outputStream.flush();
-		Thread.sleep(100);
+		Thread.sleep(10);
 
 		inputStream = new ObjectInputStream(socket.getInputStream());
 
@@ -45,17 +47,23 @@ public class BluetoothConnection implements Runnable {
 				.writeObject(BluetoothDispatcher.getInstance().getOwnData());
 		user = (User) inputStream.readObject();
 		handler = dispatcher.getHandler();
+//		setStatus(BluetoothConnectionStatus.ACTIVE);
+		Log.i("bluetoothConnection", "connection activated");
+//		(new Thread(this)).start();
+	}
+
+	public void launchConnectionThread(){
 		setStatus(BluetoothConnectionStatus.ACTIVE);
 		(new Thread(this)).start();
 	}
-
+	
 	public void setReconnectedSocket(BluetoothSocket socket)
 			throws IOException, InterruptedException, ClassNotFoundException {
 		bluetoothSocket = socket;
 
 		outputStream = new ObjectOutputStream(socket.getOutputStream());
 		outputStream.flush();
-		Thread.sleep(100);
+		Thread.sleep(10);
 
 		inputStream = new ObjectInputStream(socket.getInputStream());
 
@@ -88,15 +96,21 @@ public class BluetoothConnection implements Runnable {
 	public void run() {
 		Object receivedObject;
 		while (true) {
-				try {
-					while ((receivedObject = inputStream.readObject()) != null) {
-						if (receivedObject instanceof TextMessage) {
-							addMessage((TextMessage) receivedObject);
+			try {
+				while ((receivedObject = inputStream.readObject()) != null) {
+					if (receivedObject instanceof TextMessage) {
+						addMessage((TextMessage) receivedObject);
+					}
+					if (receivedObject instanceof TextMessageACK) {
+						if (((TextMessageACK) receivedObject)
+								.equals(messageACK)) {
+							messageACK = null;
 						}
 					}
-				} catch (Exception e) {
-					status = BluetoothConnectionStatus.INACTIVE;
 				}
+			} catch (Exception e) {
+				status = BluetoothConnectionStatus.INACTIVE;
+			}
 
 			handler.post(new Runnable() {
 				public void run() {
@@ -120,13 +134,56 @@ public class BluetoothConnection implements Runnable {
 		}
 	}
 
-	public void addMessage(final TextMessage message) throws IOException {
+	public void addMessage(final TextMessage message) throws IOException,
+			InterruptedException, ClassNotFoundException {
 		if (message.isLocal()) {
-			outputStream.writeObject(message);
+			Log.i("GOT MESSAGE:", message.getText());
+			synchronized (this) {
+				messageACK = new TextMessageACK(message.hashCode());
+				outputStream.writeObject(message);
+				int maxWaitingPeriod = 3000;
+/*
+				while (messageACK != null && maxWaitingPeriod > 0) {
+					Thread.sleep(100);
+					maxWaitingPeriod -= 100;
+				}
+				if (messageACK != null) {
+					throw new IOException("Acknowledge not acquired!");
+				}
+*/
+			}
+		} else {
+/*			
+			boolean resetDiscovery = false;
+			if(dispatcher.isFlagDiscoveryFinished() == false){
+				BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+				resetDiscovery = true;
+			}
+			outputStream.writeObject(new TextMessageACK(message.hashCode()));
+			if(resetDiscovery){
+				dispatcher.setFlagStartDiscoveryImmediateliy(true);
+			}
+*/			
 		}
 
 		handler.post(new Runnable() {
 			public void run() {
+				
+				if(!message.isLocal()){
+					boolean resetDiscovery = false;
+					if(dispatcher.isFlagDiscoveryFinished() == false){
+						BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+						resetDiscovery = true;
+					}
+					try {
+						outputStream.writeObject(new TextMessageACK(message.hashCode()));
+					} catch (IOException e) {
+					}
+					if(resetDiscovery){
+						dispatcher.setFlagStartDiscoveryImmediateliy(true);
+					}				
+				}
+				
 				messagesAdapter.add(message);
 			}
 		});

@@ -71,3 +71,4 @@ public class MyUsersListAdapter extends ArrayAdapter<ServUser>{
 			  return usersList.get(index);
 		  }
 }
+

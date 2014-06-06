@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -89,6 +90,10 @@ public class LoginActivity extends Activity {
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.login, menu);
 		return true;
+	}
+	
+	public void registerIfNoAccountAction(View view) {
+		startActivity(new Intent(this, RegistrationActivity.class));
 	}
 
 	/**
@@ -238,3 +243,4 @@ public class LoginActivity extends Activity {
 		}
 	}
 }
+

@@ -37,4 +37,8 @@ public class TextMessage implements Serializable{
 		}
 	}
 
+	@Override
+	public int hashCode(){
+		return text.hashCode() * from.hashCode();
+	}
 }
