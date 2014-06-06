@@ -17,6 +17,7 @@ public class RegistrationActivity extends Activity {
 	
 	private static int RESULT_LOAD_IMAGE = 1;
 	private ImageView userImage;
+	private String picturePath;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,17 +52,18 @@ public class RegistrationActivity extends Activity {
 			cursor.moveToFirst();
 			
 			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-			String picturePath = cursor.getString(columnIndex);
+			picturePath = cursor.getString(columnIndex);
 			cursor.close();
 			
 			ImageView imageView = (ImageView) findViewById(R.id.profilePicture);
 			imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 			
-			Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));
+			//Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));
 		}
 	}
 	
 	public void goToMeetEverywhereActivityAction(View view) {
+		Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));
 		startActivity(new Intent(this, MeetEverywhere.class));
 	}
 
