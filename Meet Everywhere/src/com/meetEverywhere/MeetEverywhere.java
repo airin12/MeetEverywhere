@@ -5,7 +5,9 @@ import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 
 import com.meetEverywhere.bluetooth.BluetoothChooseDeviceActivity;
+import com.meetEverywhere.bluetooth.BluetoothDeviceSearchService;
 import com.meetEverywhere.bluetooth.BluetoothDispatcher;
+import com.meetEverywhere.bluetooth.BluetoothListAdapter;
 import com.meetEverywhere.bluetooth.BluetoothService;
 import com.meetEverywhere.common.Configuration;
 
@@ -46,7 +48,7 @@ public class MeetEverywhere extends Activity {
 	private SharedPreferences userSettings;
 	private ImageView userImage;
 	private Configuration configuration;
-	
+	private BluetoothDispatcher dispatcher;
 	
 	private boolean isTrackingServiceRunning() {
 	    ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -75,14 +77,25 @@ public class MeetEverywhere extends Activity {
 		    }
 		});
 
+		if (BluetoothDispatcher.getInstance().getBluetoothListAdapter() == null) {
+			BluetoothDispatcher.getInstance().setBluetoothListAdapter(
+					new BluetoothListAdapter(getApplicationContext(), 0));
+		}
+		
+		if (dispatcher.isDiscoveringServiceActivated() == false) {
+			dispatcher.setDiscoveringServiceActivated(true);
+			dispatcher.setFlagDiscoveryFinished(true);
+			startService(new Intent(MeetEverywhere.this,
+					BluetoothDeviceSearchService.class));
+		}
+		
         ((FrameLayout)findViewById(R.id.bluetooth_button)).setOnClickListener(new OnClickListener() {
 	        //@Override
 	        public void onClick(View arg0) {
 	        	//startActivity(new Intent(MeetEverywhere.this, BluetoothChooseDeviceActivity.class));
 	    		Intent intent = new Intent(MeetEverywhere.this, FoundTagsActivity.class);
 	        	intent.putExtra("typeOfAdapter", "byOwnTags");
-	        	startActivity(intent);
-	        	
+	        	startActivity(intent);	        	
 	        }
 	    });
         
@@ -164,7 +177,7 @@ public class MeetEverywhere extends Activity {
 
 	private void prepareConfigAndBluetoothDispatcher() {
        	configuration = Configuration.getInstance();
-    	BluetoothDispatcher dispatcher = BluetoothDispatcher.getInstance();
+    	dispatcher = BluetoothDispatcher.getInstance();
     	dispatcher.setHandler(new Handler(getMainLooper()));
     	dispatcher.setTempContextHolder(getApplicationContext());		
 	}

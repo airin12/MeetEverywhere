@@ -45,7 +45,9 @@ public class BluetoothDispatcher {
 	private final BluetoothAdapter bluetoothAdapter = BluetoothAdapter
 			.getDefaultAdapter();
 	private Configuration configuration;
+	private boolean discoveringServiceActivated = false;
 
+	
 	private BluetoothDispatcher() {
 		connections = new LinkedHashMap<BluetoothDevice, BluetoothConnection>();
 		configuration = Configuration.getInstance();
@@ -214,5 +216,14 @@ public class BluetoothDispatcher {
 						.show();
 			}
 		});
+	}
+
+	public boolean isDiscoveringServiceActivated() {
+		return discoveringServiceActivated;
+	}
+
+	public void setDiscoveringServiceActivated(
+			boolean discoveringServiceActivated) {
+		this.discoveringServiceActivated = discoveringServiceActivated;
 	}
 }

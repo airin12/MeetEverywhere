@@ -23,7 +23,6 @@ public class BluetoothChooseDeviceActivity extends Activity {
 
 	private BluetoothDispatcher dispatcher;
 	private BluetoothAdapter bluetoothAdapter;
-	private static boolean discoveringServiceActivated = false;
 	private ListView listView;
 	private BluetoothListAdapter adapter;
 
@@ -81,8 +80,8 @@ public class BluetoothChooseDeviceActivity extends Activity {
 			Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableBT, 0xDEADBEEF);
 		}
-		if (discoveringServiceActivated == false) {
-			discoveringServiceActivated = true;
+		if (dispatcher.isDiscoveringServiceActivated() == false) {
+			dispatcher.setDiscoveringServiceActivated(true);
 			dispatcher.setFlagDiscoveryFinished(true);
 			startService(new Intent(BluetoothChooseDeviceActivity.this,
 					BluetoothDeviceSearchService.class));
