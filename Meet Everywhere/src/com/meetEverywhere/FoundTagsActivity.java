@@ -3,16 +3,18 @@ package com.meetEverywhere;
 import java.util.Collections;
 import java.util.List;
 
+import android.R.string;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import com.meetEverywhere.bluetooth.BluetoothConnection;
+import com.meetEverywhere.bluetooth.BluetoothConnectionStatus;
 import com.meetEverywhere.bluetooth.BluetoothDispatcher;
 import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.User;
@@ -26,6 +28,7 @@ public class FoundTagsActivity extends Activity {
 	private Handler handler = BluetoothDispatcher.getInstance().getHandler();
 	private int percentage;
 	private List<String> tags;
+	private String typeOfAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +38,7 @@ public class FoundTagsActivity extends Activity {
 		Intent intent = getIntent();
 		tags = intent.getStringArrayListExtra("tags");
 		percentage = intent.getIntExtra("perc", 50);
-		String typeOfAdapter = intent.getStringExtra("typeOfAdapter");
+		typeOfAdapter = intent.getStringExtra("typeOfAdapter");
 		if (typeOfAdapter.equals("byOwnTags")) {
 			if (config.getUsersFoundByOwnTagsAdapter() == null) {
 				config.setUsersFoundByOwnTagsAdapter(new MyUsersListAdapter(
@@ -67,9 +70,15 @@ public class FoundTagsActivity extends Activity {
 			}
 		});
 
-		refresher = new UsersListRefresher();
-		refresher.start();
-
+		if (typeOfAdapter.equals("byOwnTags")) {
+			//tags = config.getUser().getHashTags();
+			refresher = new UsersListRefresher();
+			refresher.start();
+		} else {
+			//TODO
+			refresher = new UsersListRefresher();
+			refresher.refresh();
+		}
 	}
 
 	public void back(View view) {
@@ -85,7 +94,9 @@ public class FoundTagsActivity extends Activity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		refresher.stopThread();
+		if (typeOfAdapter.equals("byOwnTags")) {
+			refresher.stopThread();
+		}
 	}
 
 	public void refresh(View view) {
@@ -95,6 +106,8 @@ public class FoundTagsActivity extends Activity {
 	public class UsersListRefresher extends Thread {
 		private boolean shouldRun = true;
 		private DAO dao;
+		private BluetoothDispatcher dispatcher = BluetoothDispatcher
+				.getInstance();
 
 		public UsersListRefresher() {
 			dao = new DAO();
@@ -105,23 +118,22 @@ public class FoundTagsActivity extends Activity {
 				public void run() {
 					listAdapter.setUsersList(dao.getUsersFromServer(tags,
 							percentage));
+					for (BluetoothConnection conn : dispatcher.getConnections()
+							.values()) {
+						if (conn.getStatus().equals(
+								BluetoothConnectionStatus.ACTIVE)) {
+							listAdapter.add(conn.getUser());
+						}
+					}
 				}
 			});
-
 		}
 
 		@Override
 		public void run() {
 			while (shouldRun) {
-				handler.post(new Runnable() {
-					public void run() {
-						listAdapter.setUsersList(dao.getUsersFromServer(tags,
-								percentage));
-					}
-				});
-
+				refresh();
 				try {
-					//Thread.currentThread();
 					Thread.sleep(30000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();

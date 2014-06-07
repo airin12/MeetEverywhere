@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+
+import com.meetEverywhere.MyUsersListAdapter;
 import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.TextMessage;
 import com.meetEverywhere.common.User;
@@ -47,7 +49,6 @@ public class BluetoothDispatcher {
 	private Configuration configuration;
 	private boolean discoveringServiceActivated = false;
 
-	
 	private BluetoothDispatcher() {
 		connections = new LinkedHashMap<BluetoothDevice, BluetoothConnection>();
 		configuration = Configuration.getInstance();
@@ -225,5 +226,13 @@ public class BluetoothDispatcher {
 	public void setDiscoveringServiceActivated(
 			boolean discoveringServiceActivated) {
 		this.discoveringServiceActivated = discoveringServiceActivated;
+	}
+
+	public void notifyBluetoothDevicesChanged() {
+		MyUsersListAdapter adapter = configuration
+				.getUsersFoundByOwnTagsAdapter();
+		if (adapter != null) {
+			adapter.notifyBluetoothDevicesChanged();
+		}
 	}
 }

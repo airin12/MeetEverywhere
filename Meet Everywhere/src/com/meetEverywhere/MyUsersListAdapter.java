@@ -3,6 +3,9 @@ package com.meetEverywhere;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.meetEverywhere.bluetooth.BluetoothConnection;
+import com.meetEverywhere.bluetooth.BluetoothConnectionStatus;
+import com.meetEverywhere.bluetooth.BluetoothDispatcher;
 import com.meetEverywhere.common.CompatibilityAlgorithm;
 import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.User;
@@ -21,6 +24,7 @@ public class MyUsersListAdapter extends ArrayAdapter<User> {
 
 	private final Context context;
 	private final Configuration config;
+	private final BluetoothDispatcher dispatcher;
 	private static List<User> usersFoundByOwnTagsList = new ArrayList<User>();
 	private static List<User> usersFoundBySpecifiedTagsList = new ArrayList<User>();
 	private final boolean useOwnTagsList;
@@ -31,6 +35,7 @@ public class MyUsersListAdapter extends ArrayAdapter<User> {
 		this.context = context;
 		config = Configuration.getInstance();
 		this.useOwnTagsList = useOwnTagsList;
+		this.dispatcher = BluetoothDispatcher.getInstance();
 	}
 
 	public MyUsersListAdapter(Context context, int textViewResourceId) {
@@ -38,6 +43,7 @@ public class MyUsersListAdapter extends ArrayAdapter<User> {
 		this.context = context;
 		config = Configuration.getInstance();
 		this.useOwnTagsList = false;
+		this.dispatcher = BluetoothDispatcher.getInstance();
 	}
 
 	@Override
@@ -94,6 +100,28 @@ public class MyUsersListAdapter extends ArrayAdapter<User> {
 		getUsersList().addAll(usersList);
 		Log.i("user adapter", "ustawiono user list!");
 		notifyDataSetChanged();
+	}
+
+	public void notifyBluetoothDevicesChanged() {
+		if (useOwnTagsList) {
+			List<User> list = getUsersList();
+			for (BluetoothConnection conn : dispatcher.getConnections()
+					.values()) {
+				if (conn.getStatus().equals(BluetoothConnectionStatus.ACTIVE)
+						&& !list.contains(conn.getUser())) {
+					list.add(conn.getUser());
+				}
+				if (conn.getStatus().equals(BluetoothConnectionStatus.INACTIVE)
+						&& list.contains(conn.getUser())) {
+					list.remove(conn.getUser());
+				}
+			}
+			dispatcher.getHandler().post(new Runnable() {
+				public void run() {
+					notifyDataSetChanged();
+				}
+			});
+		}
 	}
 
 }

@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 
+import com.meetEverywhere.bluetooth.BluetoothConnection;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -29,7 +31,8 @@ public class User implements Serializable {
 	private String password;
 	private boolean invited;
 	private String id;
-
+	private BluetoothConnection bluetoothConnection;
+	
 	public User(String nickname, List<Tag> hashTags, String description,
 			Bitmap picture) {
 		this.hashTags = hashTags;
@@ -144,6 +147,14 @@ public class User implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public BluetoothConnection getBluetoothConnection() {
+		return bluetoothConnection;
+	}
+
+	public void setBluetoothConnection(BluetoothConnection bluetoothConnection) {
+		this.bluetoothConnection = bluetoothConnection;
 	}
 	
 }

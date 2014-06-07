@@ -35,6 +35,7 @@ public class BluetoothConnection implements Runnable {
 		messagesAdapter = new ArrayAdapter<TextMessage>(context,
 				R.layout.bluetooth_array_adapter);
 		bluetoothSocket = socket;
+		Log.i("bluetoothConnection", "attempt to connect");
 
 		outputStream = new ObjectOutputStream(socket.getOutputStream());
 		outputStream.flush();

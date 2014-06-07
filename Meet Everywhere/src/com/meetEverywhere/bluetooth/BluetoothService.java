@@ -2,6 +2,8 @@ package com.meetEverywhere.bluetooth;
 
 import java.io.IOException;
 
+import com.meetEverywhere.common.Configuration;
+
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -65,7 +67,7 @@ public class BluetoothService extends Service implements Runnable {
 	public void run() {
 		while (true) {
 			showToast("Us³uga Bluetooth uruchomiona.");
-			BluetoothDispatcher dispatcher = BluetoothDispatcher.getInstance();
+			final BluetoothDispatcher dispatcher = BluetoothDispatcher.getInstance();
 			BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
 			BluetoothServerSocket serverSocket = null;
 			BluetoothSocket socket = null;
@@ -115,6 +117,7 @@ public class BluetoothService extends Service implements Runnable {
 											+ connection.getUser()
 													.getNickname());
 								}
+								dispatcher.notifyBluetoothDevicesChanged();
 							} catch (Exception e) {
 								e.printStackTrace();
 							}

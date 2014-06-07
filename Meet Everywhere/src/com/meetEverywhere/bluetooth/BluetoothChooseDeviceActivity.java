@@ -135,7 +135,12 @@ class BroadcastReceiverImpl extends BroadcastReceiver {
 		if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 			completedAsyncTasksCounter = 0;
 			for (final BluetoothDevice dev : devicesFound) {
-				showToast("Attempting to connect: " + dev.getName());
+				if (dispatcher.getConnections().containsKey(dev)
+						&& dispatcher.getConnections().get(dev).getStatus()
+								.equals(BluetoothConnectionStatus.ACTIVE)) {
+					showToast("Already connected: " + dev.getName());
+				}else{
+				showToast("Attempting to connect: " + dev.getName());}
 				(new AsyncTask<Context, Void, Void>() {
 					BluetoothConnection connection;
 
@@ -155,12 +160,13 @@ class BroadcastReceiverImpl extends BroadcastReceiver {
 												.equals(BluetoothConnectionStatus.INACTIVE)) {
 									dispatcher.activateConnection(tempContext,
 											conn, dev, null);
+									dispatcher.notifyBluetoothDevicesChanged();
 								}
 							}
 							return (Void) null;
 						} catch (Exception e) {
 							return (Void) null;
-						}finally{
+						} finally {
 							increaseAsyncTaskCounter();
 						}
 					}
@@ -174,6 +180,7 @@ class BroadcastReceiverImpl extends BroadcastReceiver {
 											connection.launchConnectionThread();
 											adapter.add(connection);
 											adapter.notifyDataSetChanged();
+											dispatcher.notifyBluetoothDevicesChanged();
 										}
 									}
 								});
@@ -184,14 +191,14 @@ class BroadcastReceiverImpl extends BroadcastReceiver {
 		}
 	}
 
-	public synchronized void increaseAsyncTaskCounter(){
+	public synchronized void increaseAsyncTaskCounter() {
 		completedAsyncTasksCounter++;
-		if(completedAsyncTasksCounter == devicesFound.size()){
+		if (completedAsyncTasksCounter == devicesFound.size()) {
 			devicesFound.clear();
 			dispatcher.setFlagDiscoveryFinished(true);
 		}
 	}
-	
+
 	public void showToast(final String text) {
 		BluetoothDispatcher.getInstance().getHandler().post(new Runnable() {
 			public void run() {

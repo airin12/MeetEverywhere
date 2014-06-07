@@ -77,18 +77,7 @@ public class MeetEverywhere extends Activity {
 		    }
 		});
 
-		if (BluetoothDispatcher.getInstance().getBluetoothListAdapter() == null) {
-			BluetoothDispatcher.getInstance().setBluetoothListAdapter(
-					new BluetoothListAdapter(getApplicationContext(), 0));
-		}
-		
-		if (dispatcher.isDiscoveringServiceActivated() == false) {
-			dispatcher.setDiscoveringServiceActivated(true);
-			dispatcher.setFlagDiscoveryFinished(true);
-			startService(new Intent(MeetEverywhere.this,
-					BluetoothDeviceSearchService.class));
-		}
-		
+
         ((FrameLayout)findViewById(R.id.bluetooth_button)).setOnClickListener(new OnClickListener() {
 	        //@Override
 	        public void onClick(View arg0) {
@@ -162,6 +151,20 @@ public class MeetEverywhere extends Activity {
             
         /* Wystartuj us³ugê Bluetooth. */
         startService(new Intent(MeetEverywhere.this, BluetoothService.class));
+        
+		if (BluetoothDispatcher.getInstance().getBluetoothListAdapter() == null) {
+			BluetoothDispatcher.getInstance().setBluetoothListAdapter(
+					new BluetoothListAdapter(getApplicationContext(), 0));
+		}
+		
+		if (dispatcher.isDiscoveringServiceActivated() == false) {
+			dispatcher.setDiscoveringServiceActivated(true);
+			dispatcher.setFlagDiscoveryFinished(true);
+			startService(new Intent(MeetEverywhere.this,
+					BluetoothDeviceSearchService.class));
+		}
+		
+        
         
         if(!isTrackingServiceRunning())
         	startService(new Intent(MeetEverywhere.this, PositionTracker.class));
