@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_between_items"
                 android:text="@string/UserRegistration.register"
-                android:onClick="goToMeetEverywhereActivityAction" />
+                android:onClick="registerUserAction" />
 
         </LinearLayout>
 

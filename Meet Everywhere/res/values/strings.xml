@@ -102,5 +102,7 @@
     <!-- ************************************************************************************************* -->
     <string name="Validation.nameNotProvied">Nie podales swojego nicka!</string>
     <string name="Validation.passwordNotProvided">Nie podałeś hasła!</string>
+    <string name="Validation.confirmedPasswordNotProvided">Nie potwierdziłeś hasła!</string>
+    <string name="Validation.passwordAndConfirmedPasswordAreDifferent">Hasło i potwierdzenie różnią się!</string>
     
 </resources>

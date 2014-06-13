@@ -11,11 +11,12 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 
+import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.User;
 
 public class LoginActivity extends Activity {
 
-	private LoginActivityManagement loginActivityManagement;
+	private ValidationManager validationManager;
 	private EditText passwordEditText;
 	private EditText usernameEditText;
 	private String username;
@@ -26,7 +27,7 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		
-		loginActivityManagement = new LoginActivityManagement();
+		validationManager = new ValidationManager();
 		
 		usernameEditText = (EditText) findViewById(R.id.ActivityLogin_userName);
 		passwordEditText = (EditText) findViewById(R.id.ActivityLogin_password);
@@ -67,11 +68,12 @@ public class LoginActivity extends Activity {
 	
 	public void signInAction(View view) {
 		//normalnie tu bedziemy dostawac obiekt User, ale póki co tworze tak na chama
-		User user = new User(username, null, null, null);
-		user.setPassword(password);
-		List<ValidationError> errors = loginActivityManagement.validate(user);
+		//User user = new User(username, null, null, null);
+		List<ValidationError> errors = validationManager.validateLoginAndPassword(username, password);
 		if(!errors.isEmpty()) {
 			ErrorDialog.createDialog(this, errors).show();
+		}
+		else {
 		}
 	}
 }

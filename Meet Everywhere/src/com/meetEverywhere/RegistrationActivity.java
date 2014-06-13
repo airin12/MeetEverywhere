@@ -1,5 +1,7 @@
 package com.meetEverywhere;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -7,6 +9,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -19,17 +23,62 @@ public class RegistrationActivity extends Activity {
 	private static int RESULT_LOAD_IMAGE = 1;
 	private ImageView userImage;
 	private String picturePath;
-	private EditText descriptionText;
-	private EditText usernameText;
+	private EditText descriptionEditText;
+	private ValidationManager validationManager;
+	private EditText passwordEditText;
+	private EditText usernameEditText;
+	private EditText confirmedPasswordEditText;
+	private String username;
+	private String password;
+	private String description;
+	private String confirmedPassword;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_registration);
 		
-        descriptionText = (EditText) findViewById(R.id.ProfileEditionActivity_description);
-        usernameText = (EditText) findViewById(R.id.ProfileEdition_userName);
+		validationManager = new ValidationManager();
+		
+        descriptionEditText = (EditText) findViewById(R.id.ProfileEditionActivity_description);
+        usernameEditText = (EditText) findViewById(R.id.ProfileEdition_userName);
 		userImage = (ImageView) findViewById(R.id.profilePicture);
+		
+		usernameEditText.addTextChangedListener(new TextWatcher() {
+			
+			public void afterTextChanged(Editable s) {
+				username = usernameEditText.getText().toString();
+			}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+		});
+		
+		descriptionEditText.addTextChangedListener(new TextWatcher() {
+			
+			public void afterTextChanged(Editable s) {
+				description = descriptionEditText.getText().toString();
+			}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+		});
+		
+		passwordEditText.addTextChangedListener(new TextWatcher() {
+			
+			public void afterTextChanged(Editable s) {
+				password = passwordEditText.getText().toString();
+			}			
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}	
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+		});
+		
+		confirmedPasswordEditText.addTextChangedListener(new TextWatcher() {
+			
+			public void afterTextChanged(Editable s) {
+				confirmedPassword = confirmedPasswordEditText.getText().toString();				
+			}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+		});
 	}
 
 	@Override
@@ -62,12 +111,11 @@ public class RegistrationActivity extends Activity {
 			
 			ImageView imageView = (ImageView) findViewById(R.id.profilePicture);
 			imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-			
-			//Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));
 		}
 	}
 	
-	public void goToMeetEverywhereActivityAction(View view) {
+	public void registerUserAction(View view) {
+		List<ValidationError> errors = validationManager.validateRegisterActivity(username, password, confirmedPassword);
 		Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));
 		startActivity(new Intent(this, MeetEverywhere.class));
 	}
