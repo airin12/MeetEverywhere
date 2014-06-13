@@ -33,6 +33,7 @@ public class Configuration implements Runnable{
 	
 	
 	private Configuration(){
+		instance = this;
 		loadConfiguration();
 		(new Thread(this)).start();
 	}
@@ -44,7 +45,8 @@ public class Configuration implements Runnable{
 		hashtags.add(new Tag("pi³ka no¿na"));
 		hashtags.add(new Tag("strzelectwo"));
 		String description = "Mistrz wszechœwiata i okolic. Pozdrawiam!";
-		Bitmap picture = BitmapFactory.decodeFile("ic_launcher-web.png");
+		//Bitmap picture = BitmapFactory.decodeFile("ic_launcher-web.png");
+		Bitmap picture = null;
 		desiredTagsCompatibility = 60;
 		user = new User("marek" + (new Random().nextInt(100000)), hashtags, description, picture);
 	}
@@ -55,7 +57,7 @@ public class Configuration implements Runnable{
 	
 	public static Configuration getInstance(){
 		if(instance == null){
-			instance = new Configuration();
+			/*instance =*/ new Configuration();
 		}
 		return instance;
 	}

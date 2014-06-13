@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.meetEverywhere.bluetooth.BluetoothDispatcher;
 import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.User;
 
@@ -25,8 +26,7 @@ public class ServUserProfileActivity extends Activity{
 	public void onCreate(Bundle bundle){
 		super.onCreate(bundle);
 		setContentView(R.layout.serv_user_profile_layout);
-		Intent intent = getIntent();
-		user = (User) intent.getSerializableExtra("user");
+		user = BluetoothDispatcher.getInstance().getTempUserHolder();
 		layout = (LinearLayout) findViewById(R.id.invited_layout);
 		
 		image = (ImageView) findViewById(R.id.send_icon2_profile);

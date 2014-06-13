@@ -54,10 +54,10 @@ public class BluetoothDeviceSearchService extends Service implements Runnable{
 			dispatcher.setFlagDiscoveryFinished(false);
 			while(!bluetoothAdapter.startDiscovery()){ 
 				try {
-					Thread.sleep(100);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 				}
-				showToast("B³¹d uruchamiania wyszukiwania!");
+//				showToast("B³¹d uruchamiania wyszukiwania!");
 			}
 			
 			while(!dispatcher.isFlagDiscoveryFinished()){

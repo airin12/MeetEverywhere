@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.json.JSONException;
+
 import com.meetEverywhere.R;
 import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.TextMessage;
@@ -31,7 +33,7 @@ public class BluetoothConnection implements Runnable {
 	private TextMessageACK messageACK = null;
 
 	public BluetoothConnection(Context context, BluetoothSocket socket)
-			throws IOException, ClassNotFoundException, InterruptedException {
+			throws IOException, ClassNotFoundException, InterruptedException, JSONException {
 		messagesAdapter = new ArrayAdapter<TextMessage>(context,
 				R.layout.bluetooth_array_adapter);
 		bluetoothSocket = socket;
@@ -43,9 +45,12 @@ public class BluetoothConnection implements Runnable {
 
 		inputStream = new ObjectInputStream(socket.getInputStream());
 
-		outputStream
-				.writeObject(BluetoothDispatcher.getInstance().getOwnData());
-		user = (User) inputStream.readObject();
+		outputStream.writeObject(dispatcher.getOwnData().serializeObjectToJSON(false));
+		//outputStream.writeObject(dispatcher.getOwnData());
+		
+		user = User.deserializeObjectFromJSON((String) inputStream.readObject());
+		//user = (User) inputStream.readObject();
+		user.setBluetoothConnection(this);
 		handler = dispatcher.getHandler();
 		Log.i("bluetoothConnection", "connection activated");
 	}
@@ -56,7 +61,7 @@ public class BluetoothConnection implements Runnable {
 	}
 
 	public void setReconnectedSocket(BluetoothSocket socket)
-			throws IOException, InterruptedException, ClassNotFoundException {
+			throws IOException, InterruptedException, ClassNotFoundException, JSONException {
 		bluetoothSocket = socket;
 
 		outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -65,10 +70,20 @@ public class BluetoothConnection implements Runnable {
 
 		inputStream = new ObjectInputStream(socket.getInputStream());
 
-		outputStream
-				.writeObject(BluetoothDispatcher.getInstance().getOwnData());
-		user = (User) inputStream.readObject();
+		
+		//outputStream.writeObject(dispatcher.getOwnData());
+		outputStream.writeObject(dispatcher.getOwnData().serializeObjectToJSON(false));
+		//User user = (User) inputStream.readObject();
+		User user = User.deserializeObjectFromJSON((String) inputStream.readObject());
+		updateUserData(user);
 		setStatus(BluetoothConnectionStatus.ACTIVE);
+	}
+
+	private void updateUserData(User user) {
+		this.user.setHashTags(user.getHashTags());
+		this.user.setDescription(user.getDescription());
+		this.user.setPicture(user.getPicture());
+		this.user.setUserToken(user.getUserToken());
 	}
 
 	public BluetoothSocket getBluetoothSocket() {

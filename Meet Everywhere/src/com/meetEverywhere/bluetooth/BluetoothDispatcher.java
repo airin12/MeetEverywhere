@@ -36,7 +36,7 @@ public class BluetoothDispatcher {
 	private Context tempContextHolder;
 	private BluetoothSocket tempSocketHolder;
 	private Context tempServiceContextHolder;
-
+	private User tempUserHolder;
 	private List<BluetoothDevice> devicesUnabledToConnect;
 	private boolean flagDiscoveryFinished;
 	private boolean flagStartDiscoveryImmediateliy;
@@ -234,5 +234,13 @@ public class BluetoothDispatcher {
 		if (adapter != null) {
 			adapter.notifyBluetoothDevicesChanged();
 		}
+	}
+
+	public User getTempUserHolder() {
+		return tempUserHolder;
+	}
+
+	public void setTempUserHolder(User tempUserHolder) {
+		this.tempUserHolder = tempUserHolder;
 	}
 }

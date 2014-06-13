@@ -65,7 +65,8 @@ public class FoundTagsActivity extends Activity {
 				User user = listAdapter.getUserFromIndex(position);
 				Intent intent = new Intent(FoundTagsActivity.this,
 						ServUserProfileActivity.class);
-				intent.putExtra("user", user);
+				//intent.putExtra("user", user);
+				BluetoothDispatcher.getInstance().setTempUserHolder(user);
 				startActivity(intent);
 			}
 		});
