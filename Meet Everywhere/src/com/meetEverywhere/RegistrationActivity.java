@@ -40,8 +40,10 @@ public class RegistrationActivity extends Activity {
 		
 		validationManager = new ValidationManager();
 		
-        descriptionEditText = (EditText) findViewById(R.id.ProfileEditionActivity_description);
-        usernameEditText = (EditText) findViewById(R.id.ProfileEdition_userName);
+        descriptionEditText = (EditText) findViewById(R.id.ActivityRegistration_userDescription);
+        usernameEditText = (EditText) findViewById(R.id.ActivityRegistration_userNameEditText);
+        passwordEditText = (EditText) findViewById(R.id.ActivityRegistration_passwordEditText);
+        confirmedPasswordEditText = (EditText) findViewById(R.id.ActivityRegistration_confirmPasswordEditText);
 		userImage = (ImageView) findViewById(R.id.profilePicture);
 		
 		usernameEditText.addTextChangedListener(new TextWatcher() {
