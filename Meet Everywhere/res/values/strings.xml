@@ -97,4 +97,10 @@
     <string name="insert_message_hint">Podaj treść wiadomości</string>
     <string name="send_button">Wyślij</string>
     
+    <!-- ************************************************************************************************* -->
+    <!-- ************************************* Validation *************************************** -->
+    <!-- ************************************************************************************************* -->
+    <string name="Validation.nameNotProvied">Nie podales swojego nicka!</string>
+    <string name="Validation.passwordNotProvided">Nie podałeś hasła!</string>
+    
 </resources>

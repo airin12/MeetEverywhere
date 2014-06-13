@@ -16,7 +16,7 @@ public class ErrorDialog {
 		dialog.setContentView(R.layout.error_dialog);
 		StringBuilder builder = new StringBuilder();
 		for(ValidationError error : errorMessages) {
-			builder.append(context.getResources().getString(error.getMessageKey())).append("/n");
+			builder.append(context.getResources().getString(error.getMessageKey())).append("\n");
 		}
 		((TextView)dialog.findViewById(R.id.ErrorDialog_errorList)).setText(builder.toString());
 		((TextView)dialog.findViewById(R.id.ErrorDialog_OKButton)).setOnClickListener(new OnClickListener() {
