@@ -76,5 +76,10 @@ public class BluetoothChat extends Activity implements Chat{
 		
 	}
 
+	public void messageReceived(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

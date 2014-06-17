@@ -18,6 +18,8 @@ import com.meetEverywhere.common.User;
  */
 public class DAO {
 
+	private Chat chat;
+	private MessagesListener listener;
 
 	/*
 	 * private static int timeout = 5000;
@@ -81,6 +83,45 @@ public class DAO {
 		
 	
 	public void sendInvite(String userId, String message){
+		
+	}
+	
+	public void stopListening(){
+		
+	}
+	
+	public void listenIncomingMessages(Chat chat){
+		listener = new MessagesListener(chat);
+		listener.start();
+		
+	}
+	
+	public class MessagesListener extends Thread{
+		
+		private boolean shouldRun;
+		private Chat chat;
+		
+		public MessagesListener(Chat chat){
+			shouldRun=true;
+			this.chat=chat;
+		}
+		
+		public void run(){
+			while(shouldRun){
+				Log.d("dao thread", "running");
+				chat.messageReceived("marek10:hej co tam");
+				try {
+					Thread.currentThread().sleep(10000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		public void stopThread(){
+			shouldRun=false;
+		}
 		
 	}
 	
