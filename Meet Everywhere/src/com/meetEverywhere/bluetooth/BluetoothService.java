@@ -2,8 +2,6 @@ package com.meetEverywhere.bluetooth;
 
 import java.io.IOException;
 
-import com.meetEverywhere.common.Configuration;
-
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;

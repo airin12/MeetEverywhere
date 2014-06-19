@@ -24,6 +24,7 @@ public class BluetoothConnection implements Runnable {
 	private final BluetoothDispatcher dispatcher = BluetoothDispatcher
 			.getInstance();
 	private final ArrayAdapter<TextMessage> messagesAdapter;
+	private final int MAX_WAIT_PERIOD = 3000;
 	private BluetoothSocket bluetoothSocket;
 	private ObjectInputStream inputStream;
 	private ObjectOutputStream outputStream;
@@ -33,9 +34,8 @@ public class BluetoothConnection implements Runnable {
 	private TextMessageACK messageACK = null;
 
 	public BluetoothConnection(Context context, BluetoothSocket socket)
-			throws IOException, ClassNotFoundException, InterruptedException, JSONException {
-		messagesAdapter = new ArrayAdapter<TextMessage>(context,
-				R.layout.bluetooth_array_adapter);
+			throws IOException, ClassNotFoundException, InterruptedException,
+			JSONException {
 		bluetoothSocket = socket;
 		Log.i("bluetoothConnection", "attempt to connect");
 
@@ -45,12 +45,26 @@ public class BluetoothConnection implements Runnable {
 
 		inputStream = new ObjectInputStream(socket.getInputStream());
 
-		outputStream.writeObject(dispatcher.getOwnData().serializeObjectToJSON(false));
-		//outputStream.writeObject(dispatcher.getOwnData());
-		
-		user = User.deserializeObjectFromJSON((String) inputStream.readObject());
-		//user = (User) inputStream.readObject();
+		outputStream.writeObject(dispatcher.getOwnData().serializeObjectToJSON(
+				false));
+
+		user = User
+				.deserializeObjectFromJSON((String) inputStream.readObject());
+
 		user.setBluetoothConnection(this);
+
+		
+		
+		Log.i("bt connection", "constructor");
+		if(user.getMessagesArrayAdapter() == null){
+			user.setMessagesArrayAdapter(new ArrayAdapter<TextMessage>(context,
+				R.layout.bluetooth_array_adapter));
+		}
+		Log.i("bt connection", "arrayAdapter created");
+		messagesAdapter = user.getMessagesArrayAdapter();
+		
+		
+		
 		handler = dispatcher.getHandler();
 		Log.i("bluetoothConnection", "connection activated");
 	}
@@ -61,7 +75,8 @@ public class BluetoothConnection implements Runnable {
 	}
 
 	public void setReconnectedSocket(BluetoothSocket socket)
-			throws IOException, InterruptedException, ClassNotFoundException, JSONException {
+			throws IOException, InterruptedException, ClassNotFoundException,
+			JSONException {
 		bluetoothSocket = socket;
 
 		outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -70,11 +85,11 @@ public class BluetoothConnection implements Runnable {
 
 		inputStream = new ObjectInputStream(socket.getInputStream());
 
-		
-		//outputStream.writeObject(dispatcher.getOwnData());
-		outputStream.writeObject(dispatcher.getOwnData().serializeObjectToJSON(false));
-		//User user = (User) inputStream.readObject();
-		User user = User.deserializeObjectFromJSON((String) inputStream.readObject());
+		outputStream.writeObject(dispatcher.getOwnData().serializeObjectToJSON(
+				false));
+
+		User user = User.deserializeObjectFromJSON((String) inputStream
+				.readObject());
 		updateUserData(user);
 		setStatus(BluetoothConnectionStatus.ACTIVE);
 	}
@@ -102,10 +117,12 @@ public class BluetoothConnection implements Runnable {
 		return inputStream;
 	}
 
+
 	public ArrayAdapter<TextMessage> getMessagesAdapter() {
 		return messagesAdapter;
 	}
 
+	
 	public void run() {
 		Object receivedObject;
 		while (true) {
@@ -120,6 +137,7 @@ public class BluetoothConnection implements Runnable {
 							messageACK = null;
 						}
 					}
+					
 				}
 			} catch (Exception e) {
 				status = BluetoothConnectionStatus.INACTIVE;
@@ -146,23 +164,26 @@ public class BluetoothConnection implements Runnable {
 
 		}
 	}
-
+	
 	public void addMessage(final TextMessage message) throws IOException,
 			InterruptedException, ClassNotFoundException {
 		if (message.isLocal()) {
+			if(status.equals(BluetoothConnectionStatus.INACTIVE)){
+				throw new IOException("Connection inactive");
+			}
 			synchronized (this) {
 				messageACK = new TextMessageACK(message.hashCode());
 				outputStream.writeObject(message);
-				int maxWaitingPeriod = 3000;
+				int maxWaitingPeriod = MAX_WAIT_PERIOD;
 
 				while (messageACK != null && maxWaitingPeriod > 0) {
 					Thread.sleep(100);
 					maxWaitingPeriod -= 100;
 				}
 				if (messageACK != null) {
+					status = BluetoothConnectionStatus.INACTIVE;
 					throw new IOException("Acknowledge not acquired!");
 				}
-
 			}
 		} else {
 			outputStream.writeObject(new TextMessageACK(message.hashCode()));
@@ -183,5 +204,6 @@ public class BluetoothConnection implements Runnable {
 	public void setStatus(BluetoothConnectionStatus status) {
 		this.status = status;
 	}
+
 
 }

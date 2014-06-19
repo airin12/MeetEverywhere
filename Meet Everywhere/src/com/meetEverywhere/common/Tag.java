@@ -6,6 +6,7 @@ import android.widget.Checkable;
 
 public class Tag implements Checkable, Serializable{
 
+	private static final long serialVersionUID = -1197643809398962299L;
 	private String name;
 	private boolean checked=false;
 	

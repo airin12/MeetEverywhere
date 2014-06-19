@@ -3,7 +3,6 @@ package com.meetEverywhere;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.meetEverywhere.common.User;
 
 public class ValidationManager {
 

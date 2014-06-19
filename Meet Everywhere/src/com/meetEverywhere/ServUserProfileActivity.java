@@ -21,12 +21,13 @@ public class ServUserProfileActivity extends Activity{
 	private LinearLayout layout;
 	private User user;
 	private boolean visible;
+	private BluetoothDispatcher dispatcher = BluetoothDispatcher.getInstance();
 	
 	@Override
 	public void onCreate(Bundle bundle){
 		super.onCreate(bundle);
 		setContentView(R.layout.serv_user_profile_layout);
-		user = BluetoothDispatcher.getInstance().getTempUserHolder();
+		user = dispatcher.getTempUserHolder();
 		layout = (LinearLayout) findViewById(R.id.invited_layout);
 		
 		image = (ImageView) findViewById(R.id.send_icon2_profile);

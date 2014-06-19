@@ -3,7 +3,6 @@ package com.meetEverywhere;
 import java.util.Collections;
 import java.util.List;
 
-import android.R.string;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

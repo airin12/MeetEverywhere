@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.meetEverywhere.common.ServUser;
 import com.meetEverywhere.common.Tag;
+import com.meetEverywhere.common.TextMessage;
 import com.meetEverywhere.common.User;
 
 /**
@@ -83,5 +84,11 @@ public class DAO {
 	public void sendInvite(String userId, String message){
 		
 	}
+	
+	public static boolean sendMessage(TextMessage message){
+		
+		return false;
+	}
+	
 	
 }

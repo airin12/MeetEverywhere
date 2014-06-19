@@ -11,8 +11,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 
-import com.meetEverywhere.common.Configuration;
-import com.meetEverywhere.common.User;
 
 public class LoginActivity extends Activity {
 

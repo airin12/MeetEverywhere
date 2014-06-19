@@ -13,11 +13,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.meetEverywhere.Chat;
 import com.meetEverywhere.R;
 import com.meetEverywhere.common.TextMessage;
 
-public class BluetoothChat extends Activity implements Chat{
+public class BluetoothChat extends Activity{
 
 	private ListView listView;
 	private EditText text;

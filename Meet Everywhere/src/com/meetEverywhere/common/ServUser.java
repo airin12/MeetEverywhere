@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 
 public class ServUser implements Serializable{
 
+	private static final long serialVersionUID = 799257322091961244L;
 	private final String nick;
 	private int percentage;
 	private int id;

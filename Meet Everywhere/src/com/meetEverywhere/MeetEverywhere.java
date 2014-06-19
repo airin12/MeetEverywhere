@@ -1,10 +1,6 @@
 package com.meetEverywhere;
 
-import java.io.FileNotFoundException;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
 
-import com.meetEverywhere.bluetooth.BluetoothChooseDeviceActivity;
 import com.meetEverywhere.bluetooth.BluetoothDeviceSearchService;
 import com.meetEverywhere.bluetooth.BluetoothDispatcher;
 import com.meetEverywhere.bluetooth.BluetoothListAdapter;
@@ -16,11 +12,6 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -41,11 +32,7 @@ public class MeetEverywhere extends Activity {
 	 * s¹ zsynchronizowane z serwerem.
 	 */
 	
-	private final String gcmId = "719842226591";
-	private final String userName = "meuser";
-	private final String password = "mepassword";
-	
-	private SharedPreferences userSettings;
+//	private SharedPreferences userSettings;
 	private ImageView userImage;
 	private Configuration configuration;
 	private BluetoothDispatcher dispatcher;
@@ -70,13 +57,13 @@ public class MeetEverywhere extends Activity {
         refreshDisplayedUserNameAndDescription();
 
         
-        
+/*        
 		Authenticator.setDefault (new Authenticator() {
 		    protected PasswordAuthentication getPasswordAuthentication() {
 		        return new PasswordAuthentication (userName, password.toCharArray());
 		    }
 		});
-
+*/
 
         ((FrameLayout)findViewById(R.id.bluetooth_button)).setOnClickListener(new OnClickListener() {
 	        //@Override
@@ -103,14 +90,14 @@ public class MeetEverywhere extends Activity {
 	            finish();
 	        }
 	    });
-        
+/*        
         OnClickListener userSettingsOnClickListener = new OnClickListener() {
 	        //@Override
 	        public void onClick(View arg0) {
 	        	startActivity(new Intent(MeetEverywhere.this, ProfileEdition.class));
 	        }
         };
-        
+*/        
         userImage = (ImageView)findViewById(R.id.userImage);
         userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
         
@@ -143,8 +130,8 @@ public class MeetEverywhere extends Activity {
 	    });
         */
         
-        userSettings = getSharedPreferences(SharedPreferencesKeys.preferencesName, Activity.MODE_PRIVATE);
-        boolean initialized = userSettings.getBoolean(SharedPreferencesKeys.initialization, false);
+//        userSettings = getSharedPreferences(SharedPreferencesKeys.preferencesName, Activity.MODE_PRIVATE);
+//        boolean initialized = userSettings.getBoolean(SharedPreferencesKeys.initialization, false);
         
         //if(!initialized)
         //	startActivity(new Intent(MeetEverywhere.this, ProfileEdition.class));
@@ -195,7 +182,7 @@ public class MeetEverywhere extends Activity {
         realoadMeetEveywhere();
         
     }
-    
+/*    
     private class ImageLoader extends AsyncTask<String, Object, Bitmap>{
 
 		@Override
@@ -213,7 +200,8 @@ public class MeetEverywhere extends Activity {
 				userImage.setImageBitmap(param);
 		}
     }
-    
+*/
+	
     public void realoadMeetEveywhere() {
     	userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
     }

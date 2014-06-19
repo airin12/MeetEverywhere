@@ -1,10 +1,8 @@
 package com.meetEverywhere.common;
 
 import java.io.ByteArrayOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -12,11 +10,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.meetEverywhere.DAO;
 import com.meetEverywhere.bluetooth.BluetoothConnection;
+import com.meetEverywhere.bluetooth.BluetoothDispatcher;
 
-import android.bluetooth.BluetoothDevice;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Toast;
 
 /**
  * Klasa User zawiera dane dotycz¹ce u¿ytkownika. Objekty tej klasy mog¹ byæ
@@ -27,9 +30,8 @@ import android.graphics.BitmapFactory;
  * 
  */
 
-public class User {//implements Serializable {
+public class User {
 
-	private static final long serialVersionUID = -437242741203572594L;
 	private String nickname;
 	private String userToken;
 	private long userID;
@@ -42,6 +44,10 @@ public class User {//implements Serializable {
 	private BluetoothConnection bluetoothConnection;
 	private List<User> myFriendsList;
 	private Configuration config;
+	private ArrayAdapter<TextMessage> messagesArrayAdapter;
+	private boolean isSendButtonEnabled;
+	private boolean isChatFocused;
+	private Button sendButton;
 
 	public User(String nickname, List<Tag> hashTags, String description,
 			Bitmap picture) {
@@ -52,6 +58,10 @@ public class User {//implements Serializable {
 		this.userToken = String.valueOf((new Random()).nextInt(1000));
 		this.setPicture(picture);
 		this.myFriendsList = new ArrayList<User>();
+		this.messagesArrayAdapter = null;
+		this.setSendButtonEnabled(true);
+		this.setChatFocused(false);
+		this.setSendButton(null);
 	}
 
 	public String getNickname() {
@@ -180,13 +190,13 @@ public class User {//implements Serializable {
 		serializedUser.put("userToken", user.getUserToken());
 
 		List<Tag> hashTags = user.getHashTags();
-		
+
 		JSONArray hashTagsArray = new JSONArray();
-		for(Tag t: hashTags){
+		for (Tag t : hashTags) {
 			hashTagsArray.put(t.getName());
 		}
 		serializedUser.put("hashTags", hashTagsArray);
-		
+
 		if (user.getDescription() != null) {
 			serializedUser.put("description", user.getDescription());
 		} else {
@@ -202,31 +212,28 @@ public class User {//implements Serializable {
 		return serializedUser.toString();
 	}
 
-	public static User deserializeObjectFromJSON(String jsonUser) throws JSONException {
+	public static User deserializeObjectFromJSON(String jsonUser)
+			throws JSONException {
 		JSONObject serializedUser = new JSONObject(jsonUser);
 
 		String nickname = serializedUser.getString("nickname");
 		String userToken = (String) serializedUser.get("userToken");
 
 		String description = null;
-		if (serializedUser.get("description") != null) {
+		if (!serializedUser.get("description").equals(JSONObject.NULL)) {
 			description = (String) serializedUser.get("description");
 		}
 		Bitmap picture = null;
 		if (!serializedUser.get("picture").equals(JSONObject.NULL)) {
 			picture = (Bitmap) serializedUser.get("picture");
 		}
-		
+
 		ArrayList<Tag> hashTags = new ArrayList<Tag>();
 		JSONArray hashTagsArray = serializedUser.getJSONArray("hashTags");
-		for(int i=0; i < hashTagsArray.length(); i++){
+		for (int i = 0; i < hashTagsArray.length(); i++) {
 			hashTags.add(new Tag((String) hashTagsArray.get(i)));
 		}
-		
-		//List<Tag> hashTags = (List<Tag>) serializedUser.get("hashTags");
 
-		
-		
 		User user = new User(nickname, hashTags, nickname, picture);
 		user.setUserToken(userToken);
 		user.setDescription(description);
@@ -249,6 +256,72 @@ public class User {//implements Serializable {
 			}
 		}
 		return false;
+	}
+
+	public ArrayAdapter<TextMessage> getMessagesArrayAdapter() {
+		return messagesArrayAdapter;
+	}
+
+	public void setMessagesArrayAdapter(
+			ArrayAdapter<TextMessage> messagesArrayAdapter) {
+		this.messagesArrayAdapter = messagesArrayAdapter;
+	}
+
+	public boolean isSendButtonEnabled() {
+		return isSendButtonEnabled;
+	}
+
+	public void setSendButtonEnabled(boolean isSendButtonEnabled) {
+		this.isSendButtonEnabled = isSendButtonEnabled;
+	}
+
+	public boolean isChatFocused() {
+		return isChatFocused;
+	}
+
+	public void setChatFocused(boolean isChatFocused) {
+		this.isChatFocused = isChatFocused;
+	}
+
+	public void setSendButton(Button sendButton) {
+		this.sendButton = sendButton;
+	}
+
+	public void sendMessage(final TextMessage message) {
+		final Handler handler = BluetoothDispatcher.getInstance().getHandler();
+		sendButton.setEnabled(false);
+		(new Thread(new Runnable() {
+			public void run() {
+				try {
+					bluetoothConnection.addMessage(message);
+				} catch (Exception e) {
+					if (!DAO.sendMessage(message)) {
+						handler.post(new Runnable() {
+
+							public void run() {
+
+								Toast.makeText(
+										BluetoothDispatcher.getInstance()
+												.getTempServiceContextHolder(),
+										"Wiadomoœæ nie zosta³a wys³ana!",
+										Toast.LENGTH_SHORT).show();
+							}
+						});
+					}
+				}
+				handler.post(new Runnable() {
+					public void run() {
+
+						isSendButtonEnabled = true;
+						if (isChatFocused) {
+							sendButton.setEnabled(true);
+						}
+					}
+				});
+
+			}
+		})).start();
+
 	}
 
 }
