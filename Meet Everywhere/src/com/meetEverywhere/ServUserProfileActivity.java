@@ -33,6 +33,16 @@ public class ServUserProfileActivity extends Activity{
 		inviteMessage = (EditText) findViewById(R.id.invite_message);
 		visible = false;
 		
+		TextView nickname = (TextView) findViewById(R.id.nickname_profile);
+		nickname.setText(user.getNickname());
+		
+		LinearLayout friendLayout = (LinearLayout) findViewById(R.id.friend_layout);
+		LinearLayout inviteLayout = (LinearLayout) findViewById(R.id.invite_friend);
+		if(user.isFriend()){
+			friendLayout.setVisibility(LinearLayout.VISIBLE);
+			inviteLayout.setVisibility(LinearLayout.GONE);
+		}
+		
 		if(user.getInvited())
 			layout.setVisibility(ImageView.VISIBLE);
 		else
@@ -75,6 +85,7 @@ public class ServUserProfileActivity extends Activity{
 	
 	public void openChat(View view) {
 		Intent intent = new Intent(this, GeneralChat.class);
+		intent.putExtra("nick", user.getNickname());
     	startActivity(intent);
 	}
 	

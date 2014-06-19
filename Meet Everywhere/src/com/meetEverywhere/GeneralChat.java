@@ -23,11 +23,12 @@ public class GeneralChat extends Activity{
 	private BluetoothChat bluetoothChat;
 	private ArrayList<String> messages;
 	private ArrayAdapter<String> listAdapter;
+	private String nick;
 	
 	private final Handler handler = new Handler(){
 		  @Override
 		  public void handleMessage(Message msg) {
-			  addMessage((String)msg.obj);
+			  addMessage(nick+":"+(String)msg.obj);
 			  putTagsIntoList();
 			  listView.setSelection(messages.size()-1);
 		  }
@@ -43,6 +44,7 @@ public class GeneralChat extends Activity{
 		messages=new ArrayList<String>();
 		
 		//bluetoothChat = null;
+		nick=getIntent().getStringExtra("nick");
 		
 		text = (EditText) findViewById(R.id.text_gen_chat);
 		listView = (ListView) findViewById(R.id.messagesList_gen_chat);

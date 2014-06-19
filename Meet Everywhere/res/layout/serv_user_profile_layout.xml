@@ -10,6 +10,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+    <TextView 
+        android:id="@+id/nickname_profile"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:gravity="center"
+        />
+    
     <LinearLayout 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -63,6 +71,33 @@
      
     </LinearLayout>
     
+    <LinearLayout 
+        android:id="@+id/friend_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+    
+    <ImageView
+            android:id="@+id/friend_icon_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="right"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/add_user_icon" />
+    
+    <TextView
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/msg_friend_profile"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:textSize="20sp"/>
+     
+    </LinearLayout>
+    
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -79,6 +114,7 @@
         android:textSize="20sp"/>
      
         <LinearLayout
+      android:id="@+id/invite_friend"
       android:orientation="horizontal" 
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

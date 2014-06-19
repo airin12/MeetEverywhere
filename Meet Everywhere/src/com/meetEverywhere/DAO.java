@@ -73,6 +73,10 @@ public class DAO {
 			//Bitmap bitmap = null;				
 			
 			User user = new User(nick, tags, desc, null);
+			int nr = random.nextInt(100);
+			if(nr<30)
+				user.setFriend(true);
+			
 			if(perc>=percentage){
 				list.add(user);
 			}
@@ -109,9 +113,9 @@ public class DAO {
 		public void run(){
 			while(shouldRun){
 				Log.d("dao thread", "running");
-				chat.messageReceived("marek10:hej co tam");
+				chat.messageReceived("hej co tam");
 				try {
-					Thread.currentThread().sleep(10000);
+					Thread.currentThread().sleep(15000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

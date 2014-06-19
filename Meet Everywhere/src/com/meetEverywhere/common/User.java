@@ -38,6 +38,7 @@ public class User {//implements Serializable {
 	private byte[] picture;
 	private String password;
 	private boolean invited;
+	private boolean isFriend;
 	private String id;
 	private BluetoothConnection bluetoothConnection;
 	private List<User> myFriendsList;
@@ -52,6 +53,7 @@ public class User {//implements Serializable {
 		this.userToken = String.valueOf((new Random()).nextInt(1000));
 		this.setPicture(picture);
 		this.myFriendsList = new ArrayList<User>();
+		this.isFriend=false;
 	}
 
 	public String getNickname() {
@@ -249,6 +251,14 @@ public class User {//implements Serializable {
 			}
 		}
 		return false;
+	}
+	
+	public boolean isFriend() {
+		return isFriend;
+	}
+
+	public void setFriend(boolean isFriend) {
+		this.isFriend = isFriend;
 	}
 
 }
