@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.ServUser;
 import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.TextMessage;
@@ -18,8 +19,11 @@ import com.meetEverywhere.common.User;
  * 
  */
 public class DAO {
-
-
+/*
+	private Chat chat;
+	private MessagesListener listener;
+*/
+	
 	/*
 	 * private static int timeout = 5000;
 	 * 
@@ -71,7 +75,12 @@ public class DAO {
 			//Bitmap bitmap = BitmapFactory.decodeFile("/ic_launcher-web.png", options);
 			//Bitmap bitmap = null;				
 			
-			User user = new User(nick, tags, desc, null);
+			User user = new User(nick, tags, desc, null, "dfsfdsf");
+			int nr = random.nextInt(100);
+			if(nr<30)
+				Configuration.getInstance().getUser().getMyFriendsList().add(user);
+				//user.setFriend(true);
+			
 			if(perc>=percentage){
 				list.add(user);
 			}
@@ -85,10 +94,52 @@ public class DAO {
 		
 	}
 	
+//<<<<<<< HEAD
 	public static boolean sendMessage(TextMessage message){
 		
 		return false;
 	}
 	
+//=======
+	public void stopListening(){
+		
+	}
+/*	
+	public void listenIncomingMessages(Chat chat){
+		listener = new MessagesListener(chat);
+		listener.start();
+		
+	}
+	
+	public class MessagesListener extends Thread{
+		
+		private boolean shouldRun;
+		private Chat chat;
+		
+		public MessagesListener(Chat chat){
+			shouldRun=true;
+			this.chat=chat;
+		}
+		
+		public void run(){
+			while(shouldRun){
+				Log.d("dao thread", "running");
+				chat.messageReceived("hej co tam");
+				try {
+					Thread.currentThread().sleep(15000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		public void stopThread(){
+			shouldRun=false;
+		}
+		
+	}
+>>>>>>> branch 'master' of https://github.com/airin12/MeetEverywhere
+*/
 	
 }

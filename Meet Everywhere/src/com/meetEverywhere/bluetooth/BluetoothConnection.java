@@ -98,7 +98,7 @@ public class BluetoothConnection implements Runnable {
 		this.user.setHashTags(user.getHashTags());
 		this.user.setDescription(user.getDescription());
 		this.user.setPicture(user.getPicture());
-		this.user.setUserToken(user.getUserToken());
+		//this.user.setUserToken(user.getUserToken());
 	}
 
 	public BluetoothSocket getBluetoothSocket() {

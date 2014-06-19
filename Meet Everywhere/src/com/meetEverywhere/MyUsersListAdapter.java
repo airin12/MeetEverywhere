@@ -60,9 +60,14 @@ public class MyUsersListAdapter extends ArrayAdapter<User> {
 		ImageView photo = (ImageView) row.findViewById(R.id.photo);
 		TextView nick = (TextView) row.findViewById(R.id.user_name);
 		TextView percentage = (TextView) row.findViewById(R.id.percentage);
+		ImageView friend = (ImageView) row.findViewById(R.id.friend_icon);
 
 		User user = getUserFromIndex(position);
 
+//		if(user.isFriend())
+		if(Configuration.getInstance().getUser().getMyFriendsList().contains(user))	
+			friend.setVisibility(ImageView.VISIBLE);
+		
 		nick.setText(user.getNickname());
 		int percentOfCompatibility = CompatibilityAlgorithm
 				.computePercentageValue(config.getUser().getHashTags(),

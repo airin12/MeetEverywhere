@@ -33,13 +33,14 @@ import android.widget.Toast;
 public class User {
 
 	private String nickname;
-	private String userToken;
+	private final String userToken;
 	private long userID;
 	private List<Tag> hashTags;
 	private String description;
 	private byte[] picture;
 	private String password;
 	private boolean invited;
+//	private boolean isFriend;
 	private String id;
 	private BluetoothConnection bluetoothConnection;
 	private List<User> myFriendsList;
@@ -50,11 +51,12 @@ public class User {
 	private Button sendButton;
 
 	public User(String nickname, List<Tag> hashTags, String description,
-			Bitmap picture) {
+			Bitmap picture, String userToken) {
 		config = Configuration.getInstance();
 		this.hashTags = hashTags;
 		this.nickname = nickname;
 		this.description = description;
+//		this.userToken = userToken;
 		this.userToken = String.valueOf((new Random()).nextInt(1000));
 		this.setPicture(picture);
 		this.myFriendsList = new ArrayList<User>();
@@ -62,6 +64,7 @@ public class User {
 		this.setSendButtonEnabled(true);
 		this.setChatFocused(false);
 		this.setSendButton(null);
+//		this.isFriend=false;
 	}
 
 	public String getNickname() {
@@ -120,10 +123,6 @@ public class User {
 
 	public String getUserToken() {
 		return userToken;
-	}
-
-	public void setUserToken(String userToken) {
-		this.userToken = userToken;
 	}
 
 	public long getUserID() {
@@ -234,8 +233,8 @@ public class User {
 			hashTags.add(new Tag((String) hashTagsArray.get(i)));
 		}
 
-		User user = new User(nickname, hashTags, nickname, picture);
-		user.setUserToken(userToken);
+		User user = new User(nickname, hashTags, nickname, picture, userToken);
+//		user.setUserToken(userToken);
 		user.setDescription(description);
 		return user;
 	}
@@ -257,7 +256,15 @@ public class User {
 		}
 		return false;
 	}
+/*	
+	public boolean isFriend() {
+		return isFriend;
+	}
 
+	public void setFriend(boolean isFriend) {
+		this.isFriend = isFriend;
+	}
+*/
 	public ArrayAdapter<TextMessage> getMessagesArrayAdapter() {
 		return messagesArrayAdapter;
 	}

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.meetEverywhere.bluetooth.BluetoothDispatcher;
+import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.User;
 
@@ -33,6 +34,17 @@ public class ServUserProfileActivity extends Activity{
 		image = (ImageView) findViewById(R.id.send_icon2_profile);
 		inviteMessage = (EditText) findViewById(R.id.invite_message);
 		visible = false;
+		
+		TextView nickname = (TextView) findViewById(R.id.nickname_profile);
+		nickname.setText(user.getNickname());
+		
+		LinearLayout friendLayout = (LinearLayout) findViewById(R.id.friend_layout);
+		LinearLayout inviteLayout = (LinearLayout) findViewById(R.id.invite_friend);
+		if(Configuration.getInstance().getUser().getMyFriendsList().contains(user)){
+		//if(user.isFriend()){
+			friendLayout.setVisibility(LinearLayout.VISIBLE);
+			inviteLayout.setVisibility(LinearLayout.GONE);
+		}
 		
 		if(user.getInvited())
 			layout.setVisibility(ImageView.VISIBLE);
@@ -76,6 +88,7 @@ public class ServUserProfileActivity extends Activity{
 	
 	public void openChat(View view) {
 		Intent intent = new Intent(this, GeneralChat.class);
+		intent.putExtra("nick", user.getNickname());
     	startActivity(intent);
 	}
 	

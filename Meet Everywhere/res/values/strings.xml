@@ -43,6 +43,7 @@
     <string name="chat_text">Wyślij wiadomość</string>
     <string name="invite_hint">Wpisz dodatkową wiadomość</string>   
     <string name="msg_sent_profile">Zaproszenie wysłane</string>
+    <string name="msg_friend_profile">Twój znajomy</string>
 	
 	
 	<string name="close_icon">close_icon</string>    

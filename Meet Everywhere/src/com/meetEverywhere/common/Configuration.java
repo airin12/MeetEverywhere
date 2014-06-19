@@ -48,7 +48,7 @@ public class Configuration implements Runnable{
 		//Bitmap picture = BitmapFactory.decodeFile("ic_launcher-web.png");
 		Bitmap picture = null;
 		desiredTagsCompatibility = 60;
-		user = new User("marek" + (new Random().nextInt(100000)), hashtags, description, picture);
+		user = new User("marek" + (new Random().nextInt(100000)), hashtags, description, picture, "jsdjfkskjf");
 	}
 
 	private void storageConfiguration() {

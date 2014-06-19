@@ -20,6 +20,17 @@
         android:textSize="32sp"
         android:layout_marginLeft="5dp"/>
      
+     <ImageView
+        android:id="@+id/friend_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/add_user_icon"
+        android:contentDescription="@string/desc" 
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:visibility="gone"
+        android:layout_gravity="center"/>
+     
       <TextView
         android:id="@+id/percentage"
         android:layout_width="wrap_content"
