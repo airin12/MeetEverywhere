@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.meetEverywhere.bluetooth.BluetoothDispatcher;
 import com.meetEverywhere.common.Configuration;
+import com.meetEverywhere.common.InvitationMessage;
 import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.User;
 
@@ -40,6 +41,7 @@ public class ServUserProfileActivity extends Activity{
 		
 		LinearLayout friendLayout = (LinearLayout) findViewById(R.id.friend_layout);
 		LinearLayout inviteLayout = (LinearLayout) findViewById(R.id.invite_friend);
+		
 		if(Configuration.getInstance().getUser().getMyFriendsList().contains(user)){
 		//if(user.isFriend()){
 			friendLayout.setVisibility(LinearLayout.VISIBLE);
@@ -77,13 +79,19 @@ public class ServUserProfileActivity extends Activity{
 	}
 	
 	public void sendInvite(View view) {
+/*
 		user.changeInvited();
+		
 		layout.setVisibility(LinearLayout.VISIBLE);
 		visible=false;
 		inviteMessage.setVisibility(EditText.GONE);
 		image.setVisibility(EditText.GONE);
+*/		
+		user.sendInvitation(new InvitationMessage(inviteMessage.getText().toString(), dispatcher.getOwnData().getNickname(), dispatcher.getOwnData().getUserToken()), layout, inviteMessage, image, user);
+/*
 		DAO dao = new DAO();
 		dao.sendInvite(user.getId(), inviteMessage.getText().toString());
+*/		
 	}
 	
 	public void openChat(View view) {

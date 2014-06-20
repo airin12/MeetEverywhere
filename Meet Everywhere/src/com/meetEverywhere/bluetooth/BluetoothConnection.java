@@ -8,9 +8,11 @@ import org.json.JSONException;
 
 import com.meetEverywhere.R;
 import com.meetEverywhere.common.Configuration;
+import com.meetEverywhere.common.InvitationMessage;
+import com.meetEverywhere.common.Message;
 import com.meetEverywhere.common.TextMessage;
 import com.meetEverywhere.common.User;
-import com.meetEverywhere.common.TextMessageACK;
+import com.meetEverywhere.common.MessageACK;
 
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
@@ -31,7 +33,7 @@ public class BluetoothConnection implements Runnable {
 	private BluetoothConnectionStatus status;
 	private User user;
 	private Handler handler;
-	private TextMessageACK messageACK = null;
+	private MessageACK messageACK = null;
 
 	public BluetoothConnection(Context context, BluetoothSocket socket)
 			throws IOException, ClassNotFoundException, InterruptedException,
@@ -53,18 +55,14 @@ public class BluetoothConnection implements Runnable {
 
 		user.setBluetoothConnection(this);
 
-		
-		
 		Log.i("bt connection", "constructor");
-		if(user.getMessagesArrayAdapter() == null){
+		if (user.getMessagesArrayAdapter() == null) {
 			user.setMessagesArrayAdapter(new ArrayAdapter<TextMessage>(context,
-				R.layout.bluetooth_array_adapter));
+					R.layout.bluetooth_array_adapter));
 		}
 		Log.i("bt connection", "arrayAdapter created");
 		messagesAdapter = user.getMessagesArrayAdapter();
-		
-		
-		
+
 		handler = dispatcher.getHandler();
 		Log.i("bluetoothConnection", "connection activated");
 	}
@@ -98,7 +96,7 @@ public class BluetoothConnection implements Runnable {
 		this.user.setHashTags(user.getHashTags());
 		this.user.setDescription(user.getDescription());
 		this.user.setPicture(user.getPicture());
-		//this.user.setUserToken(user.getUserToken());
+		// this.user.setUserToken(user.getUserToken());
 	}
 
 	public BluetoothSocket getBluetoothSocket() {
@@ -117,27 +115,24 @@ public class BluetoothConnection implements Runnable {
 		return inputStream;
 	}
 
-
 	public ArrayAdapter<TextMessage> getMessagesAdapter() {
 		return messagesAdapter;
 	}
 
-	
 	public void run() {
 		Object receivedObject;
 		while (true) {
 			try {
 				while ((receivedObject = inputStream.readObject()) != null) {
-					if (receivedObject instanceof TextMessage) {
-						addMessage((TextMessage) receivedObject);
+					if (receivedObject instanceof Message) {
+						addMessage((Message) receivedObject);
 					}
-					if (receivedObject instanceof TextMessageACK) {
-						if (((TextMessageACK) receivedObject)
-								.equals(messageACK)) {
+					if (receivedObject instanceof MessageACK) {
+						if (((MessageACK) receivedObject).equals(messageACK)) {
 							messageACK = null;
 						}
 					}
-					
+
 				}
 			} catch (Exception e) {
 				status = BluetoothConnectionStatus.INACTIVE;
@@ -164,15 +159,15 @@ public class BluetoothConnection implements Runnable {
 
 		}
 	}
-	
-	public void addMessage(final TextMessage message) throws IOException,
+
+	public void addMessage(final Message message) throws IOException,
 			InterruptedException, ClassNotFoundException {
 		if (message.isLocal()) {
-			if(status.equals(BluetoothConnectionStatus.INACTIVE)){
+			if (status.equals(BluetoothConnectionStatus.INACTIVE)) {
 				throw new IOException("Connection inactive");
 			}
 			synchronized (this) {
-				messageACK = new TextMessageACK(message.hashCode());
+				messageACK = new MessageACK(message.hashCode());
 				outputStream.writeObject(message);
 				int maxWaitingPeriod = MAX_WAIT_PERIOD;
 
@@ -186,14 +181,29 @@ public class BluetoothConnection implements Runnable {
 				}
 			}
 		} else {
-			outputStream.writeObject(new TextMessageACK(message.hashCode()));
+			outputStream.writeObject(new MessageACK(message.hashCode()));
 		}
 
-		handler.post(new Runnable() {
-			public void run() {
-				messagesAdapter.add(message);
-			}
-		});
+		if (message instanceof TextMessage) {
+			handler.post(new Runnable() {
+				public void run() {
+					messagesAdapter.add((TextMessage) message);
+				}
+			});
+		}
+
+		if (message instanceof InvitationMessage && !message.isLocal()) {
+			handler.post(new Runnable() {
+				public void run() {
+					Toast.makeText(
+							dispatcher.getTempContextHolder(),
+							message.getAuthorNickname()
+									+ " przes³a³ zaproszenie : "
+									+ message.getText(), Toast.LENGTH_SHORT)
+							.show();
+				}
+			});
+		}
 
 	}
 
@@ -204,6 +214,5 @@ public class BluetoothConnection implements Runnable {
 	public void setStatus(BluetoothConnectionStatus status) {
 		this.status = status;
 	}
-
 
 }

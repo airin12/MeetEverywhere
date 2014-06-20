@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.meetEverywhere.common.Configuration;
+import com.meetEverywhere.common.InvitationMessage;
 import com.meetEverywhere.common.ServUser;
 import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.TextMessage;
@@ -90,8 +91,9 @@ public class DAO {
 	}
 		
 	
-	public void sendInvite(String userId, String message){
+	public static boolean sendInvite(InvitationMessage message){
 		
+		return false;
 	}
 	
 //<<<<<<< HEAD

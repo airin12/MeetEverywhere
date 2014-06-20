@@ -19,6 +19,9 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 /**
@@ -329,6 +332,49 @@ public class User {
 			}
 		})).start();
 
+	}
+
+	public void sendInvitation(final InvitationMessage message, final LinearLayout layout, final EditText inviteMessage, final ImageView image, final User user) {
+		final Handler handler = BluetoothDispatcher.getInstance().getHandler();
+		
+		layout.setVisibility(LinearLayout.VISIBLE);
+		inviteMessage.setVisibility(EditText.GONE);
+		image.setVisibility(EditText.GONE);
+		
+		
+		(new Thread(new Runnable() {
+			public void run() {
+				try {
+					bluetoothConnection.addMessage(message);
+				} catch (Exception e) {
+					if (!DAO.sendInvite(message)) {
+						handler.post(new Runnable() {
+							public void run() {
+								Toast.makeText(
+										BluetoothDispatcher.getInstance()
+												.getTempServiceContextHolder(),
+										"Wiadomoœæ nie zosta³a wys³ana!",
+										Toast.LENGTH_SHORT).show();
+								layout.setVisibility(LinearLayout.GONE);
+							}
+						});
+					}
+				}
+				handler.post(new Runnable() {
+					public void run() {
+						user.changeInvited();
+
+						isSendButtonEnabled = true;
+						if (isChatFocused) {
+							sendButton.setEnabled(true);
+						}
+					}
+				});
+
+			}
+		})).start();
+
+		
 	}
 
 }

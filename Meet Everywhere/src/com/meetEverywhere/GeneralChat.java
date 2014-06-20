@@ -1,4 +1,3 @@
-//<<<<<<< HEAD
 package com.meetEverywhere;
 
 import android.app.Activity;
@@ -63,12 +62,14 @@ public class GeneralChat extends Activity{
 	
 		String message = text.getText().toString();
 		if(!message.equals("")){
-			user.sendMessage(new TextMessage(message, config.getUser().getNickname()));
+			user.sendMessage(new TextMessage(message, config.getUser().getNickname(), config.getUser().getUserToken()));
 		}
 		text.setText("");
 	}
 
 }
+
+
 /*
 =======
 package com.meetEverywhere;

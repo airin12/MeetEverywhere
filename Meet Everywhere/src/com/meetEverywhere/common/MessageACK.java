@@ -11,22 +11,22 @@ import java.io.Serializable;
  * @author marekmagik
  * 
  */
-public class TextMessageACK implements Serializable{
+public class MessageACK implements Serializable{
 
 	private static final long serialVersionUID = -5542524376260432352L;
-	private final int hashcodeOfTextMessage;
+	private final int hashcodeOfMessage;
 
-	public TextMessageACK(int hashcode) {
-		this.hashcodeOfTextMessage = hashcode;
+	public MessageACK(int hashcode) {
+		this.hashcodeOfMessage = hashcode;
 	}
 
-	public int getHashcodeOfTextMessage() {
-		return hashcodeOfTextMessage;
+	public int getHashcodeOfMessage() {
+		return hashcodeOfMessage;
 	}
 	
 	@Override
 	public boolean equals(Object o1){
-		if(hashcodeOfTextMessage == ((TextMessageACK) o1).getHashcodeOfTextMessage()){
+		if(hashcodeOfMessage == ((MessageACK) o1).getHashcodeOfMessage()){
 			return true;
 		}else{
 			return false;

@@ -1,44 +1,25 @@
 package com.meetEverywhere.common;
 
-import java.io.Serializable;
-
-import com.meetEverywhere.bluetooth.BluetoothDispatcher;
-
-public class TextMessage implements Serializable{
+public class TextMessage extends Message{
 
 	private static final long serialVersionUID = 2922796847639314334L;
-	private final String text;
-	/* Jeœli null - wiadomoœc napisana przez siebie, jeœli nie - otrzymana. */
-	private final String from;
-
-	public TextMessage(String text, String from) {
-		this.text = text;
-		this.from = from;
+	
+	
+	public TextMessage(String text, String authorNickname, String from) {
+		super(text, authorNickname, from);
 	}
-
-	public String getText() {
-		return text;
-	}
-
-	public boolean isLocal() {
-		if (BluetoothDispatcher.getInstance().getOwnData().getNickname().equals(from)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
+	
 	@Override
 	public String toString() {
 		if (isLocal()) {
-			return "Ja: " + text;
+			return "Ja: " + getText();
 		} else {
-			return from + ": " + text;
+			return getAuthorNickname() + ": " + getText();
 		}
 	}
 
 	@Override
 	public int hashCode(){
-		return text.hashCode() * from.hashCode();
+		return getText().hashCode() * getFrom().hashCode();
 	}
 }

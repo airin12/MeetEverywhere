@@ -52,7 +52,7 @@ public class BluetoothChat extends Activity{
 			public void onClick(View v) {
 				String messageText = text.getText().toString();
 				if(!messageText.equals("")){
-					TextMessage message = new TextMessage(messageText, dispatcher.getOwnData().getNickname());
+					TextMessage message = new TextMessage(messageText, dispatcher.getOwnData().getNickname(), dispatcher.getOwnData().getUserToken());
 					try {
 						actualConnection.addMessage(message);
 						text.setText("");
