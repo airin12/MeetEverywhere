@@ -78,6 +78,21 @@
         <activity
             android:name="com.meetEverywhere.GeneralChat">
         </activity>
+        <activity
+            android:name="com.meetEverywhere.ManageContactsActivity">
+        </activity>
+        <activity
+            android:name="com.meetEverywhere.FriendsListFragment">
+        </activity>
+        <activity
+            android:name="com.meetEverywhere.BlockedContactsActivity">
+        </activity>
+        <activity
+            android:name="com.meetEverywhere.InvitationsSentActivity">
+        </activity>
+        <activity
+            android:name="com.meetEverywhere.InvitationsReceivedActivity">
+        </activity>
 
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"

@@ -7,6 +7,7 @@
 	<string name="main_layout_logged_as">Zalogowany jako:</string>
 	<string name="main_layout_start_bt_activity">Uruchom czat Bluetooth</string>
 	<string name="main_layout_start_gps_activity">Wyszukaj za pomocą GPS</string>
+	<string name="main_layout_start_contacts_activity">Zarządzaj kontaktami</string>
 	<string name="main_layout_start_profile_edition_activity">Edytuj swoje dane</string>
 	<string name="main_layout_start_settings_activity">Ustawienia</string>
 	<string name="main_layout_shutdown">Zakończ</string>
@@ -50,6 +51,7 @@
 	<string name="settings_icon">settings_icon</string>    
 	<string name="profile_icon">profile_icon</string>
 	<string name="gps_icon">gps_icon</string>
+	<string name="contacts_icon">contacts_icon</string>
 	<string name="bt_icon">bt_icon</string>
 	<string name="main_layout_user">user</string>
 
