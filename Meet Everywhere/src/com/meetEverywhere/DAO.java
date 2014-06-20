@@ -84,6 +84,19 @@ public class DAO {
         }
 	}
 	
+	public void createUser(User user){
+		String tokenText;
+        try {
+            tokenText =  new ApiService.CreateUserQuery("UserName").execute().get();
+            token.setText(tokenText);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+		
+	}
+	
 	public List<User> getUsersFromServer(List<String> tags2, int percentage) {
 		
 		List<User> result = new LinkedList<User>();
@@ -121,7 +134,7 @@ public class DAO {
 		return false;
 	}
 	
-	//TODO: dodawanie i usuwanie userów i tagów
+	
 	
 //=======
 	public void stopListening(){
