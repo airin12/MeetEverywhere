@@ -89,6 +89,8 @@ public class DAO {
 		Log.i("DAO", "list returned " + list.size() + " elements");
 		return list;
 	}
+	
+	
 		
 	
 	public static boolean sendInvite(InvitationMessage message){

@@ -209,4 +209,8 @@ public class MeetEverywhere extends Activity {
     public void goToProfileEditionActivityAction(View view) {
     	startActivity(new Intent(MeetEverywhere.this, ProfileEdition.class));
     }
+    
+    public void openManageContactsActivity(View view){
+    	startActivity(new Intent(this, ManageContactsActivity.class));
+    }
 }

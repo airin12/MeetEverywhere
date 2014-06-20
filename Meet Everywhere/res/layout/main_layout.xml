@@ -161,6 +161,32 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </FrameLayout>
+        
+        <FrameLayout
+            android:id="@+id/contacts_button"
+            android:layout_width="fill_parent"
+            android:layout_height="70dp"
+            android:onClick="openManageContactsActivity" >
+
+            <ImageView
+                android:id="@+id/contacts_button_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:contentDescription="@string/contacts_icon"
+                android:src="@drawable/contacts" />
+
+            <TextView
+                android:id="@+id/contacts_gps_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="70dp"
+                android:text="@string/main_layout_start_contacts_activity"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/profile_edition_button"
