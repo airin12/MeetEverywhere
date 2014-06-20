@@ -1,6 +1,11 @@
 package com.meetEverywhere;
 
-import android.os.AsyncTask;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -11,21 +16,22 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+
+import com.meetEverywhere.common.Tag;
+import com.meetEverywhere.common.User;
 
 /**
  * Created by Krzysiu on 04.06.14.
  */
 public class ApiService {
 	
-	private enum HttpType {
+	public enum HttpType {
 		GET,
 		POST,
 		PATCH
@@ -46,6 +52,14 @@ public class ApiService {
     private static final String INCOMING_INVITATIONS_HTTP = INVITATIONS_MODULE_HTTP + "/incoming_invitations";
     private static final String OUTCOMING_INVITATIONS_HTTP = INVITATIONS_MODULE_HTTP + "/outcoming_invitations";
 
+    public static class GetMyUserData extends AsyncTask<Void, Void, String> {
+    	@Override
+		protected String doInBackground(Void... voids) {
+			JSONObject jsonObject = performQuery(ApiService.USER_HTTP, new ArrayList<NameValuePair>(), HttpType.GET);
+			return jsonObject.toString();
+    	}
+    }
+    
     public static class CreateUserQuery extends AsyncTask<Void, Void, String> {
 
     	private String userName;
@@ -107,11 +121,47 @@ public class ApiService {
 		}
     }
     
-    public static class GetMatchesQuery extends AsyncTask<Void, Void, String> {	
+    public static class GetMatchesQuery extends AsyncTask<Void, Void, List<User>> {	
+    	
+    	private Set<String> tags;
+    	private String percentage;
+    	
+    	public GetMatchesQuery(Set<String> tags, String percentage) {
+			this.tags = tags;
+			this.percentage = percentage;
+		}
+    	
 		@Override
-		protected String doInBackground(Void... params) {
-			JSONObject jsonObject = performQuery(ApiService.MATCHES_HTTP, new ArrayList<NameValuePair>(), HttpType.GET);
-			return jsonObject.toString();
+		protected List<User> doInBackground(Void... params) {
+			
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			for(String tag : tags) {
+				nameValuePairs.add(new BasicNameValuePair("tags[]", tag));
+			}	
+			nameValuePairs.add(new BasicNameValuePair(":percentage[]", percentage));
+			JSONObject jsonObject = performQuery(ApiService.MATCHES_HTTP, nameValuePairs, HttpType.GET);
+			List<User> users = new LinkedList<User>();
+			
+			
+			try {
+				JSONArray array = jsonObject.getJSONArray("users");
+				for(int i = 0 ; i < array.length() ; i++){
+					JSONObject juser = array.getJSONObject(i);
+					String name = juser.getString("name");
+					JSONObject id = juser.getJSONObject("id");
+					String token = id.getString("$oid");
+					User user = new User(name, new LinkedList<Tag>(), " ",null, token);
+				    users.add(user);
+				    
+				}
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			return users;
 		}
     }
     
@@ -133,8 +183,10 @@ public class ApiService {
 
 		@Override
 		protected String doInBackground(Void... params) {
-			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-            nameValuePairs.add(new BasicNameValuePair("tags", tags.toString()));
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+			for(String tag : tags) {
+				nameValuePairs.add(new BasicNameValuePair("tags[]", tag));
+			}
 			JSONObject jsonObject = performQuery(ApiService.TAG_HTTP, nameValuePairs, HttpType.PATCH);
 			return jsonObject.toString();
 		}
@@ -212,7 +264,7 @@ public class ApiService {
     }
     
     /**
-     * If error return null;
+     * If error return null; -- For now {"nojson"=";("} (todo in future alteration)
      * 
      * @param httpAddress
      * @param nameValuePairs
@@ -227,13 +279,17 @@ public class ApiService {
         	}
         	base.addHeader(AUTHORIZATION_HEADER_KEY, getAutorizationHeaderValue());
             HttpResponse response = new DefaultHttpClient().execute(base);
-            InputStream stream = response.getEntity().getContent();
-            StringBuilder builder = new StringBuilder();
-            int code;
-            while((code = stream.read()) != -1) {
-                builder.append((char)code);
+            if(response.getEntity() != null) { //TODO: Local Domain Model or backend alterations
+                InputStream stream = response.getEntity().getContent();
+                StringBuilder builder = new StringBuilder();
+                int code;
+                while((code = stream.read()) != -1) {
+                    builder.append((char)code);
+                }
+                jsonObject = new JSONObject(builder.toString());
+            } else {
+            	jsonObject = new JSONObject("{\"nojson\"=\";(\"}");
             }
-            jsonObject = new JSONObject(builder.toString());
         } catch (ClientProtocolException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {

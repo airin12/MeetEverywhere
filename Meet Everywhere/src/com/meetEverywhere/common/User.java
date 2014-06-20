@@ -347,7 +347,7 @@ public class User {
 				try {
 					bluetoothConnection.addMessage(message);
 				} catch (Exception e) {
-					if (!DAO.sendInvite(message)) {
+					if (!DAO.sendInvite(message, Long.toString(userID))) {
 						handler.post(new Runnable() {
 							public void run() {
 								Toast.makeText(

@@ -1,16 +1,23 @@
 package com.meetEverywhere;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+
+import org.apache.http.NameValuePair;
+import org.json.JSONObject;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.widget.TextView;
 
+import com.meetEverywhere.ApiService.HttpType;
 import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.InvitationMessage;
-import com.meetEverywhere.common.ServUser;
 import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.TextMessage;
 import com.meetEverywhere.common.User;
@@ -49,51 +56,61 @@ public class DAO {
 	 * e); } }
 	 */
 
+	
+	private static TextView token;
+	
+	
 	public synchronized void updateLocationOnServer(double latitude,
 			double longtitude, boolean isPositionFromGPS) {
-		// TODO
+		 String result;
+	        try {
+	        	result =  new ApiService.UpdateLocationCoordinatesQuery(latitude, longtitude).execute().get();
+	        } catch (InterruptedException e) {
+	            e.printStackTrace();
+	        } catch (ExecutionException e) {
+	            e.printStackTrace();
+	        }
 	}
 	
 	public synchronized void updateMyHashtags(List<String> hashtags){
-		// TODO
+		String result;
+				
+        try {
+        	result =  new ApiService.UpdateMyTagsQuery(new HashSet<String>(hashtags)).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 	}
 	
 	public List<User> getUsersFromServer(List<String> tags2, int percentage) {
-		List<User> list = new ArrayList<User>();
 		
-		Random random = new Random();
-		int count = random.nextInt(5)+1;
+		List<User> result = new LinkedList<User>();
+        try {
+        	result =  new ApiService.GetMatchesQuery(new HashSet<String>(tags2), Integer.toString(percentage)).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 		
-		for(int i=0;i<count;i++){
-			String nick = "marek"+random.nextInt(100);
-			String desc = " jestem marek z Wloszczowy, pozdrawiam Tarnow";
-			List<Tag> tags = new ArrayList<Tag>();
-			tags.add(new Tag("siatkowka"));
-			tags.add(new Tag("szachy"));
-			int perc = random.nextInt(100);
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-			//Bitmap bitmap = BitmapFactory.decodeFile("/ic_launcher-web.png", options);
-			//Bitmap bitmap = null;				
-			
-			User user = new User(nick, tags, desc, null, "dfsfdsf");
-			int nr = random.nextInt(100);
-			if(nr<30)
-				Configuration.getInstance().getUser().getMyFriendsList().add(user);
-				//user.setFriend(true);
-			
-			if(perc>=percentage){
-				list.add(user);
-			}
-		}
-		Log.i("DAO", "list returned " + list.size() + " elements");
-		return list;
+        return result;
 	}
 		
 	
-	public static boolean sendInvite(InvitationMessage message){
-		
-		return false;
+	public static boolean sendInvite( InvitationMessage message, String userID){
+		String result;
+        try {
+        	result =  new ApiService.InviteUserQuery(userID, message.toString()).execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
 	}
 	
 //<<<<<<< HEAD
@@ -101,6 +118,8 @@ public class DAO {
 		
 		return false;
 	}
+	
+	//TODO: dodawanie i usuwanie userów i tagów
 	
 //=======
 	public void stopListening(){
