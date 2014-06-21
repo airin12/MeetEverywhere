@@ -8,11 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
-import com.meetEverywhere.FoundTagsActivity.UsersListRefresher;
 import com.meetEverywhere.bluetooth.BluetoothDispatcher;
+import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.User;
 
 public class FriendsListFragment extends Activity {
@@ -26,11 +26,8 @@ public class FriendsListFragment extends Activity {
 
 		listView = (ListView) findViewById(R.id.friends_list);
 		
-		//List<User> friends = Configuration.getInstance()
-			//	.getUser().getMyFriendsList();
-		
-		DAO dao = new DAO();
-		List<User> friends = dao.getUsersFromServer(null, 0);
+		List<User> friends = Configuration.getInstance()
+				.getUser().getMyFriendsList();
 		
 		Log.d("friends",friends.size()+"");
 		Log.d("STARTING","FRIENDS");

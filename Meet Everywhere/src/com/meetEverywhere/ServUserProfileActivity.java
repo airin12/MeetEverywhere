@@ -86,8 +86,9 @@ public class ServUserProfileActivity extends Activity{
 		visible=false;
 		inviteMessage.setVisibility(EditText.GONE);
 		image.setVisibility(EditText.GONE);
-*/		
-		user.sendInvitation(new InvitationMessage(inviteMessage.getText().toString(), dispatcher.getOwnData().getNickname(), dispatcher.getOwnData().getUserToken()), layout, inviteMessage, image, user);
+*/		InvitationMessage invite = new InvitationMessage(inviteMessage.getText().toString(), dispatcher.getOwnData().getNickname(), dispatcher.getOwnData().getUserToken());
+		Configuration.getInstance().getInvitationMessagesSent().add(invite);
+		user.sendInvitation(invite, layout, inviteMessage, image, user);
 /*
 		DAO dao = new DAO();
 		dao.sendInvite(user.getId(), inviteMessage.getText().toString());

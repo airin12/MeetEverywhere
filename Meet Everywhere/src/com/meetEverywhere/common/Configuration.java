@@ -1,13 +1,13 @@
 package com.meetEverywhere.common;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import com.meetEverywhere.MyUsersListAdapter;
-
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
+import com.meetEverywhere.MyUsersListAdapter;
 
 
 /**
@@ -30,6 +30,9 @@ public class Configuration implements Runnable{
 	private User user;
 	private boolean isApplicationOnline;
 	private int desiredTagsCompatibility;
+	private List<User> blocked;
+	private List<InvitationMessage> invitesSent;
+	private List<InvitationMessage> invitesReceived;
 	
 	
 	private Configuration(){
@@ -49,8 +52,14 @@ public class Configuration implements Runnable{
 		Bitmap picture = null;
 		desiredTagsCompatibility = 60;
 		user = new User("marek" + (new Random().nextInt(100000)), hashtags, description, picture, "jsdjfkskjf");
-	}
-
+		blocked = new LinkedList<User>();
+		blocked.add(new User("marek" + (new Random().nextInt(100000)), hashtags, description, picture, "jsdjfkskjf"));
+		
+		invitesReceived = new LinkedList<InvitationMessage>();
+		invitesSent = new LinkedList<InvitationMessage>();
+			
+	}	
+		
 	private void storageConfiguration() {
 		// TODO metoda do zapisywania danych w przestrzeni lokalnej 
 	}
@@ -137,6 +146,31 @@ public class Configuration implements Runnable{
 	public void setUsersFoundBySpecifiedTagsAdapter(MyUsersListAdapter usersFoundBySpecifiedTags) {
 		this.usersFoundBySpecifiedTags = usersFoundBySpecifiedTags;
 	}
+
+	public List<User> getBlocked() {
+		return blocked;
+	}
+
+	public void setBlocked(List<User> blocked) {
+		this.blocked = blocked;
+	}
+
+	public List<InvitationMessage> getInvitationMessagesSent() {
+		return invitesSent;
+	}
+
+	public void setInvitationMessagesSent(List<InvitationMessage> invitesSent) {
+		this.invitesSent = invitesSent;
+	}
+
+	public List<InvitationMessage> getInvitationMessagesReceived() {
+		return invitesReceived;
+	}
+
+	public void setInvitationMessagesReceived(List<InvitationMessage> invitesReceived) {
+		this.invitesReceived = invitesReceived;
+	}
+	
 	
 	
 }
