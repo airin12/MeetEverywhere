@@ -152,9 +152,9 @@ public class MeetEverywhere extends Activity {
 		}
 		
         
-        
-        if(!isTrackingServiceRunning())
-        	startService(new Intent(MeetEverywhere.this, PositionTracker.class));
+        // Position Tracker - czeka na lepsze czasy -> po³¹czenie z serwerem
+//        if(!isTrackingServiceRunning())
+//        	startService(new Intent(MeetEverywhere.this, PositionTracker.class));
                 
     }
 
