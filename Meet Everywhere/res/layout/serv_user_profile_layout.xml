@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:layout_weight="1"
-        android:src="@drawable/user"
+        android:src="@drawable/user_icon"
         android:layout_margin="5dp"
         android:contentDescription="@string/desc" 
         />

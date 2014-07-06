@@ -176,32 +176,10 @@ public class MeetEverywhere extends Activity {
     protected void onResume() {
         super.onResume();
         refreshDisplayedUserNameAndDescription();
-        //userImage = (ImageView)findViewById(R.id.userImage);
-        //userImage.setImageBitmap(BitmapFactory.decodeFile("/res/drawable-hdpi/ic_launcher.png"));
-        
         realoadMeetEveywhere();
         
     }
-/*    
-    private class ImageLoader extends AsyncTask<String, Object, Bitmap>{
 
-		@Override
-		protected Bitmap doInBackground(String... params) {
-			try {
-				return BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.parse(params[0])));
-			} catch (FileNotFoundException e) {
-				return null;
-			}
-		}
-    	
-		@Override
-		protected void onPostExecute(Bitmap param){
-			if(param != null)
-				userImage.setImageBitmap(param);
-		}
-    }
-*/
-	
     public void realoadMeetEveywhere() {
     	userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
     }

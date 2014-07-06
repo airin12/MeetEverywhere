@@ -60,7 +60,7 @@
                         android:layout_height="100dp"
                         android:contentDescription="@string/main_layout_user"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/user" />
+                        android:src="@drawable/user_icon" />
 
                 </RelativeLayout>
 

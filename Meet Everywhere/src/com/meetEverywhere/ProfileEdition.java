@@ -54,8 +54,10 @@ public class ProfileEdition extends Activity {
         	usernameText.setText(username);
         }
         
-        userImage = (ImageView)findViewById(R.id.profilePicture);
-        userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
+        userImage = (ImageView)findViewById(R.id.ProfileEdition_profilePicture);
+        
+        if(Configuration.getInstance().getUser().getPicture() != null)
+        	userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
         
     }
     
@@ -80,7 +82,7 @@ public class ProfileEdition extends Activity {
 			picturePath = cursor.getString(columnIndex);
 			cursor.close();
 			
-			ImageView imageView = (ImageView) findViewById(R.id.profilePicture);
+			ImageView imageView = (ImageView) findViewById(R.id.ProfileEdition_profilePicture);
 			imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));	
 		}
 	}
@@ -93,22 +95,22 @@ public class ProfileEdition extends Activity {
 	}
     
     
-    private class ImageLoader extends AsyncTask<Uri, Object, Bitmap>{
-
-		@Override
-		protected Bitmap doInBackground(Uri... params) {
-			try {
-				return BitmapFactory.decodeStream(getContentResolver().openInputStream(params[0]));
-			} catch (FileNotFoundException e) {
-				return null;
-			}
-		}
-    	
-		@Override
-		protected void onPostExecute(Bitmap param){
-			if(param != null)
-				userImage.setImageBitmap(param);
-		}
-    }
+//    private class ImageLoader extends AsyncTask<Uri, Object, Bitmap>{
+//
+//		@Override
+//		protected Bitmap doInBackground(Uri... params) {
+//			try {
+//				return BitmapFactory.decodeStream(getContentResolver().openInputStream(params[0]));
+//			} catch (FileNotFoundException e) {
+//				return null;
+//			}
+//		}
+//    	
+//		@Override
+//		protected void onPostExecute(Bitmap param){
+//			if(param != null)
+//				userImage.setImageBitmap(param);
+//		}
+//    }
 }
 
