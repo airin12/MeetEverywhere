@@ -1,0 +1,157 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".SettingsActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/Frame.Margin"
+        android:orientation="vertical"
+        android:gravity="center" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_frame_black"
+            android:gravity="center" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/Frame.Margin"
+                android:orientation="vertical"
+                android:gravity="center" >
+
+                <CheckBox
+                    android:id="@+id/SettingsActivity.bluetoothCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    
+                    android:text="@string/SettingsActivity.bluetoothCheckBoxText" />
+
+                <TextView
+                    android:id="@+id/SettingsActivity.bluetoothCustomizeDeviceSearchingFrequencyLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_between_items"
+                    android:gravity="center"
+                    android:text="@string/SettingsActivity.bluetoothCustomizeDeviceSearchingFrequencyTextLabel" />
+
+                <SeekBar
+                    android:id="@+id/SettingsActivity.bluetoothCustomizeDeviceSearchingFrequencyBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_between_items"
+            android:background="@drawable/shape_frame_black"
+            android:gravity="center" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/Frame.Margin"
+                android:orientation="vertical"
+                android:gravity="center" >
+
+                <CheckBox
+                    android:id="@+id/SettingsActivity.gpsCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/SettingsActivity.gpsCheckBoxText" />
+
+                <TextView
+                    android:id="@+id/SettingsActivity.gpsCustomizeDeviceSearchingRadiusLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_between_items"
+                    android:gravity="center"
+                    android:text="@string/SettingsActivity.gpsCustomizeDeviceSearchingRadiusTextLabel" />
+
+                <SeekBar
+                    android:id="@+id/SettingsActivity.gpsCustomizeDeviceSearchingRadiusBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_between_items"
+            android:background="@drawable/shape_frame_black"
+            android:gravity="center" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/Frame.Margin"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/SettingsActivity.goToBlockedUsersListButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/SettingsActivity.goToBlockedUsersListButtonText" />
+
+                <Button
+                    android:id="@+id/SettingsActivity.goToFriendsListButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_between_items"
+                    android:text="@string/SettingsActivity.goToFriendsListButtonText" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_between_items"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/SettingsActivity.setPercentageOfTagsToBeIdenticalLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/SettingsActivity.setPercentageOfTagsToBeIdenticalTextLabel" />
+
+            <SeekBar
+                android:id="@+id/SettingsActivity.setPercentageOfTagsToBeIdenticalBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_between_items"
+            android:orientation="vertical"
+            android:gravity="center" >
+
+            <Button
+                android:id="@+id/SettingsActivity.saveSettingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/SettingsActivity.saveSettingsButtonText" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
