@@ -94,6 +94,7 @@
 	<string name="SettingsActivity.oneKilometer">kilometra</string>
 	<string name="SettingsActivity.zeroOrtwoOrMoreKilometers">kilometrów</string>
 	<string name="SettingsActivity.notEnabled">Funkcja niedostepna</string>
+	<string name="SettingsActivity.percentageOfIdenticaTagsInformationText">Zgodność tagów: 0%</string>
 	    
 
 

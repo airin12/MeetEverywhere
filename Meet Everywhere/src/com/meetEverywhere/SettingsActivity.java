@@ -2,6 +2,7 @@ package com.meetEverywhere;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap.Config;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -23,6 +24,7 @@ public class SettingsActivity extends Activity {
 	private TextView gpsSearchingRadiusInfo;
 	private int secondsBetweenRefreshingBluetooth;
 	private int searchingRadiusInKilometres;
+	private int percentageOfIdenticalTags;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,7 @@ public class SettingsActivity extends Activity {
 							secondsBetweenRefreshingBluetooth = progress;
 							
 							StringBuilder textForSearchingFrequencyInfo = new StringBuilder();
-							textForSearchingFrequencyInfo.append(R.string.SettingActivity_bluetoothDeviceSearchigFrequencyInformationText)
+							textForSearchingFrequencyInfo.append(getText(R.string.SettingActivity_bluetoothDeviceSearchigFrequencyInformationText))
 														 .append(" ")
 														 .append(progress)
 														 .append(" ");					
@@ -84,6 +86,9 @@ public class SettingsActivity extends Activity {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked) {
 					gpsSearchingRadiusBar.setEnabled(true);
+					searchingRadiusInKilometres = Configuration.getInstance().getGpsScanningRadiusInKilometres();
+					gpsSearchingRadiusBar.setProgress(searchingRadiusInKilometres);
+					
 					gpsSearchingRadiusBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 						
 						public void onStopTrackingTouch(SeekBar seekBar) {
@@ -94,7 +99,7 @@ public class SettingsActivity extends Activity {
 							searchingRadiusInKilometres = progress;
 							
 							StringBuilder textForSearchingRadiusInfo = new StringBuilder();
-							textForSearchingRadiusInfo.append(R.string.SettingsActivity_gpsDeviceSearchingRadiusInformationText)
+							textForSearchingRadiusInfo.append(getText(R.string.SettingsActivity_gpsDeviceSearchingRadiusInformationText))
 													  .append(" ")
 													  .append(searchingRadiusInKilometres)
 													  .append(" ");
@@ -110,20 +115,6 @@ public class SettingsActivity extends Activity {
 						}
 					});
 					
-					
-					searchingRadiusInKilometres = gpsSearchingRadiusBar.getProgress();
-					
-					StringBuilder textForSearchingRadiusInfo = new StringBuilder();
-					textForSearchingRadiusInfo.append(R.string.SettingsActivity_gpsDeviceSearchingRadiusInformationText)
-											  .append(" ")
-											  .append(searchingRadiusInKilometres)
-											  .append(" ");
-					if(searchingRadiusInKilometres == 0 || searchingRadiusInKilometres > 2) {
-						textForSearchingRadiusInfo.append(getText(R.string.SettingsActivity_zeroOrtwoOrMoreKilometers));
-					}
-					else {
-						textForSearchingRadiusInfo.append(getText(R.string.SettingsActivity_oneKilometer));
-					}
 				}
 				else {
 					gpsSearchingRadiusBar.setEnabled(false);
@@ -132,7 +123,30 @@ public class SettingsActivity extends Activity {
 			}
 		});
 		
+		percentageOfIdenticalTags = Configuration.getInstance().getPercentageOfIdenticalTags();
+		percentageOfIdenticalTagsBar.setProgress(percentageOfIdenticalTags);
 		
+		percentageOfIdenticalTagsBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				percentageOfIdenticalTagsBar.setSecondaryProgress(percentageOfIdenticalTagsBar.getProgress());
+			}
+			
+			
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				percentageOfIdenticalTags = progress;
+				
+				StringBuilder textForChosenPercentageOfIdenticalTagsInfo = new StringBuilder();
+				String currentText = getText(R.string.SettingsActivity_percentageOfIdenticaTagsInformationText).toString();
+				textForChosenPercentageOfIdenticalTagsInfo.append(currentText .subSequence(currentText.length()-2, currentText.length()))
+														  .append(percentageOfIdenticalTags)
+														  .append("%");
+														  
+			}
+			
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+		});
 		
 	}
 

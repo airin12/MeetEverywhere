@@ -120,7 +120,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/Frame.Margin"
                 android:layout_marginTop="@dimen/spacing_between_items"
-                android:orientation="vertical" >
+                android:orientation="vertical"
+                android:gravity="center" >
 
                 <TextView
                     android:id="@+id/SettingsActivity.setPercentageOfTagsToBeIdenticalLabel"
@@ -139,7 +140,7 @@
                     android:id="@+id/SettingsActivity.percentageOfTagsToBeIdenticalInformation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="@string/SettingsActivity.percentageOfIdenticaTagsInformationText"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
             </LinearLayout>

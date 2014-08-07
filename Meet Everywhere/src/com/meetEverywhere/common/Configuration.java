@@ -33,7 +33,9 @@ public class Configuration implements Runnable{
 	private List<User> blocked;
 	private List<InvitationMessage> invitesSent;
 	private List<InvitationMessage> invitesReceived;
-	
+	private int percentageOfIdenticalTags = 50;
+	private boolean isBluetoothUsed;
+	private boolean isGPSUsed;
 	
 	private Configuration(){
 		instance = this;
@@ -179,5 +181,28 @@ public class Configuration implements Runnable{
 		this.gpsScanningRadiusInKilometres = gpsScanningRadiusInKilometres;
 	}
 
-	
+	public int getPercentageOfIdenticalTags() {
+		return percentageOfIdenticalTags;
+	}
+
+	public void setPercentageOfIdenticalTags(int percentageOfIdenticalTags) {
+		this.percentageOfIdenticalTags = percentageOfIdenticalTags;
+	}
+
+	public boolean isBluetoothUsed() {
+		return isBluetoothUsed;
+	}
+
+	public void setBluetoothUsed(boolean isBluetoothUsed) {
+		this.isBluetoothUsed = isBluetoothUsed;
+	}
+
+	public boolean isGPSUsed() {
+		return isGPSUsed;
+	}
+
+	public void setGPSUsed(boolean isGPSUsed) {
+		this.isGPSUsed = isGPSUsed;
+	}
+
 }
