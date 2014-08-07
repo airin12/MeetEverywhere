@@ -6,5 +6,6 @@
     <dimen name="spacing_between_items">15dp</dimen>
     <dimen name="ProfileEditionActivity.attachPictureButtonWidth">150dp</dimen>
     <dimen name="Frame.Margin">10dp</dimen>
+    <dimen name="SettingsActivity.UserListsButtonWidth">200dp</dimen>
 
 </resources>

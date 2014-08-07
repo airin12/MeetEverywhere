@@ -86,6 +86,14 @@
 	<string name="SettingsActivity.goToBlockedUsersListButtonText">Lista zablokowanych</string>
 	<string name="SettingsActivity.goToFriendsListButtonText">Lista przyjaciół</string>
 	<string name="SettingsActivity.saveSettingsButtonText">Zapisz ustawienia</string>
+	<string name="SettingActivity.bluetoothDeviceSearchigFrequencyInformationText">Wyszukiwanie odbywa się co</string>
+	<string name="SettingActivity.oneSecondText">sekundę</string>
+	<string name="SettingsActivity.twoToFourSecondsText">sekundy</string>
+	<string name="SettingsActivity.zeroOrFiveOrMoreSecondsText">sekund</string>
+	<string name="SettingsActivity.gpsDeviceSearchingRadiusInformationText">Wyszukiwanie w promieniu</string>
+	<string name="SettingsActivity.oneKilometer">kilometra</string>
+	<string name="SettingsActivity.zeroOrtwoOrMoreKilometers">kilometrów</string>
+	<string name="SettingsActivity.notEnabled">Funkcja niedostepna</string>
 	    
 
 

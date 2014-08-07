@@ -149,7 +149,7 @@ public class BluetoothConnection implements Runnable {
 			while (getStatus().equals(BluetoothConnectionStatus.INACTIVE)) {
 				try {
 					Thread.sleep(Configuration.getInstance()
-							.getBluetoothMillisToReconnectAttempt());
+							.getBluetoothSecsToReconnectAttempt());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					Log.i("WYJATEK",

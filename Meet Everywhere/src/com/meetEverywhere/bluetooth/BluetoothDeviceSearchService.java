@@ -70,7 +70,7 @@ public class BluetoothDeviceSearchService extends Service implements Runnable{
 			counter = 0;
 			while (!isStartRefreshingImmediately()
 					&& counter < configuration
-							.getBluetoothMillisTimeBetweenRefreshing()) {
+							.getBluetoothSecsTimeBetweenRefreshing()) {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {

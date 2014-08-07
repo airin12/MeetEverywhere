@@ -19,10 +19,10 @@ import com.meetEverywhere.MyUsersListAdapter;
  */
 public class Configuration implements Runnable{
 	private static Configuration instance;
-	private final int SECOND_FROM_MILLIS= 1000;
-	private long bluetoothMillisToReconnectAttempt = 2 * SECOND_FROM_MILLIS;
-	private long bluetoothMillisTimeBetweenRefreshing = 20 * SECOND_FROM_MILLIS;
-	private long serverMillisTimeBetweenRefreshing = 30 * SECOND_FROM_MILLIS;
+	private int bluetoothSecsToReconnectAttempt = 60;
+	private int bluetoothSecsTimeBetweenRefreshing = 60;
+	private int gpsScanningRadiusInKilometres = 1;
+	private int serverSecsTimeBetweenRefreshing = 60;
 	private List<Tag> tagsToSearchApartFromUserTags;
 	private MyUsersListAdapter usersFoundByOwnTags;
 	private MyUsersListAdapter usersFoundBySpecifiedTags;
@@ -79,13 +79,13 @@ public class Configuration implements Runnable{
 		return user;
 	}
 
-	public long getBluetoothMillisToReconnectAttempt() {
-		return bluetoothMillisToReconnectAttempt;
+	public long getBluetoothSecsToReconnectAttempt() {
+		return bluetoothSecsToReconnectAttempt;
 	}
 
-	public void setBluetoothMillisToReconnectAttempt(
-			long bluetoothMillisToReconnectAttempt) {
-		this.bluetoothMillisToReconnectAttempt = bluetoothMillisToReconnectAttempt;
+	public void setBluetoothSecsToReconnectAttempt(
+			int bluetoothSecsToReconnectAttempt) {
+		this.bluetoothSecsToReconnectAttempt = bluetoothSecsToReconnectAttempt;
 	}
 
 	public boolean isApplicationOnline() {
@@ -96,13 +96,13 @@ public class Configuration implements Runnable{
 		this.isApplicationOnline = isApplicationOnline;
 	}
 
-	public long getBluetoothMillisTimeBetweenRefreshing() {
-		return bluetoothMillisTimeBetweenRefreshing;
+	public int getBluetoothSecsTimeBetweenRefreshing() {
+		return bluetoothSecsTimeBetweenRefreshing;
 	}
 
-	public void setBluetoothMillisTimeBetweenRefreshing(
-			long bluetoothMillisTimeBetweenRefreshing) {
-		this.bluetoothMillisTimeBetweenRefreshing = bluetoothMillisTimeBetweenRefreshing;
+	public void setBluetoothSecsTimeBetweenRefreshing(
+			int bluetoothSecsTimeBetweenRefreshing) {
+		this.bluetoothSecsTimeBetweenRefreshing = bluetoothSecsTimeBetweenRefreshing;
 	}
 
 	public int getDesiredTagsCompatibility() {
@@ -113,13 +113,13 @@ public class Configuration implements Runnable{
 		this.desiredTagsCompatibility = desiredTagsCompatibility;
 	}
 
-	public long getServerMillisTimeBetweenRefreshing() {
-		return serverMillisTimeBetweenRefreshing;
+	public long getServerSecsTimeBetweenRefreshing() {
+		return serverSecsTimeBetweenRefreshing;
 	}
 
-	public void setServerMillisTimeBetweenRefreshing(
-			long serverMillisTimeBetweenRefreshing) {
-		this.serverMillisTimeBetweenRefreshing = serverMillisTimeBetweenRefreshing;
+	public void setServerSecsTimeBetweenRefreshing(
+			int serverSecsTimeBetweenRefreshing) {
+		this.serverSecsTimeBetweenRefreshing = serverSecsTimeBetweenRefreshing;
 	}
 
 	public List<Tag> getTagsToSearchApartFromUserTags() {
@@ -171,6 +171,13 @@ public class Configuration implements Runnable{
 		this.invitesReceived = invitesReceived;
 	}
 	
-	
+	public int getGpsScanningRadiusInKilometres() {
+		return gpsScanningRadiusInKilometres;
+	}
+
+	public void setGpsScanningRadiusInKilometres(int gpsScanningRadiusInKilometres) {
+		this.gpsScanningRadiusInKilometres = gpsScanningRadiusInKilometres;
+	}
+
 	
 }

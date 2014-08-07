@@ -32,7 +32,7 @@
                     android:id="@+id/SettingsActivity.bluetoothCheckBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    
+                    android:checked="false"
                     android:text="@string/SettingsActivity.bluetoothCheckBoxText" />
 
                 <TextView
@@ -46,7 +46,17 @@
                 <SeekBar
                     android:id="@+id/SettingsActivity.bluetoothCustomizeDeviceSearchingFrequencyBar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:max="600" />
+
+                <TextView
+                    android:id="@+id/SettingsActivity.bluetoothDeviceSearchigFrequencyInformation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/SettingsActivity.notEnabled"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
             </LinearLayout>
 
         </RelativeLayout>
@@ -55,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_between_items"
-            android:background="@drawable/shape_frame_black"
+            android:background="@drawable/shape_frame_red"
             android:gravity="center" >
 
             <LinearLayout
@@ -69,6 +79,7 @@
                     android:id="@+id/SettingsActivity.gpsCheckBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="false"
                     android:text="@string/SettingsActivity.gpsCheckBoxText" />
 
                 <TextView
@@ -82,7 +93,16 @@
                 <SeekBar
                     android:id="@+id/SettingsActivity.gpsCustomizeDeviceSearchingRadiusBar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:max="30" />
+
+                <TextView
+                    android:id="@+id/SettingsActivity.gpsDeviceSearchingRadiusInformation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/SettingsActivity.notEnabled"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
 
             </LinearLayout>
 
@@ -92,7 +112,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_between_items"
-            android:background="@drawable/shape_frame_black"
+            android:background="@drawable/shape_frame_blue"
+            android:gravity="center" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/Frame.Margin"
+                android:layout_marginTop="@dimen/spacing_between_items"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/SettingsActivity.setPercentageOfTagsToBeIdenticalLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/SettingsActivity.setPercentageOfTagsToBeIdenticalTextLabel" />
+
+                <SeekBar
+                    android:id="@+id/SettingsActivity.setPercentageOfTagsToBeIdenticalBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="100" />
+
+                <TextView
+                    android:id="@+id/SettingsActivity.percentageOfTagsToBeIdenticalInformation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_between_items"
+            android:background="@drawable/shape_frame_purple"
             android:gravity="center" >
 
             <LinearLayout
@@ -104,38 +161,21 @@
 
                 <Button
                     android:id="@+id/SettingsActivity.goToBlockedUsersListButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/SettingsActivity.UserListsButtonWidth"
                     android:layout_height="wrap_content"
-                    android:text="@string/SettingsActivity.goToBlockedUsersListButtonText" />
+                    android:text="@string/SettingsActivity.goToBlockedUsersListButtonText"
+                    android:onClick="goToBlockedContactsActivityAction" />
 
                 <Button
                     android:id="@+id/SettingsActivity.goToFriendsListButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/SettingsActivity.UserListsButtonWidth"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_between_items"
-                    android:text="@string/SettingsActivity.goToFriendsListButtonText" />
+                    android:text="@string/SettingsActivity.goToFriendsListButtonText"
+                    android:onClick="goToFriendsListActivity" />
             </LinearLayout>
 
         </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_between_items"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/SettingsActivity.setPercentageOfTagsToBeIdenticalLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/SettingsActivity.setPercentageOfTagsToBeIdenticalTextLabel" />
-
-            <SeekBar
-                android:id="@+id/SettingsActivity.setPercentageOfTagsToBeIdenticalBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -148,7 +188,8 @@
                 android:id="@+id/SettingsActivity.saveSettingsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/SettingsActivity.saveSettingsButtonText" />
+                android:text="@string/SettingsActivity.saveSettingsButtonText"
+                android:onClick="saveSettingsAndGoBackAction" />
 
         </LinearLayout>
 
