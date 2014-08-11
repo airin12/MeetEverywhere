@@ -19,27 +19,24 @@ import com.meetEverywhere.MyUsersListAdapter;
  */
 public class Configuration implements Runnable{
 	private static Configuration instance;
-	private int bluetoothSecsToReconnectAttempt = 60;
 	private int bluetoothSecsTimeBetweenRefreshing = 60;
-	private int gpsScanningRadiusInKilometres = 1;
+	private double gpsScanningRadiusInKilometres = 1;
 	private int serverSecsTimeBetweenRefreshing = 60;
 	private List<Tag> tagsToSearchApartFromUserTags;
 	private MyUsersListAdapter usersFoundByOwnTags;
 	private MyUsersListAdapter usersFoundBySpecifiedTags;
-	private List<User> favourites;
 	private User user;
 	private boolean isApplicationOnline;
-	private int desiredTagsCompatibility;
+	private int desiredTagsCompatibility = 50;
 	private List<User> blocked;
 	private List<InvitationMessage> invitesSent;
 	private List<InvitationMessage> invitesReceived;
-	private int percentageOfIdenticalTags = 50;
 	private boolean isBluetoothUsed;
 	private boolean isGPSUsed;
 	
 	private Configuration(){
 		instance = this;
-		loadConfiguration();
+		//loadConfiguration();
 		(new Thread(this)).start();
 	}
 	
@@ -61,14 +58,10 @@ public class Configuration implements Runnable{
 		invitesSent = new LinkedList<InvitationMessage>();
 			
 	}	
-		
-	private void storageConfiguration() {
-		// TODO metoda do zapisywania danych w przestrzeni lokalnej 
-	}
-	
+			
 	public static Configuration getInstance(){
 		if(instance == null){
-			/*instance =*/ new Configuration();
+			instance = new Configuration();
 		}
 		return instance;
 	}
@@ -77,17 +70,12 @@ public class Configuration implements Runnable{
 		
 	}
 	
+	public void setUser(User user){
+		this.user = user;
+	}
+	
 	public User getUser(){
 		return user;
-	}
-
-	public long getBluetoothSecsToReconnectAttempt() {
-		return bluetoothSecsToReconnectAttempt;
-	}
-
-	public void setBluetoothSecsToReconnectAttempt(
-			int bluetoothSecsToReconnectAttempt) {
-		this.bluetoothSecsToReconnectAttempt = bluetoothSecsToReconnectAttempt;
 	}
 
 	public boolean isApplicationOnline() {
@@ -173,20 +161,12 @@ public class Configuration implements Runnable{
 		this.invitesReceived = invitesReceived;
 	}
 	
-	public int getGpsScanningRadiusInKilometres() {
+	public double getGpsScanningRadiusInKilometres() {
 		return gpsScanningRadiusInKilometres;
 	}
 
-	public void setGpsScanningRadiusInKilometres(int gpsScanningRadiusInKilometres) {
-		this.gpsScanningRadiusInKilometres = gpsScanningRadiusInKilometres;
-	}
-
-	public int getPercentageOfIdenticalTags() {
-		return percentageOfIdenticalTags;
-	}
-
-	public void setPercentageOfIdenticalTags(int percentageOfIdenticalTags) {
-		this.percentageOfIdenticalTags = percentageOfIdenticalTags;
+	public void setGpsScanningRadiusInKilometres(double minGpsRadius) {
+		this.gpsScanningRadiusInKilometres = minGpsRadius;
 	}
 
 	public boolean isBluetoothUsed() {

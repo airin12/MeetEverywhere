@@ -11,12 +11,15 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.meetEverywhere.common.Configuration;
+import com.meetEverywhere.common.User;
+import com.meetEverywhere.database.AccountsDAO;
 
 public class RegistrationActivity extends Activity {
 	
@@ -118,8 +121,26 @@ public class RegistrationActivity extends Activity {
 	
 	public void registerUserAction(View view) {
 		List<ValidationError> errors = validationManager.validateRegisterActivity(username, password, confirmedPassword);
-		Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));
-		startActivity(new Intent(this, MeetEverywhere.class));
-	}
+		if(!errors.isEmpty()){
+			ErrorDialog.createDialog(this, errors);
+		}else{
+		errors.clear();
+		DAO dao = new DAO();
+		User user;
+		
+		
+		if((user = dao.register(username, password, description)) == null){
+			errors.add(new ValidationError(R.string.Validation_userAlreadyExists));
+			ErrorDialog.createDialog(this, errors).show();
+		}else{
+			AccountsDAO accountsDAO = AccountsDAO.getInstance(this);
+			accountsDAO.register(user);
+			if(!accountsDAO.logIn(username, password)){
+				Log.i("DB", "accounts doesnt exist");
+				return;
+			}
+			startActivity(new Intent(this, MeetEverywhere.class));
+		}
+	}}
 
 }

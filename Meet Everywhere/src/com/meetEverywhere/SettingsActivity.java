@@ -86,7 +86,7 @@ public class SettingsActivity extends Activity {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked) {
 					gpsSearchingRadiusBar.setEnabled(true);
-					searchingRadiusInKilometres = Configuration.getInstance().getGpsScanningRadiusInKilometres();
+					searchingRadiusInKilometres = (int) Configuration.getInstance().getGpsScanningRadiusInKilometres();
 					gpsSearchingRadiusBar.setProgress(searchingRadiusInKilometres);
 					
 					gpsSearchingRadiusBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -123,7 +123,7 @@ public class SettingsActivity extends Activity {
 			}
 		});
 		
-		percentageOfIdenticalTags = Configuration.getInstance().getPercentageOfIdenticalTags();
+		percentageOfIdenticalTags = Configuration.getInstance().getDesiredTagsCompatibility();
 		percentageOfIdenticalTagsBar.setProgress(percentageOfIdenticalTags);
 		
 		percentageOfIdenticalTagsBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {

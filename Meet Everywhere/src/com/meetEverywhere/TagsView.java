@@ -29,7 +29,7 @@ public abstract class TagsView extends Activity {
 	private List<Tag> tags = new ArrayList<Tag>();
 	private ArrayAdapter<Tag> listAdapter;
 
-	private DatabaseAdapter myDBAdapter;
+//	private DatabaseAdapter myDBAdapter;
 
 	private List<Tag> getTagsFromDatabase() {
 		List<Tag> list = new ArrayList<Tag>();
@@ -46,10 +46,10 @@ public abstract class TagsView extends Activity {
 		
 		View view = findViewById(R.id.tags_view);
 		setupUI(view);
-
+/*
 		myDBAdapter = new DatabaseAdapter(getApplicationContext());
 		myDBAdapter.open();
-
+*/
 		tagListView = (ListView) findViewById(R.id.tagsListView);
 		tagListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		tags = getTagsFromDatabase();
@@ -105,7 +105,7 @@ public abstract class TagsView extends Activity {
 	@Override
 	protected void onDestroy() {
 
-		myDBAdapter.close();
+//		myDBAdapter.close();
 		super.onDestroy();
 	}
 	

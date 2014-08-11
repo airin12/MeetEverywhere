@@ -23,8 +23,8 @@ public class FriendsEdition extends Activity {
 
 	private final int PICK_CONTACT = 1;
 
-	private Cursor dbCursor;
-	private DatabaseAdapter myDBAdapter;
+//	private Cursor dbCursor;
+//	private DatabaseAdapter myDBAdapter;
 
 	private List<String> contacts = new ArrayList<String>();
 	private List<Tag> fullContacts = new ArrayList<Tag>();
@@ -53,12 +53,14 @@ public class FriendsEdition extends Activity {
 	}
 
 	private void getContacts() {
+/*
 		dbCursor = myDBAdapter.getAllContacts();
 		startManagingCursor(dbCursor);
 		dbCursor.requery();
 
 		if (dbCursor.moveToFirst()) {
 			do {
+
 				int id = dbCursor.getInt(myDBAdapter.ID_COLUMN);
 				String name = dbCursor.getString(myDBAdapter.NAME_COLUMN);
 				String num = dbCursor.getString(myDBAdapter.NUM_COLUMN);
@@ -95,6 +97,7 @@ public class FriendsEdition extends Activity {
 				}
 			}
 		cur.close();
+*/
 	}
 
 	@Override
@@ -102,9 +105,10 @@ public class FriendsEdition extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friends_edition_layout);
 
+/*
 		myDBAdapter = new DatabaseAdapter(getApplicationContext());
 		myDBAdapter.open();
-
+*/
 		getContacts();
 		adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_multiple_choice, contacts);
@@ -133,9 +137,9 @@ public class FriendsEdition extends Activity {
 			startActivityForResult(intent, PICK_CONTACT);
 			break;
 		case R.id.save:
-			SparseBooleanArray positions = listView.getCheckedItemPositions();
+//			SparseBooleanArray positions = listView.getCheckedItemPositions();
 			for (int i = 0; i < fullContacts.size(); i++) {
-				Tag c = fullContacts.get(i);
+//				Tag c = fullContacts.get(i);
 				/*
 				 * if(positions.get(i)){ if(c.getId() < 0)
 				 * myDBAdapter.insertContact(c.getName(), c.getNumber()); } else

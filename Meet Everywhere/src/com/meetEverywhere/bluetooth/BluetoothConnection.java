@@ -7,7 +7,6 @@ import java.io.ObjectOutputStream;
 import org.json.JSONException;
 
 import com.meetEverywhere.R;
-import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.InvitationMessage;
 import com.meetEverywhere.common.Message;
 import com.meetEverywhere.common.TextMessage;
@@ -27,6 +26,7 @@ public class BluetoothConnection implements Runnable {
 			.getInstance();
 	private final ArrayAdapter<TextMessage> messagesAdapter;
 	private final int MAX_WAIT_PERIOD = 3000;
+	private final int PERIOD_BEETWEEN_RECONNECT_ATTEMPT = 30000;
 	private BluetoothSocket bluetoothSocket;
 	private ObjectInputStream inputStream;
 	private ObjectOutputStream outputStream;
@@ -148,8 +148,7 @@ public class BluetoothConnection implements Runnable {
 
 			while (getStatus().equals(BluetoothConnectionStatus.INACTIVE)) {
 				try {
-					Thread.sleep(Configuration.getInstance()
-							.getBluetoothSecsToReconnectAttempt());
+					Thread.sleep(PERIOD_BEETWEEN_RECONNECT_ATTEMPT);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					Log.i("WYJATEK",

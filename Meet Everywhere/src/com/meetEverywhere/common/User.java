@@ -13,6 +13,8 @@ import org.json.JSONObject;
 import com.meetEverywhere.DAO;
 import com.meetEverywhere.bluetooth.BluetoothConnection;
 import com.meetEverywhere.bluetooth.BluetoothDispatcher;
+import com.meetEverywhere.database.AccountsDAO;
+import com.meetEverywhere.database.LocalDAO;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,7 +39,7 @@ public class User {
 
 	private String nickname;
 	private final String userToken;
-	private long userID;
+	private String userID;
 	private List<Tag> hashTags;
 	private String description;
 	private byte[] picture;
@@ -52,22 +54,29 @@ public class User {
 	private boolean isSendButtonEnabled;
 	private boolean isChatFocused;
 	private Button sendButton;
-
+	private LocalDAO localDAO = AccountsDAO.getInstance(null);	// tymczasowo, do testów
+	
 	public User(String nickname, List<Tag> hashTags, String description,
 			Bitmap picture, String userToken) {
 		config = Configuration.getInstance();
 		this.hashTags = hashTags;
 		this.nickname = nickname;
 		this.description = description;
-//		this.userToken = userToken;
-		this.userToken = String.valueOf((new Random()).nextInt(1000));
-		this.setPicture(picture);
+		this.userToken = userToken;
+		this.picture = convertBitmapToByteArray(picture);
 		this.myFriendsList = new ArrayList<User>();
 		this.messagesArrayAdapter = null;
 		this.setSendButtonEnabled(true);
 		this.setChatFocused(false);
 		this.setSendButton(null);
-//		this.isFriend=false;
+	}
+
+	public User(String nickname, List<Tag> hashTags, String description,
+			 String userToken, byte[] picture, String userID, String password) {
+		this(nickname, hashTags, description, null, userToken);
+		this.picture = picture;
+		this.userID = userID;
+		this.password = password;
 	}
 
 	public String getNickname() {
@@ -76,6 +85,7 @@ public class User {
 
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
+		localDAO.saveUser(this);
 	}
 
 	public List<Tag> getHashTags() {
@@ -84,6 +94,7 @@ public class User {
 
 	public void setHashTags(List<Tag> hashTags) {
 		this.hashTags = hashTags;
+		localDAO.saveUser(this);
 	}
 
 	@Override
@@ -107,33 +118,40 @@ public class User {
 	}
 
 	public void setPicture(Bitmap picture) {
+		this.picture = convertBitmapToByteArray(picture);
+		localDAO.saveUser(this);
+	}
+
+	private byte[] convertBitmapToByteArray(Bitmap picture){
 		if (picture == null) {
-			this.picture = null;
+			return null;
 		} else {
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
-			this.picture = stream.toByteArray();
+			return stream.toByteArray();
 		}
 	}
-
+	
 	public String getDescription() {
 		return description;
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
+		localDAO.saveUser(this);
 	}
 
 	public String getUserToken() {
 		return userToken;
 	}
 
-	public long getUserID() {
+	public String getUserID() {
 		return userID;
 	}
 
-	public void setUserID(long userID) {
+	public void setUserID(String userID) {
 		this.userID = userID;
+		localDAO.saveUser(this);
 	}
 
 	public String getPassword() {
@@ -142,6 +160,7 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+		localDAO.saveUser(this);
 	}
 
 	public static class UserComparator implements Comparator<User> {
@@ -173,6 +192,7 @@ public class User {
 
 	public void setId(String id) {
 		this.id = id;
+		localDAO.saveUser(this);
 	}
 
 	public BluetoothConnection getBluetoothConnection() {
@@ -347,7 +367,7 @@ public class User {
 				try {
 					bluetoothConnection.addMessage(message);
 				} catch (Exception e) {
-					if (!DAO.sendInvite(message, Long.toString(userID))) {
+					if (!DAO.sendInvite(message, userID)) {
 						handler.post(new Runnable() {
 							public void run() {
 								Toast.makeText(
@@ -375,6 +395,10 @@ public class User {
 		})).start();
 
 		
+	}
+
+	public byte[] getPictureAsByteArray() {
+		return picture;
 	}
 
 }

@@ -57,7 +57,7 @@ public class DAO {
 	 */
 
 	
-	private static TextView token;
+	//private static TextView token;
 	
 	
 	public synchronized void updateLocationOnServer(double latitude,
@@ -83,12 +83,31 @@ public class DAO {
             e.printStackTrace();
         }
 	}
+
+	static List<User> alreadyRegistered = new ArrayList<User>();
+
+	public synchronized User register(String nickname, String password, String description){
+/* <mock> */
+		for(User user : alreadyRegistered){
+			if(user.getNickname().equals(nickname)){
+				return null;
+			}
+		}
+		Random rand = new Random();
+		User user = new User(nickname, new ArrayList<Tag>(), description, "token" + rand.nextInt(100000), null, "userd" + rand.nextInt(1000000), password);
+		
+		//user.setUserID("userd" + rand.nextInt(1000000));
+		//user.setPassword(password);
+	//	alreadyRegistered.add(user);
+		return user;
+/*</mock> */		
+	}
 	
 	public void createUser(User user){
 		String tokenText;
         try {
             tokenText =  new ApiService.CreateUserQuery("UserName").execute().get();
-            token.setText(tokenText);
+      //      token.setText(tokenText);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -98,16 +117,17 @@ public class DAO {
 	}
 	
 	public List<User> getUsersFromServer(List<String> tags2, int percentage) {
-		
+
 		List<User> result = new LinkedList<User>();
-        try {
+/*
+		try {
         	result =  new ApiService.GetMatchesQuery(new HashSet<String>(tags2), Integer.toString(percentage)).execute().get();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-		
+*/		
         return result;
 	}
 	

@@ -122,5 +122,7 @@
     <string name="Validation.confirmedPasswordNotProvided">Nie potwierdziłeś hasła!</string>
     <string name="Validation.passwordAndConfirmedPasswordAreDifferent">Hasło i potwierdzenie różnią się!</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="Validation.loginFailed">&quot;Błąd logowania&quot;</string>
+    <string name="Validation.userAlreadyExists">Użytkownik o takim nicku już istnieje!</string>
 
 </resources>
