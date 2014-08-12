@@ -32,7 +32,7 @@
                     android:id="@+id/SettingsActivity.bluetoothCheckBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false"
+                    android:checked="true"
                     android:text="@string/SettingsActivity.bluetoothCheckBoxText" />
 
                 <TextView
@@ -47,7 +47,6 @@
                     android:id="@+id/SettingsActivity.bluetoothCustomizeDeviceSearchingFrequencyBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:max="600" />
 
                 <TextView
@@ -94,7 +93,6 @@
                     android:id="@+id/SettingsActivity.gpsCustomizeDeviceSearchingRadiusBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:max="30" />
 
                 <TextView

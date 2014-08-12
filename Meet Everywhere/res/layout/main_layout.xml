@@ -226,7 +226,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:contentDescription="@string/settings_icon"
-                android:src="@drawable/settings" />
+                android:src="@drawable/settings"
+                android:onClick="goToSettingsActivityAction" />
 
             <TextView
                 android:id="@+id/settings_text"

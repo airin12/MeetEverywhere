@@ -191,4 +191,8 @@ public class MeetEverywhere extends Activity {
     public void openManageContactsActivity(View view){
     	startActivity(new Intent(this, ManageContactsActivity.class));
     }
+    
+    public void goToSettingsActivityAction(View view) {
+    	startActivity(new Intent(this, SettingsActivity.class));
+    }
 }

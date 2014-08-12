@@ -2,7 +2,6 @@ package com.meetEverywhere;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap.Config;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -22,6 +21,8 @@ public class SettingsActivity extends Activity {
 	private SeekBar percentageOfIdenticalTagsBar;
 	private TextView bluetoothSearchingFrequencyInfo;
 	private TextView gpsSearchingRadiusInfo;
+	private CheckBox bluetoothCheckBox;
+	private CheckBox gpsCheckBox;
 	private int secondsBetweenRefreshingBluetooth;
 	private int searchingRadiusInKilometres;
 	private int percentageOfIdenticalTags;
@@ -31,17 +32,35 @@ public class SettingsActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 		
+		Configuration configuration = Configuration.getInstance();
+		
 		bluetoothSearchingFrequencyBar = (SeekBar)findViewById(R.id.SettingsActivity_bluetoothCustomizeDeviceSearchingFrequencyBar);
 		gpsSearchingRadiusBar = (SeekBar)findViewById(R.id.SettingsActivity_gpsCustomizeDeviceSearchingRadiusBar);
+		percentageOfIdenticalTagsBar = (SeekBar)findViewById(R.id.SettingsActivity_setPercentageOfTagsToBeIdenticalBar);
 		
 		bluetoothSearchingFrequencyInfo = (TextView)findViewById(R.id.SettingsActivity_bluetoothDeviceSearchigFrequencyInformation);
+		gpsSearchingRadiusInfo = (TextView)findViewById(R.id.SettingsActivity_gpsDeviceSearchingRadiusInformation);
 		
-		((CheckBox)findViewById(R.id.SettingsActivity_bluetoothCheckBox)).setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		bluetoothSearchingFrequencyBar.setEnabled(configuration.isBluetoothUsed());
+		gpsSearchingRadiusBar.setEnabled(configuration.isGPSUsed());
+		
+		bluetoothCheckBox = (CheckBox)findViewById(R.id.SettingsActivity_bluetoothCheckBox);
+		gpsCheckBox = (CheckBox)findViewById(R.id.SettingsActivity_gpsCheckBox);
+		
+		bluetoothCheckBox.setChecked(configuration.isBluetoothUsed());
+		gpsCheckBox.setChecked(configuration.isGPSUsed());
+		
+		secondsBetweenRefreshingBluetooth = Configuration.getInstance().getBluetoothSecsTimeBetweenRefreshing();
+		searchingRadiusInKilometres = (int) Configuration.getInstance().getGpsScanningRadiusInKilometres();
+		
+		if(bluetoothCheckBox.isChecked()) {
+		}
+		
+		bluetoothCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked) {
 					bluetoothSearchingFrequencyBar.setEnabled(true);
-					secondsBetweenRefreshingBluetooth = Configuration.getInstance().getBluetoothSecsTimeBetweenRefreshing();
 					bluetoothSearchingFrequencyBar.setProgress(secondsBetweenRefreshingBluetooth);
 					
 					bluetoothSearchingFrequencyBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -66,7 +85,9 @@ public class SettingsActivity extends Activity {
 							}
 							else {
 								textForSearchingFrequencyInfo.append(getText(R.string.SettingsActivity_twoToFourSecondsText));
-							}	
+							}
+						
+							bluetoothSearchingFrequencyInfo.setText(textForSearchingFrequencyInfo);
 						}
 						
 						public void onStartTrackingTouch(SeekBar arg0) {
@@ -81,12 +102,12 @@ public class SettingsActivity extends Activity {
 			}
 		});
 		
-		((CheckBox)findViewById(R.id.SettingsActivity_gpsCheckBox)).setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		gpsCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked) {
 					gpsSearchingRadiusBar.setEnabled(true);
-					searchingRadiusInKilometres = (int) Configuration.getInstance().getGpsScanningRadiusInKilometres();
+
 					gpsSearchingRadiusBar.setProgress(searchingRadiusInKilometres);
 					
 					gpsSearchingRadiusBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -170,3 +191,4 @@ public class SettingsActivity extends Activity {
 	}
 
 }
+

@@ -122,7 +122,7 @@ public class RegistrationActivity extends Activity {
 	public void registerUserAction(View view) {
 		List<ValidationError> errors = validationManager.validateRegisterActivity(username, password, confirmedPassword);
 		if(!errors.isEmpty()){
-			ErrorDialog.createDialog(this, errors);
+			ErrorDialog.createDialog(this, errors).show();
 		}else{
 		errors.clear();
 		DAO dao = new DAO();

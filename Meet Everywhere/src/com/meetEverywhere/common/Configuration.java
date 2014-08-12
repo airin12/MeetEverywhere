@@ -33,7 +33,7 @@ public class Configuration implements Runnable{
 	private List<InvitationMessage> invitesReceived;
 	private boolean isBluetoothUsed;
 	private boolean isGPSUsed;
-	
+
 	private Configuration(){
 		instance = this;
 		//loadConfiguration();
