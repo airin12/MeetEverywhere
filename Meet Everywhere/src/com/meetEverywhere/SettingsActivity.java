@@ -52,9 +52,35 @@ public class SettingsActivity extends Activity {
 		
 		secondsBetweenRefreshingBluetooth = Configuration.getInstance().getBluetoothSecsTimeBetweenRefreshing();
 		searchingRadiusInKilometres = (int) Configuration.getInstance().getGpsScanningRadiusInKilometres();
+	
+		bluetoothSearchingFrequencyBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			public void onStopTrackingTouch(SeekBar arg0) {
+				bluetoothSearchingFrequencyBar.setSecondaryProgress(bluetoothSearchingFrequencyBar.getProgress());
+			}
+			
+			public void onProgressChanged(SeekBar seekbar, int progress, boolean fromUser) {
+				secondsBetweenRefreshingBluetooth = progress;
+				
+				StringBuilder textForSearchingFrequencyInfo = createBluetoothSearchingFrequencyInfo(progress);
+				bluetoothSearchingFrequencyInfo.setText(textForSearchingFrequencyInfo);
+			}
+			
+			public void onStartTrackingTouch(SeekBar arg0) {
+			}
+		
+		});
 		
 		if(bluetoothCheckBox.isChecked()) {
+			StringBuilder textForSearchingFrequencyInfo = createBluetoothSearchingFrequencyInfo(secondsBetweenRefreshingBluetooth);
+			bluetoothSearchingFrequencyInfo.setText(textForSearchingFrequencyInfo);
 		}
+		
+		if(gpsCheckBox.isChecked()) {
+			StringBuilder textForSearchingRadiusInfo = createGpsSearchingRadiusInfo();
+			gpsSearchingRadiusInfo.setText(textForSearchingRadiusInfo);
+		}
+		
 		
 		bluetoothCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			
@@ -63,42 +89,29 @@ public class SettingsActivity extends Activity {
 					bluetoothSearchingFrequencyBar.setEnabled(true);
 					bluetoothSearchingFrequencyBar.setProgress(secondsBetweenRefreshingBluetooth);
 					
-					bluetoothSearchingFrequencyBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-						
-						public void onStopTrackingTouch(SeekBar arg0) {
-							bluetoothSearchingFrequencyBar.setSecondaryProgress(bluetoothSearchingFrequencyBar.getProgress());
-						}
-						
-						public void onProgressChanged(SeekBar seekbar, int progress, boolean fromUser) {
-							secondsBetweenRefreshingBluetooth = progress;
-							
-							StringBuilder textForSearchingFrequencyInfo = new StringBuilder();
-							textForSearchingFrequencyInfo.append(getText(R.string.SettingActivity_bluetoothDeviceSearchigFrequencyInformationText))
-														 .append(" ")
-														 .append(progress)
-														 .append(" ");					
-							if(progress == 0 || progress >= 5) {
-								textForSearchingFrequencyInfo.append(getText(R.string.SettingsActivity_zeroOrFiveOrMoreSecondsText));
-							}
-							else if(progress == 1) {
-								textForSearchingFrequencyInfo.append(getText(R.string.SettingActivity_oneSecondText));
-							}
-							else {
-								textForSearchingFrequencyInfo.append(getText(R.string.SettingsActivity_twoToFourSecondsText));
-							}
-						
-							bluetoothSearchingFrequencyInfo.setText(textForSearchingFrequencyInfo);
-						}
-						
-						public void onStartTrackingTouch(SeekBar arg0) {
-						}
-					
-					});
+
 				}
 				else {
 					bluetoothSearchingFrequencyBar.setEnabled(false);
 					bluetoothSearchingFrequencyInfo.setText(R.string.SettingsActivity_notEnabled);
 				}
+			}
+		});
+		
+		gpsSearchingRadiusBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				gpsSearchingRadiusBar.setSecondaryProgress(gpsSearchingRadiusBar.getProgress());
+			}
+			
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				searchingRadiusInKilometres = progress;
+				
+				StringBuilder textForSearchingRadiusInfo = createGpsSearchingRadiusInfo();
+				gpsSearchingRadiusInfo.setText(textForSearchingRadiusInfo);
+			}
+			
+			public void onStartTrackingTouch(SeekBar seekBar) {
 			}
 		});
 		
@@ -110,31 +123,7 @@ public class SettingsActivity extends Activity {
 
 					gpsSearchingRadiusBar.setProgress(searchingRadiusInKilometres);
 					
-					gpsSearchingRadiusBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-						
-						public void onStopTrackingTouch(SeekBar seekBar) {
-							gpsSearchingRadiusBar.setSecondaryProgress(gpsSearchingRadiusBar.getProgress());
-						}
-						
-						public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-							searchingRadiusInKilometres = progress;
-							
-							StringBuilder textForSearchingRadiusInfo = new StringBuilder();
-							textForSearchingRadiusInfo.append(getText(R.string.SettingsActivity_gpsDeviceSearchingRadiusInformationText))
-													  .append(" ")
-													  .append(searchingRadiusInKilometres)
-													  .append(" ");
-							if(searchingRadiusInKilometres == 0 || searchingRadiusInKilometres > 2) {
-								textForSearchingRadiusInfo.append(getText(R.string.SettingsActivity_zeroOrtwoOrMoreKilometers));
-							}
-							else {
-								textForSearchingRadiusInfo.append(getText(R.string.SettingsActivity_oneKilometer));
-							}
-						}
-						
-						public void onStartTrackingTouch(SeekBar seekBar) {
-						}
-					});
+
 					
 				}
 				else {
@@ -190,5 +179,38 @@ public class SettingsActivity extends Activity {
 		//Configuration.getInstance().setBluetoothMillisTimeBetweenRefreshing(bluetoothMillisTimeBetweenRefreshing)
 	}
 
+	private StringBuilder createBluetoothSearchingFrequencyInfo(
+			int progress) {
+		StringBuilder textForSearchingFrequencyInfo = new StringBuilder();
+		textForSearchingFrequencyInfo.append(getText(R.string.SettingActivity_bluetoothDeviceSearchigFrequencyInformationText))
+									 .append(" ")
+									 .append(progress)
+									 .append(" ");					
+		if(progress == 0 || progress >= 5) {
+			textForSearchingFrequencyInfo.append(getText(R.string.SettingsActivity_zeroOrFiveOrMoreSecondsText));
+		}
+		else if(progress == 1) {
+			textForSearchingFrequencyInfo.append(getText(R.string.SettingActivity_oneSecondText));
+		}
+		else {
+			textForSearchingFrequencyInfo.append(getText(R.string.SettingsActivity_twoToFourSecondsText));
+		}
+		return textForSearchingFrequencyInfo;
+	}
+	
+	private StringBuilder createGpsSearchingRadiusInfo() {
+		StringBuilder textForSearchingRadiusInfo = new StringBuilder();
+		textForSearchingRadiusInfo.append(getText(R.string.SettingsActivity_gpsDeviceSearchingRadiusInformationText))
+								  .append(" ")
+								  .append(searchingRadiusInKilometres)
+								  .append(" ");
+		if(searchingRadiusInKilometres == 0 || searchingRadiusInKilometres > 2) {
+			textForSearchingRadiusInfo.append(getText(R.string.SettingsActivity_zeroOrtwoOrMoreKilometers));
+		}
+		else {
+			textForSearchingRadiusInfo.append(getText(R.string.SettingsActivity_oneKilometer));
+		}
+		return textForSearchingRadiusInfo;
+	}
 }
 
