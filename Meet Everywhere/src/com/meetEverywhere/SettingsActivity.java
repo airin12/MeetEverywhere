@@ -66,6 +66,7 @@ public class SettingsActivity extends Activity {
 		if (bluetoothCheckBox.isChecked()) {
 			StringBuilder textForSearchingFrequencyInfo = createBluetoothSearchingFrequencyInfo(secondsBetweenRefreshingBluetooth);
 			bluetoothSearchingFrequencyInfo.setText(textForSearchingFrequencyInfo);
+			bluetoothSearchingFrequencyBar.setProgress(secondsBetweenRefreshingBluetooth);
 		}
 		
 		bluetoothCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -117,6 +118,7 @@ public class SettingsActivity extends Activity {
 		if (gpsCheckBox.isChecked()) {
 			StringBuilder textForSearchingRadiusInfo = createGpsSearchingRadiusInfo(searchingRadiusInKilometres);
 			gpsSearchingRadiusInfo.setText(textForSearchingRadiusInfo);
+			gpsSearchingRadiusBar.setProgress(searchingRadiusInKilometres);
 		}
 		
 		gpsCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -141,6 +143,7 @@ public class SettingsActivity extends Activity {
 		
 		StringBuilder textForChosenPercentageOfIdenticalTagsInfo = createPercentageOfIdenticalTagsProgressInfo(percentageOfIdenticalTags);
 		percentageOfIdenticalTagsProgressInfo.setText(textForChosenPercentageOfIdenticalTagsInfo);
+		
 		
 		percentageOfIdenticalTagsBar = (SeekBar) findViewById(R.id.SettingsActivity_setPercentageOfTagsToBeIdenticalBar);
 		percentageOfIdenticalTagsBar.setProgress(percentageOfIdenticalTags);
@@ -225,5 +228,9 @@ public class SettingsActivity extends Activity {
 		  
 		  AccountsDAO accountDAO = AccountsDAO.getInstance(null);
 		  accountDAO.saveConfiguration(configuration);
+		  
+		  Intent i = new Intent(this, MeetEverywhere.class);
+		  startActivity(i);
+		  finish();
 	}
 }
