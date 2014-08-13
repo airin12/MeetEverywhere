@@ -89,12 +89,12 @@
 	<string name="SettingActivity.bluetoothDeviceSearchigFrequencyInformationText">Wyszukiwanie odbywa się co</string>
 	<string name="SettingActivity.oneSecondText">sekundę</string>
 	<string name="SettingsActivity.twoToFourSecondsText">sekundy</string>
-	<string name="SettingsActivity.zeroOrFiveOrMoreSecondsText">sekund</string>
+	<string name="SettingsActivity.FiveOrMoreSecondsText">sekund</string>
 	<string name="SettingsActivity.gpsDeviceSearchingRadiusInformationText">Wyszukiwanie w promieniu</string>
 	<string name="SettingsActivity.oneKilometer">kilometra</string>
-	<string name="SettingsActivity.zeroOrtwoOrMoreKilometers">kilometrów</string>
+	<string name="SettingsActivity.twoOrMoreKilometers">kilometrów</string>
 	<string name="SettingsActivity.notEnabled">Funkcja niedostepna</string>
-	<string name="SettingsActivity.percentageOfIdenticaTagsInformationText">Zgodność tagów: 0%</string>
+	<string name="SettingsActivity.percentageOfIdenticaTagsInformationText">Zgodność tagów: </string>
 	    
 
 
