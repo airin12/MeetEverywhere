@@ -49,4 +49,10 @@ public class FriendsListFragment extends Activity {
 			}
 		});
 	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		((FriendsListAdapter)listView.getAdapter()).notifyDataSetChanged();
+	}
 }
