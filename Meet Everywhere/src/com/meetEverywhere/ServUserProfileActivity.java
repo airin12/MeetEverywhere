@@ -60,14 +60,16 @@ public class ServUserProfileActivity extends Activity{
 		StringBuffer buffer = new StringBuffer();
 		
 		boolean start = true;
-		for(Tag tag : user.getHashTags()){
-			
-			if(start)
-				start=false;
-			else
-				buffer.append(", ");
-			
-			buffer.append(tag.getName());
+		if(user.getHashTags()!=null){
+			for(Tag tag : user.getHashTags()){
+				
+				if(start)
+					start=false;
+				else
+					buffer.append(", ");
+				
+				buffer.append(tag.getName());
+			}
 		}
 		
 		text2.setText(buffer.toString());

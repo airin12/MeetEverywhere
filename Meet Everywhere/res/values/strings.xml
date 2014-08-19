@@ -50,6 +50,7 @@
     <string name="bt_icon">bt_icon</string>
     <string name="main_layout_user">user</string>
     <string name="accept_text">Akceptuj</string>
+    <string name="unlock_text">Odblokuj</string>
 
     <!-- ************************************************************************************************* -->
     <!-- ************************************* Common strings *************************************** -->

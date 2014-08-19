@@ -28,9 +28,9 @@ public class Configuration implements Runnable{
 	private User user;
 	private boolean isApplicationOnline;
 	private int desiredTagsCompatibility = 50;
-	private List<User> blocked;
-	private List<InvitationMessage> invitesSent;
-	private List<InvitationMessage> invitesReceived;
+	private List<User> blocked = new LinkedList<User>();
+	private List<InvitationMessage> invitesSent = new LinkedList<InvitationMessage>();
+	private List<InvitationMessage> invitesReceived = new LinkedList<InvitationMessage>();
 	private boolean isBluetoothUsed;
 	private boolean isGPSUsed;
 

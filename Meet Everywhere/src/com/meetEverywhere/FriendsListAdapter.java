@@ -20,7 +20,7 @@ public class FriendsListAdapter extends ArrayAdapter<User>{
 	
 	public FriendsListAdapter(Context context, int resource, List<User> objects) {
 		super(context, resource, objects);
-		users=objects;
+		users=objects;		
 		this.context=context;
 		
 	}
