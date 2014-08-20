@@ -22,7 +22,6 @@ public class FriendsListAdapter extends ArrayAdapter<User> {
 		super(context, resource, users);
 		this.users = users;
 		this.context = context;
-
 	}
 
 	@Override
@@ -48,11 +47,6 @@ public class FriendsListAdapter extends ArrayAdapter<User> {
 
 		return row;
 
-	}
-
-	public void add(User user) {
-		//users.add(user);
-		notifyDataSetChanged();
 	}
 
 	public List<User> getUsers() {

@@ -28,16 +28,13 @@ public class Configuration implements Runnable{
 	private User user;
 	private boolean isApplicationOnline;
 	private int desiredTagsCompatibility = 50;
-//	private List<User> blocked;
 	
 	private final GenericUsersDBArrayList allKnownUsers;
 	private final InvitedUsersArrayListProxy invitedUsers;
 	private final InvitationReceivedArrayListProxy invitationReceivedUsers;
 	private final BlockedArrayListProxy blockedUsers;
 	private final AcquaintancesArrayListProxy acquaintancesUsers;
-	
-//	private List<InvitationMessage> invitesSent;
-//	private List<InvitationMessage> invitesReceived;
+
 	private boolean isBluetoothUsed;
 	private boolean isGPSUsed;
 
@@ -57,9 +54,8 @@ public class Configuration implements Runnable{
 		}
 		return instance;
 	}
-
-	public void run() {
-		
+	
+	public void run() {	
 	}
 	
 	public void setUser(User user){
@@ -128,31 +124,6 @@ public class Configuration implements Runnable{
 	public void setUsersFoundBySpecifiedTagsAdapter(MyUsersListAdapter usersFoundBySpecifiedTags) {
 		this.usersFoundBySpecifiedTags = usersFoundBySpecifiedTags;
 	}
-/*
-	public List<User> getBlocked() {
-		return blocked;
-	}
-
-	public void setBlocked(List<User> blocked) {
-		this.blocked = blocked;
-	}
-	
-	public List<InvitationMessage> getInvitationMessagesSent() {
-		return invitesSent;
-	}
-
-	public void setInvitationMessagesSent(List<InvitationMessage> invitesSent) {
-		this.invitesSent = invitesSent;
-	}
-
-	public List<InvitationMessage> getInvitationMessagesReceived() {
-		return invitesReceived;
-	}
-
-	public void setInvitationMessagesReceived(List<InvitationMessage> invitesReceived) {
-		this.invitesReceived = invitesReceived;
-	}
-*/
 	
 	public double getGpsScanningRadiusInKilometres() {
 		return gpsScanningRadiusInKilometres;

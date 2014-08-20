@@ -148,7 +148,6 @@ public class DAO {
         return true;
 	}
 	
-//<<<<<<< HEAD
 	public static boolean sendMessage(TextMessage message){
 		
 		return false;
@@ -156,46 +155,8 @@ public class DAO {
 	
 	
 	
-//=======
 	public void stopListening(){
 		
 	}
-/*	
-	public void listenIncomingMessages(Chat chat){
-		listener = new MessagesListener(chat);
-		listener.start();
-		
-	}
-	
-	public class MessagesListener extends Thread{
-		
-		private boolean shouldRun;
-		private Chat chat;
-		
-		public MessagesListener(Chat chat){
-			shouldRun=true;
-			this.chat=chat;
-		}
-		
-		public void run(){
-			while(shouldRun){
-				Log.d("dao thread", "running");
-				chat.messageReceived("hej co tam");
-				try {
-					Thread.currentThread().sleep(15000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		public void stopThread(){
-			shouldRun=false;
-		}
-		
-	}
->>>>>>> branch 'master' of https://github.com/airin12/MeetEverywhere
-*/
 	
 }

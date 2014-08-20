@@ -2,14 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
     
     
     <ListView 
         android:id="@+id/blocked_list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
         
     </ListView>
+    
+        <LinearLayout
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="acceptInvitation"
+      android:layout_marginBottom="5dp"
+      android:layout_marginTop="5dp">
+      
+       <ImageView
+            android:id="@+id/unlock_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/unlock_icon" />
+     
+      <TextView
+            android:id="@+id/accept_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/unlock_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      
+      </LinearLayout>
 
 </LinearLayout>

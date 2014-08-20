@@ -2,6 +2,7 @@ package com.meetEverywhere.database;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle.Control;
 
 import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.User;
@@ -32,7 +33,8 @@ public class GenericUsersDBArrayList extends ArrayList<User> {
 	
 	@Override
 	public boolean add(User user){
-		if(super.add(user)){
+		if(!contains(user)){
+			super.add(user);
 			return user.saveInDB();
 		}
 		return false;

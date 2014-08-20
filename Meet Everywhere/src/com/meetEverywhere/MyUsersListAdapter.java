@@ -64,7 +64,7 @@ public class MyUsersListAdapter extends ArrayAdapter<User> {
 
 		User user = getUserFromIndex(position);
 
-		if(Configuration.getInstance().getUser().getMyFriendsList().contains(user))	
+		if(user.isAcquaintance())	
 			friend.setVisibility(ImageView.VISIBLE);
 		
 		nick.setText(user.getNickname());

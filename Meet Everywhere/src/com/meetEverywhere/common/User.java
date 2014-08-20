@@ -53,15 +53,13 @@ public class User implements Comparable<User> {
 	private boolean isSyncedWithServer;
 
 	private BluetoothConnection bluetoothConnection;
-	private List<User> myFriendsList;
 	private ArrayAdapter<TextMessage> messagesArrayAdapter;
 	private boolean isSendButtonEnabled;
 	private boolean isChatFocused;
 
 	private Button sendButton;
 	private Configuration config;
-	private LocalDAO localDAO;// = AccountsDAO.getInstance(null); // tymczasowo, do
-																// testów
+	private LocalDAO localDAO;
 
 	public User(String nickname, List<Tag> hashTags, String description,
 			String userToken, byte[] picture, String userID, String password,
@@ -74,7 +72,7 @@ public class User implements Comparable<User> {
 		this.description = description;
 		this.userToken = userToken;
 		this.picture = picture;
-		this.myFriendsList = new ArrayList<User>();
+		//this.myFriendsList = new ArrayList<User>();
 		this.messagesArrayAdapter = null;
 		this.userID = userID;
 		this.password = password;
@@ -101,13 +99,17 @@ public class User implements Comparable<User> {
 		this.isInvited = isInvited;
 		saveifRequired();
 	}
-	
+
 	public boolean isAcquaintance() {
 		return isAcquaintance;
 	}
 
 	public void setAcquaintance(boolean isAcquaintance) {
 		this.isAcquaintance = isAcquaintance;
+		this.isBlocked = false;
+		this.isInvited = false;
+		this.incomingInvitationMessage = null;
+		isSyncedWithServer = false;
 		saveifRequired();
 	}
 
@@ -124,15 +126,15 @@ public class User implements Comparable<User> {
 		return incomingInvitationMessage != null;
 	}
 
-	public String getInvitationMessage(){
+	public String getInvitationMessage() {
 		return incomingInvitationMessage;
 	}
-	
-	public void setInvitationMessage(String invitationMessage){
+
+	public void setInvitationMessage(String invitationMessage) {
 		this.incomingInvitationMessage = invitationMessage;
 		saveifRequired();
 	}
-	
+
 	public boolean isInvited() {
 		return isInvited;
 	}
@@ -143,7 +145,6 @@ public class User implements Comparable<User> {
 
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
-		//localDAO.saveUser(this);
 		saveifRequired();
 	}
 
@@ -154,7 +155,6 @@ public class User implements Comparable<User> {
 	public void setHashTags(List<Tag> hashTags) {
 		this.hashTags = hashTags;
 		saveifRequired();
-		//localDAO.saveUser(this);
 	}
 
 	@Override
@@ -179,7 +179,6 @@ public class User implements Comparable<User> {
 
 	public void setPicture(Bitmap picture) {
 		this.picture = convertBitmapToByteArray(picture);
-		//localDAO.saveUser(this);
 		saveifRequired();
 	}
 
@@ -200,7 +199,6 @@ public class User implements Comparable<User> {
 	public void setDescription(String description) {
 		this.description = description;
 		saveifRequired();
-		//localDAO.saveUser(this);
 	}
 
 	public String getUserToken() {
@@ -217,7 +215,6 @@ public class User implements Comparable<User> {
 
 	public void setPassword(String password) {
 		this.password = password;
-		//localDAO.saveUser(this);
 		saveifRequired();
 	}
 
@@ -288,34 +285,15 @@ public class User implements Comparable<User> {
 		ArrayList<Tag> hashTags = new ArrayList<Tag>();
 		JSONArray hashTagsArray = serializedUser.getJSONArray("hashTags");
 		for (int i = 0; i < hashTagsArray.length(); i++) {
-			hashTags.add(new Tag((String) hashTagsArray.get(i), userID ));
+			hashTags.add(new Tag((String) hashTagsArray.get(i), userID));
 		}
 
 		// TODO: zmodyfikowaæ przeys³ane komunikaty ze wzglêdu na 4 flagi
 		// "stanu znajomoœci" i flagê synchronizacji z serwerem
-		User user = UsersAbstractFactory.createOrGetUser(nickname, hashTags, description, null,
-				User.convertBitmapToByteArray(picture), userID, null, false,
-				false, false, null, false);
+		User user = UsersAbstractFactory.createOrGetUser(nickname, hashTags,
+				description, null, User.convertBitmapToByteArray(picture),
+				userID, null, false, false, false, null, false);
 		return user;
-	}
-
-	public List<User> getMyFriendsList() {
-		return myFriendsList;
-	}
-
-/*
-	public void setMyFriendsList(List<User> myFriendsList) {
-		this.myFriendsList = myFriendsList;
-	}
-*/
-	public boolean areFriendsWithSpecifiedUser(String userToken) {
-		String myToken = config.getUser().getUserToken();
-		for (User u : myFriendsList) {
-			if (myToken.equals(u.getUserToken())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public ArrayAdapter<TextMessage> getMessagesArrayAdapter() {
@@ -445,30 +423,36 @@ public class User implements Comparable<User> {
 		this.isSyncedWithServer = syncedWithServer;
 	}
 
-	public boolean saveInDB(){
+	public boolean saveInDB() {
 		return localDAO.saveUser(this);
 	}
-	
+
 	public boolean removeFromDB() {
 		return localDAO.removeUser(this);
 	}
-	
-	public void setPicture(byte[] picture){
+
+	public void setPicture(byte[] picture) {
 		this.picture = picture;
 		saveifRequired();
 	}
-	
-	private boolean saveifRequired(){
-		if(isAcquaintance || isBlocked || isInvited || (incomingInvitationMessage != null)){
-			if(!config.getAllKnownUsers().add(this)){
-				return localDAO.saveUser(this);
+
+	private boolean saveifRequired() {
+		if (config.getAllKnownUsers().contains(this)) {
+			return localDAO.saveUser(this);
+		} else {
+			if (isAcquaintance || isBlocked || isInvited
+					|| (incomingInvitationMessage != null)) {
+				config.getAllKnownUsers().add(this);
+				if (!config.getAllKnownUsers().add(this)) {
+					return localDAO.saveUser(this);
+				}
+			} else {
+				if (userToken != null) {
+					return localDAO.saveUser(this);
+				}
 			}
-		}else{
-			if(userToken != null){
-				return localDAO.saveUser(this);
-			}
+			return false;
 		}
-		return false;
 	}
-	
+
 }

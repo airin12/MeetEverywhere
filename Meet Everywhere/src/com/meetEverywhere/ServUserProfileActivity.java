@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.meetEverywhere.bluetooth.BluetoothDispatcher;
-import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.InvitationMessage;
 import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.User;
@@ -42,9 +41,7 @@ public class ServUserProfileActivity extends Activity {
 		LinearLayout friendLayout = (LinearLayout) findViewById(R.id.friend_layout);
 		LinearLayout inviteLayout = (LinearLayout) findViewById(R.id.invite_friend);
 
-		if (Configuration.getInstance().getUser().getMyFriendsList()
-				.contains(user)) {
-			// if(user.isFriend()){
+		if (user.isAcquaintance()) {
 			friendLayout.setVisibility(LinearLayout.VISIBLE);
 			inviteLayout.setVisibility(LinearLayout.GONE);
 		}
@@ -61,14 +58,16 @@ public class ServUserProfileActivity extends Activity {
 		StringBuffer buffer = new StringBuffer();
 
 		boolean start = true;
-		for (Tag tag : user.getHashTags()) {
-
-			if (start)
-				start = false;
-			else
-				buffer.append(", ");
-
-			buffer.append(tag.getName());
+		if(user.getHashTags()!=null){
+			for(Tag tag : user.getHashTags()){
+				
+				if(start)
+					start=false;
+				else
+					buffer.append(", ");
+				
+				buffer.append(tag.getName());
+			}
 		}
 
 		text2.setText(buffer.toString());

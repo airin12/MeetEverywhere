@@ -1,5 +1,6 @@
 package com.meetEverywhere;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -9,19 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.meetEverywhere.common.InvitationMessage;
 import com.meetEverywhere.common.User;
 
 public class InvitationsListAdapter extends ArrayAdapter<User>{
 	private final boolean incomingInvitationsMode;
 	private List<User> users;
 	private Context context;
-	
+	private List<User> toAcceptInvitation;
 	
 	public InvitationsListAdapter(Context context, int resource, List<User> users, boolean incomingInvitations) {
 		super(context, resource, users);
 		this.users=users;
+		toAcceptInvitation = new ArrayList<User>();
 		this.context=context;
 		this.incomingInvitationsMode = incomingInvitations;
 	}
@@ -55,11 +57,26 @@ public class InvitationsListAdapter extends ArrayAdapter<User>{
 		return row;
 		
 	}
+
+	public void toggle(int position) {
+		
+		User user = users.get(position);
+		if(toAcceptInvitation.contains(user)){
+			toAcceptInvitation.remove(user);
+		}else{
+			toAcceptInvitation.add(user);
+		}
+	}
 	
-	public void add(InvitationMessage invite) {
-		//invites.add(invite);
+	public void removeSelected(){
+		for(User u: toAcceptInvitation){
+			u.setAcquaintance(true);
+			Toast.makeText(context, "Zaakceptowano zaproszenie", Toast.LENGTH_SHORT).show();
+		}
+		
 		notifyDataSetChanged();
 	}
 	
+
 
 }
