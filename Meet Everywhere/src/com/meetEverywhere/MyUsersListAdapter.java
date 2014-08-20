@@ -64,7 +64,6 @@ public class MyUsersListAdapter extends ArrayAdapter<User> {
 
 		User user = getUserFromIndex(position);
 
-//		if(user.isFriend())
 		if(Configuration.getInstance().getUser().getMyFriendsList().contains(user))	
 			friend.setVisibility(ImageView.VISIBLE);
 		

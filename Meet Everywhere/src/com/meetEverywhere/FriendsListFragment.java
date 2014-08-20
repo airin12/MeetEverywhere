@@ -25,23 +25,24 @@ public class FriendsListFragment extends Activity {
 		setContentView(R.layout.friends_list_fragment_layout);
 
 		listView = (ListView) findViewById(R.id.friends_list);
-		
-		List<User> friends = Configuration.getInstance()
-				.getUser().getMyFriendsList();
-		
-		Log.d("friends",friends.size()+"");
-		Log.d("STARTING","FRIENDS");
 
-		FriendsListAdapter adapter = new FriendsListAdapter(getApplicationContext(),
-				R.layout.found_tags_content_info, friends );
-		
+		List<User> friends = Configuration.getInstance()
+				.getAcquaintancesUsers();
+
+		Log.d("friends", friends.size() + "");
+		Log.d("STARTING", "FRIENDS");
+
+		FriendsListAdapter adapter = new FriendsListAdapter(
+				getApplicationContext(), R.layout.found_tags_content_info,
+				friends);
+
 		listView.setAdapter(adapter);
-		
-		
+
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				User user = ((FriendsListAdapter)listView.getAdapter()).getUsers().get(position);
+				User user = ((FriendsListAdapter) listView.getAdapter())
+						.getUsers().get(position);
 				Intent intent = new Intent(FriendsListFragment.this,
 						ServUserProfileActivity.class);
 				BluetoothDispatcher.getInstance().setTempUserHolder(user);

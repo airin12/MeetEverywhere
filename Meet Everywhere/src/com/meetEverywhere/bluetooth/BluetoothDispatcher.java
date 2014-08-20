@@ -188,7 +188,7 @@ public class BluetoothDispatcher {
 		return flagDiscoveryFinished;
 	}
 
-	public void setFlagDiscoveryFinished(boolean flagDiscoveryFinished) {
+	public synchronized void setFlagDiscoveryFinished(boolean flagDiscoveryFinished) {
 		this.flagDiscoveryFinished = flagDiscoveryFinished;
 	}
 

@@ -86,7 +86,7 @@ public class FoundTagsActivity extends Activity {
 
 	public void loadAdapterWithNewList(List<User> usersList) {
 		listAdapter.setUsersList(usersList);
-		Collections.sort(listAdapter.getUsersList(), new User.UserComparator());
+		Collections.sort(listAdapter.getUsersList());
 
 	}
 

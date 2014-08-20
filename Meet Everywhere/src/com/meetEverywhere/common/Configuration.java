@@ -1,13 +1,13 @@
 package com.meetEverywhere.common;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
-
-import android.graphics.Bitmap;
 
 import com.meetEverywhere.MyUsersListAdapter;
+import com.meetEverywhere.database.AcquaintancesArrayListProxy;
+import com.meetEverywhere.database.BlockedArrayListProxy;
+import com.meetEverywhere.database.GenericUsersDBArrayList;
+import com.meetEverywhere.database.InvitationReceivedArrayListProxy;
+import com.meetEverywhere.database.InvitedUsersArrayListProxy;
 
 
 /**
@@ -28,37 +28,29 @@ public class Configuration implements Runnable{
 	private User user;
 	private boolean isApplicationOnline;
 	private int desiredTagsCompatibility = 50;
-	private List<User> blocked;
-	private List<InvitationMessage> invitesSent;
-	private List<InvitationMessage> invitesReceived;
+//	private List<User> blocked;
+	
+	private final GenericUsersDBArrayList allKnownUsers;
+	private final InvitedUsersArrayListProxy invitedUsers;
+	private final InvitationReceivedArrayListProxy invitationReceivedUsers;
+	private final BlockedArrayListProxy blockedUsers;
+	private final AcquaintancesArrayListProxy acquaintancesUsers;
+	
+//	private List<InvitationMessage> invitesSent;
+//	private List<InvitationMessage> invitesReceived;
 	private boolean isBluetoothUsed;
 	private boolean isGPSUsed;
 
 	private Configuration(){
 		instance = this;
-		//loadConfiguration();
-		(new Thread(this)).start();
+		allKnownUsers = new GenericUsersDBArrayList();
+		invitedUsers = new InvitedUsersArrayListProxy(allKnownUsers);
+		invitationReceivedUsers = new InvitationReceivedArrayListProxy(allKnownUsers);
+		blockedUsers = new BlockedArrayListProxy(allKnownUsers);
+		acquaintancesUsers = new AcquaintancesArrayListProxy(allKnownUsers);
+		//(new Thread(this)).start();
 	}
-	
-	private void loadConfiguration() {
-		// TODO metoda do wczytywania danych z przestrzeni lokalnej
-		// MOCK:
-		List<Tag> hashtags = new ArrayList<Tag>();
-		hashtags.add(new Tag("pi³ka no¿na"));
-		hashtags.add(new Tag("strzelectwo"));
-		String description = "Mistrz wszechœwiata i okolic. Pozdrawiam!";
-		//Bitmap picture = BitmapFactory.decodeFile("ic_launcher-web.png");
-		Bitmap picture = null;
-		desiredTagsCompatibility = 60;
-		user = new User("marek" + (new Random().nextInt(100000)), hashtags, description, picture, "jsdjfkskjf");
-		blocked = new LinkedList<User>();
-		blocked.add(new User("marek" + (new Random().nextInt(100000)), hashtags, description, picture, "jsdjfkskjf"));
-		
-		invitesReceived = new LinkedList<InvitationMessage>();
-		invitesSent = new LinkedList<InvitationMessage>();
-			
-	}	
-			
+				
 	public static Configuration getInstance(){
 		if(instance == null){
 			instance = new Configuration();
@@ -136,7 +128,7 @@ public class Configuration implements Runnable{
 	public void setUsersFoundBySpecifiedTagsAdapter(MyUsersListAdapter usersFoundBySpecifiedTags) {
 		this.usersFoundBySpecifiedTags = usersFoundBySpecifiedTags;
 	}
-
+/*
 	public List<User> getBlocked() {
 		return blocked;
 	}
@@ -144,7 +136,7 @@ public class Configuration implements Runnable{
 	public void setBlocked(List<User> blocked) {
 		this.blocked = blocked;
 	}
-
+	
 	public List<InvitationMessage> getInvitationMessagesSent() {
 		return invitesSent;
 	}
@@ -160,6 +152,7 @@ public class Configuration implements Runnable{
 	public void setInvitationMessagesReceived(List<InvitationMessage> invitesReceived) {
 		this.invitesReceived = invitesReceived;
 	}
+*/
 	
 	public double getGpsScanningRadiusInKilometres() {
 		return gpsScanningRadiusInKilometres;
@@ -185,4 +178,25 @@ public class Configuration implements Runnable{
 		this.isGPSUsed = isGPSUsed;
 	}
 
+	public GenericUsersDBArrayList getAllKnownUsers() {
+		return allKnownUsers;
+	}
+
+	public InvitedUsersArrayListProxy getInvitedUsers() {
+		return invitedUsers;
+	}
+
+	public InvitationReceivedArrayListProxy getInvitationReceivedUsers() {
+		return invitationReceivedUsers;
+	}
+
+	public BlockedArrayListProxy getBlockedUsers() {
+		return blockedUsers;
+	}
+
+	public AcquaintancesArrayListProxy getAcquaintancesUsers() {
+		return acquaintancesUsers;
+	}
+
+	
 }

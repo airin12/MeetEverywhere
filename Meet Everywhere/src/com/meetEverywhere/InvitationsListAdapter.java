@@ -11,29 +11,31 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.meetEverywhere.common.InvitationMessage;
+import com.meetEverywhere.common.User;
 
-public class InvitationsListAdapter extends ArrayAdapter<InvitationMessage>{
-
-	private List<InvitationMessage> invites;
+public class InvitationsListAdapter extends ArrayAdapter<User>{
+	private final boolean incomingInvitationsMode;
+	private List<User> users;
 	private Context context;
 	
-	public InvitationsListAdapter(Context context, int resource, List<InvitationMessage> objects) {
-		super(context, resource, objects);
-		invites=objects;
+	
+	public InvitationsListAdapter(Context context, int resource, List<User> users, boolean incomingInvitations) {
+		super(context, resource, users);
+		this.users=users;
 		this.context=context;
-		
+		this.incomingInvitationsMode = incomingInvitations;
 	}
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
 		
-		if (position >= invites.size()) {
+		if (position >= users.size()) {
 			return null;
 		}
 		
 		
-		InvitationMessage invite = invites.get(position);
+		User user = users.get(position);
 		
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -41,8 +43,12 @@ public class InvitationsListAdapter extends ArrayAdapter<InvitationMessage>{
 
 		TextView nick = (TextView) row.findViewById(R.id.invitation_nick);
 		TextView msg = (TextView) row.findViewById(R.id.invitation_message);
-		nick.setText(invite.getAuthorNickname());
-		msg.setText(invite.getText());
+		nick.setText(user.getNickname());
+		if(incomingInvitationsMode){
+		msg.setText(user.getInvitationMessage());
+		}else{
+			msg.setText("");
+		}
 		nick.setTextColor(Color.BLACK);
 		msg.setTextColor(Color.DKGRAY);
 		
@@ -51,12 +57,9 @@ public class InvitationsListAdapter extends ArrayAdapter<InvitationMessage>{
 	}
 	
 	public void add(InvitationMessage invite) {
-		invites.add(invite);
+		//invites.add(invite);
 		notifyDataSetChanged();
 	}
 	
-	public List<InvitationMessage> getInvitationMessages(){
-		return invites;
-	}
 
 }

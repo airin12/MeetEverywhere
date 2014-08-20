@@ -13,50 +13,49 @@ import android.widget.TextView;
 
 import com.meetEverywhere.common.User;
 
-public class FriendsListAdapter extends ArrayAdapter<User>{
+public class FriendsListAdapter extends ArrayAdapter<User> {
 
 	private List<User> users;
 	private Context context;
-	
-	public FriendsListAdapter(Context context, int resource, List<User> objects) {
-		super(context, resource, objects);
-		users=objects;
-		this.context=context;
-		
+
+	public FriendsListAdapter(Context context, int resource, List<User> users) {
+		super(context, resource, users);
+		this.users = users;
+		this.context = context;
+
 	}
-	
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		
-		Log.d("getView", position+"");
-		
+
+		Log.d("getView", position + "");
+
 		if (position >= users.size()) {
 			return null;
 		}
-		
-		
+
 		User user = users.get(position);
-		
+
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View row = inflater.inflate(R.layout.found_tags_content_info, null);
 
 		ImageView photo = (ImageView) row.findViewById(R.id.photo);
 		TextView nick = (TextView) row.findViewById(R.id.user_name);
-		
+
 		photo.setImageBitmap(user.getPicture());
 		nick.setText(user.getNickname());
-		
+
 		return row;
-		
+
 	}
-	
+
 	public void add(User user) {
-		users.add(user);
+		//users.add(user);
 		notifyDataSetChanged();
 	}
-	
-	public List<User> getUsers(){
+
+	public List<User> getUsers() {
 		return users;
 	}
 

@@ -20,11 +20,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
 import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.User;
+import com.meetEverywhere.common.UsersAbstractFactory;
 
 /**
  * Created by Krzysiu on 04.06.14.
@@ -149,8 +149,8 @@ public class ApiService {
 					JSONObject juser = array.getJSONObject(i);
 					String name = juser.getString("name");
 					JSONObject id = juser.getJSONObject("id");
-					String token = id.getString("$oid");
-					User user = new User(name, new LinkedList<Tag>(), " ",null, token);
+					String userID = id.getString("$oid");
+					User user = UsersAbstractFactory.createOrGetUser(name, new LinkedList<Tag>(), "", null, null, userID, null, false, false, false, null, false);
 				    users.add(user);
 				    
 				}

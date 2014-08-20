@@ -1,25 +1,18 @@
 package com.meetEverywhere;
 
-import java.io.FileNotFoundException;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.ContactsContract.CommonDataKinds.Nickname;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.meetEverywhere.common.Configuration;
-import com.meetEverywhere.common.User;
 //import android.provider.MediaStore;
 
 
@@ -28,7 +21,6 @@ public class ProfileEdition extends Activity {
 	private static final int USER_IMAGE_REQUEST_CODE = 1000;
 	private static int RESULT_LOAD_IMAGE = 1;
 	
-	private SharedPreferences userSettings;
 	private EditText descriptionText;
 	private EditText usernameText;
 	private ImageView userImage;
@@ -40,7 +32,6 @@ public class ProfileEdition extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_edition_layout);
         
-        userSettings = getSharedPreferences(SharedPreferencesKeys.preferencesName, Activity.MODE_PRIVATE);
         descriptionText = (EditText) findViewById(R.id.ProfileEditionActivity_description);
         usernameText = (EditText) findViewById(R.id.ProfileEdition_userName);
        

@@ -94,7 +94,7 @@ public class DAO {
 			}
 		}
 		Random rand = new Random();
-		User user = new User(nickname, new ArrayList<Tag>(), description, "token" + rand.nextInt(100000), null, "userd" + rand.nextInt(1000000), password);
+		User user = new User(nickname, new ArrayList<Tag>(), description, "token" + rand.nextInt(100000), null, "userd" + rand.nextInt(1000000), password, false, false, false, null, false);
 		
 		//user.setUserID("userd" + rand.nextInt(1000000));
 		//user.setPassword(password);

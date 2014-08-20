@@ -62,7 +62,7 @@ public class GeneralChat extends Activity{
 	
 		String message = text.getText().toString();
 		if(!message.equals("")){
-			user.sendMessage(new TextMessage(message, config.getUser().getNickname(), config.getUser().getUserToken()));
+			user.sendMessage(new TextMessage(message, config.getUser().getNickname(), config.getUser().getUserID(), user.getUserID()));
 		}
 		text.setText("");
 	}

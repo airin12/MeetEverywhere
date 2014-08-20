@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 public class BluetoothService extends Service implements Runnable {
@@ -73,9 +74,10 @@ public class BluetoothService extends Service implements Runnable {
 				serverSocket = adapter
 						.listenUsingInsecureRfcommWithServiceRecord(
 								"MeetEverywhere", dispatcher.getUUID());
-
+				
+				Log.i("BT", "nas³uchiwanie aktywne");
 				while ((socket = serverSocket.accept()) != null) {
-
+					Log.i("BT", "odebrano pakiet");
 					final BluetoothSocket tempSocket = socket;
 					final BluetoothDispatcher tempDispatcher = dispatcher;
 					handler.post(new Runnable() {

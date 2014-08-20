@@ -136,7 +136,7 @@ public abstract class TagsView extends Activity {
 		
 		for (String tag : newTags) {
 			if (!TextUtils.isEmpty(tag) && !tagsListContains(tag))
-				tags.add(new Tag(tag));
+				tags.add(new Tag(tag, null));
 		}
 
 		putTagsIntoList(tags);

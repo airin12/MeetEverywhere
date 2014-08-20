@@ -220,8 +220,8 @@ public class SettingsActivity extends Activity {
 	}
 
 	public void saveSettingsAndGoBackAction(View view) {
-		  configuration.setBluetoothUsed(bluetoothCheckBox.isEnabled());
-		  configuration.setGPSUsed(gpsCheckBox.isEnabled());
+		  configuration.setBluetoothUsed(bluetoothCheckBox.isChecked());
+		  configuration.setGPSUsed(gpsCheckBox.isChecked());
 		  configuration.setBluetoothSecsTimeBetweenRefreshing(secondsBetweenRefreshingBluetooth);
 		  configuration.setGpsScanningRadiusInKilometres(searchingRadiusInKilometres);
 		  configuration.setDesiredTagsCompatibility(percentageOfIdenticalTags);

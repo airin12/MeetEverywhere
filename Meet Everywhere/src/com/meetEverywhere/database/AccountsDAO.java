@@ -20,33 +20,39 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 	
 	private static final String DATABASE_FILENAME = "Accounts.db";
 	private static final int DATABASE_VERSION = 1;
+	private final Context context;
+	private String pickedAccountToken;
+	private String pickedAccountID;
+	
+	private static final String TABLE_ACCOUNTS = "Accounts";
+	private static final String COL_ACCOUNTS_TOKEN = "Token";
+	private static final String COL_ACCOUNTS_USERID = "Id";
+	private static final String COL_ACCOUNTS_NICKNAME = "Nickname";
+	private static final String COL_ACCOUNTS_PASSWORD = "Password";
+	private static final String COL_ACCOUNTS_DESCRIPTION = "Description";
+	private static final String COL_ACCOUNTS_PICTURE = "Picture";
+	private static final String COL_ACCOUNTS_SYNCED_WITH_SERVER = "SyncedWithServer";
+	
+	private static final String TABLE_CONFIG = "Configuration";
+	private static final String COL_CONFIG_TOKEN = "Token";
+	private static final String COL_CONFIG_USE_BLUETOOTH = "UseBluetooth";
+	private static final String COL_CONFIG_BLUETOOTH_SEARCH_FREQ = "BtSearchFreq";
+	private static final String COL_CONFIG_USE_GPS = "UseGPS";
+	private static final String COL_CONFIG_MAX_GPS_RADIUS = "MaxGpsRadius";
+	private static final String COL_CONFIG_SERVER_POOL_FREQ = "SvPoolFreq";
+	private static final String COL_CONFIG_MIN_COMPATIBILITY_PERCENT = "CompatibilityPercent";
 
-	public static final String TABLE_ACCOUNTS = "Accounts";
-	public static final String COL_ACCOUNTS_TOKEN = "Token";
-	public static final String COL_ACCOUNTS_USERID = "Id";
-	public static final String COL_ACCOUNTS_NICKNAME = "Nickname";
-	public static final String COL_ACCOUNTS_PASSWORD = "Password";
-	public static final String COL_ACCOUNTS_DESCRIPTION = "Description";
-	public static final String COL_ACCOUNTS_PICTURE = "Picture";
-
-	public static final String TABLE_CONFIG = "Configuration";
-	public static final String COL_CONFIG_TOKEN = "Token";
-	public static final String COL_CONFIG_USE_BLUETOOTH = "UseBluetooth";
-	public static final String COL_CONFIG_BLUETOOTH_SEARCH_FREQ = "BtSearchFreq";
-	public static final String COL_CONFIG_USE_GPS = "UseGPS";
-	public static final String COL_CONFIG_MAX_GPS_RADIUS = "MaxGpsRadius";
-	public static final String COL_CONFIG_SERVER_POOL_FREQ = "SvPoolFreq";
-	public static final String COL_CONFIG_MIN_COMPATIBILITY_PERCENT = "CompatibilityPercent";
-
-	public static final String TABLE_TAGS = "Tags";
-	public static final String COL_TAG_ID = "Id";
-	public static final String COL_TAG_TEXT = "Text";
-	public static final String COL_TAG_TOKEN = "Token";
-
+	private static final String TABLE_TAGS = "Tags";
+	private static final String COL_TAG_ID = "Id";
+	private static final String COL_TAG_TEXT = "Text";
+	private static final String COL_TAG_TOKEN = "Token";
+	private static final String COL_TAG_SYNCED_WITH_SERVER = "SyncedWithServer";
+	
 	private static AccountsDAO instance = null;
 	
 	private AccountsDAO(Context context) {
 		super(context, DATABASE_FILENAME, null, DATABASE_VERSION);
+		this.context = context;
 		if (database == null) {
 			database = getWritableDatabase();
 		}
@@ -59,6 +65,10 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 		return instance;
 	}
 	
+	public Context getContext(){
+		return context;
+	}
+	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 
@@ -69,7 +79,9 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 				+ COL_ACCOUNTS_DESCRIPTION + " TEXT, "
 				+ COL_ACCOUNTS_PICTURE + " BLOB, "
 				+ COL_ACCOUNTS_NICKNAME + " INT NOT NULL, "
-				+ COL_ACCOUNTS_PASSWORD + " TEXT NOT NULL"
+				+ COL_ACCOUNTS_PASSWORD + " TEXT NOT NULL, "
+				+ COL_ACCOUNTS_SYNCED_WITH_SERVER + " INT NOT NULL, "
+				+ "UNIQUE("+ COL_ACCOUNTS_TOKEN +") ON CONFLICT FAIL "
 				+ ")";
 		
 		String createConfigurationTableQuery = "CREATE TABLE " + TABLE_CONFIG + " (" 
@@ -79,13 +91,15 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 				+ COL_CONFIG_USE_GPS + " INT NOT NULL, "						//BOOLEAN
 				+ COL_CONFIG_MAX_GPS_RADIUS + " DOUBLE PRECISION NOT NULL, "
 				+ COL_CONFIG_SERVER_POOL_FREQ + " INT NOT NULL, "
-				+ COL_CONFIG_MIN_COMPATIBILITY_PERCENT + " INT NOT NULL"
+				+ COL_CONFIG_MIN_COMPATIBILITY_PERCENT + " INT NOT NULL, "
+				+ "UNIQUE("+ COL_CONFIG_TOKEN +") ON CONFLICT FAIL "
 				+ ")";
 
 		String createTagsTableQuery = "CREATE TABLE " + TABLE_TAGS + " ("
 				+ COL_TAG_ID + " INT AUTO_INCREMENT, "
 				+ COL_TAG_TEXT + " TEXT NOT NULL, "
-				+ COL_TAG_TOKEN + " TEXT NOT NULL"
+				+ COL_TAG_TOKEN + " TEXT NOT NULL, "
+				+ COL_TAG_SYNCED_WITH_SERVER + " INT NOT NULL"
 				+ ")";
 // @formatter:on
 
@@ -146,8 +160,10 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 				String userID = accountResult.getString(indexUserID);
 				List<Tag> hashTags = getHashtagsByToken(userToken);
 
+				pickedAccountToken = userToken;
+				pickedAccountID = userID;
 				User user = new User(nickname, hashTags, description,
-						userToken, picture, userID, password);
+						userToken, picture, userID, password, false, false, false, null, false);
 
 				Configuration config = Configuration.getInstance();
 				config.setUser(user);
@@ -217,11 +233,12 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 		account.put(COL_ACCOUNTS_TOKEN, user.getUserToken());
 		account.put(COL_ACCOUNTS_USERID, user.getUserID());
 		account.put(COL_ACCOUNTS_PICTURE, user.getPictureAsByteArray());
-
+		account.put(COL_ACCOUNTS_SYNCED_WITH_SERVER, 0);
+		
 		config.put(COL_CONFIG_BLUETOOTH_SEARCH_FREQ, 60);
 		config.put(COL_CONFIG_SERVER_POOL_FREQ, 60);
 		config.put(COL_CONFIG_MIN_COMPATIBILITY_PERCENT, 50);
-		config.put(COL_CONFIG_MAX_GPS_RADIUS, 1);
+		config.put(COL_CONFIG_MAX_GPS_RADIUS, 10);
 		config.put(COL_CONFIG_TOKEN, user.getUserToken());
 		config.put(COL_CONFIG_USE_BLUETOOTH, 1);
 		config.put(COL_CONFIG_USE_GPS, 1);
@@ -281,7 +298,8 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 		userValues.put(COL_ACCOUNTS_TOKEN, user.getUserToken());
 		userValues.put(COL_ACCOUNTS_USERID, user.getUserID());
 		userValues.put(COL_ACCOUNTS_PICTURE, user.getPictureAsByteArray());
-
+		userValues.put(COL_ACCOUNTS_SYNCED_WITH_SERVER, 0);
+		
 		try {
 			database.beginTransaction();
 			database.delete(TABLE_ACCOUNTS,
@@ -318,7 +336,7 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 			int indexHashTags = accountResult.getColumnIndex(COL_TAG_TEXT);
 			while (accountResult.moveToNext()) {
 				String hashtag = accountResult.getString(indexHashTags);
-				Tag tag = new Tag(hashtag);
+				Tag tag = new Tag(hashtag, null);
 				tagsList.add(tag);
 			}
 
@@ -343,6 +361,7 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 				ContentValues tags = new ContentValues();
 				tags.put(COL_TAG_TEXT, tag.getName());
 				tags.put(COL_TAG_TOKEN, token);
+				tags.put(COL_TAG_SYNCED_WITH_SERVER, 0);
 				if(database.insert(TABLE_TAGS, null, tags) == -1){
 					return false;
 				}
@@ -357,6 +376,19 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// Implementacja nie jest konieczna.
+	}
+
+	public boolean removeUser(User user) {
+		// TODO To be implemented. One day...
+		return false;
+	}
+
+	public String getPickedAccountToken() {
+		return pickedAccountToken;
+	}
+
+	public String getPickedAccountID() {
+		return pickedAccountID;
 	}
 
 }

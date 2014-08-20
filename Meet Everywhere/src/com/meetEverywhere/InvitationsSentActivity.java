@@ -1,5 +1,6 @@
 package com.meetEverywhere;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -13,6 +14,7 @@ import android.widget.ListView;
 
 import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.InvitationMessage;
+import com.meetEverywhere.common.User;
 
 public class InvitationsSentActivity extends Activity {
 
@@ -24,14 +26,19 @@ public class InvitationsSentActivity extends Activity {
 		setContentView(R.layout.invitations_sent_layout);
 
 		listView = (ListView) findViewById(R.id.invitations_sent_list);
+		
+/*		
 		List<InvitationMessage> invites = Configuration.getInstance()
 				.getInvitationMessagesSent();
-		invites.add(new InvitationMessage("hejka", "magik", "asad112"));
+		invites.add(new InvitationMessage("hejka", "magik", "marek", "asad112"));
 		invites.add(new InvitationMessage(
 				"hejka baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-				"magik12", "asad112"));
+				"magik12", "marek", "asad112"));
+*/		
+		ArrayList<User> invitedUsers = Configuration.getInstance().getInvitedUsers();
+		
 		InvitationsListAdapter adapter = new InvitationsListAdapter(
-				getApplicationContext(), R.id.invitations_sent_list, invites);
+				getApplicationContext(), R.id.invitations_sent_list, invitedUsers, false);
 
 		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		listView.setOnItemClickListener(new OnItemClickListener() {

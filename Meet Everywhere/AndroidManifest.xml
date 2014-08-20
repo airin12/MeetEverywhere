@@ -59,6 +59,10 @@
         <activity android:name="com.meetEverywhere.bluetooth.BluetoothChat" >
         </activity>
         
+        <activity
+            android:name="com.meetEverywhere.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
         
         <activity
             android:name="com.meetEverywhere.TagsEdition"

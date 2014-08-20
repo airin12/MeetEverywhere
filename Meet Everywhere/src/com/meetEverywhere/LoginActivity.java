@@ -1,7 +1,5 @@
 package com.meetEverywhere;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.meetEverywhere.database.AccountsDAO;
@@ -81,9 +79,6 @@ public class LoginActivity extends Activity {
 	}
 
 	public void signInAction(View view) {
-		// normalnie tu bedziemy dostawac obiekt User, ale póki co tworze tak
-		// na chama
-		// User user = new User(username, null, null, null);
 		List<ValidationError> errors = validationManager
 				.validateLoginAndPassword(username, password);
 		if (!errors.isEmpty()) {

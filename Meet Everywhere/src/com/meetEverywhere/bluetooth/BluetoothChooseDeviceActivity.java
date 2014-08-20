@@ -88,7 +88,6 @@ public class BluetoothChooseDeviceActivity extends Activity {
 		} else {
 			setStartRefreshingImmediately(true);
 		}
-
 	}
 
 	public void showToast(final String text) {
