@@ -56,4 +56,8 @@ public class FriendsListFragment extends Activity {
 		super.onStart();
 		((FriendsListAdapter)listView.getAdapter()).notifyDataSetChanged();
 	}
+	
+	public void deleteFromFriendsList(View view) {
+		
+	}
 }

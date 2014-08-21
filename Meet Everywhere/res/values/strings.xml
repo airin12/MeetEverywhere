@@ -51,6 +51,7 @@
     <string name="main_layout_user">user</string>
     <string name="accept_text">Akceptuj</string>
     <string name="unlock_text">Odblokuj</string>
+    <string name="delete_friend_text">Usuń z listy znajomych</string>
 
     <!-- ************************************************************************************************* -->
     <!-- ************************************* Common strings *************************************** -->

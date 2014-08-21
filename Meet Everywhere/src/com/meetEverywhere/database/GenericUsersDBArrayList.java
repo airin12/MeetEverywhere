@@ -18,7 +18,7 @@ public class GenericUsersDBArrayList extends ArrayList<User> {
 	
 	private void loadData() {
 		addAll(UsersDAO.getInstance(null).getAllUsers());
-		//mock_loader();
+		mock_loader();
 	}
 
 	private void mock_loader(){
