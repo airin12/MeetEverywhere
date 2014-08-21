@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.meetEverywhere.common.Configuration;
 //import android.provider.MediaStore;
@@ -22,7 +23,7 @@ public class ProfileEdition extends Activity {
 	private static int RESULT_LOAD_IMAGE = 1;
 	
 	private EditText descriptionText;
-	private EditText usernameText;
+	private TextView username;
 	private ImageView userImage;
 	private String imageUri;
 	private String picturePath;
@@ -32,18 +33,15 @@ public class ProfileEdition extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_edition_layout);
         
+        username = (TextView) findViewById(R.id.ProfileEdition_userName);
         descriptionText = (EditText) findViewById(R.id.ProfileEditionActivity_description);
-        usernameText = (EditText) findViewById(R.id.ProfileEdition_userName);
        
         String description = Configuration.getInstance().getUser().getDescription();
         if(description != null) {
         	descriptionText.setText(description);
         }
         
-        String username = Configuration.getInstance().getUser().getNickname();
-        if(username != null) {
-        	usernameText.setText(username);
-        }
+        username.setText(Configuration.getInstance().getUser().getNickname());
         
         userImage = (ImageView)findViewById(R.id.ProfileEdition_profilePicture);
         
@@ -81,27 +79,9 @@ public class ProfileEdition extends Activity {
 	public void saveSettingsAndGoBackAction(View view) {
 		Configuration.getInstance().getUser().setPicture(BitmapFactory.decodeFile(picturePath));
 		Configuration.getInstance().getUser().setDescription(descriptionText.getText().toString());
-		Configuration.getInstance().getUser().setNickname(usernameText.getText().toString());
 		finish();
 	}
     
     
-//    private class ImageLoader extends AsyncTask<Uri, Object, Bitmap>{
-//
-//		@Override
-//		protected Bitmap doInBackground(Uri... params) {
-//			try {
-//				return BitmapFactory.decodeStream(getContentResolver().openInputStream(params[0]));
-//			} catch (FileNotFoundException e) {
-//				return null;
-//			}
-//		}
-//    	
-//		@Override
-//		protected void onPostExecute(Bitmap param){
-//			if(param != null)
-//				userImage.setImageBitmap(param);
-//		}
-//    }
 }
 

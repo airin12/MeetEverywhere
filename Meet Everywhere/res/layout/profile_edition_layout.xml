@@ -38,13 +38,12 @@
                     android:text="@string/user_name"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
-                <EditText
+                <TextView
                     android:id="@+id/ProfileEdition.userName"
-                    android:enabled="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp" >
-                </EditText>
+                </TextView>
 
                 <TextView
                     android:id="@+id/textView2"
@@ -111,6 +110,10 @@
      </LinearLayout>
     
 </ScrollView>
+
+
+
+
 
 
 
