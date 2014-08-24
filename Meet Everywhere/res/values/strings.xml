@@ -52,6 +52,7 @@
     <string name="accept_text">Akceptuj</string>
     <string name="unlock_text">Odblokuj</string>
     <string name="delete_friend_text">Usuń z listy znajomych</string>
+    <string name="confirm_delete_friend_text">Usuń</string>
 
     <!-- ************************************************************************************************* -->
     <!-- ************************************* Common strings *************************************** -->
