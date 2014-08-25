@@ -19,7 +19,6 @@ public class FriendsListAdapter extends ArrayAdapter<User> {
 
 	private List<User> users;
 	private List<User> toDeledeFriends;
-	private List<CheckBox> checkBoxes;
 	private Context context;
 	private int actualMode;
 
@@ -28,7 +27,6 @@ public class FriendsListAdapter extends ArrayAdapter<User> {
 		this.users = users;
 		this.context = context;	
 		toDeledeFriends = new LinkedList<User>();
-		checkBoxes = new LinkedList<CheckBox>();
 		actualMode=FriendsListFragment.NORMAL_MODE;
 	}
 
@@ -55,7 +53,6 @@ public class FriendsListAdapter extends ArrayAdapter<User> {
 		else if(actualMode==FriendsListFragment.NORMAL_MODE)
 			checkBox.setVisibility(CheckBox.GONE);
 		
-		checkBoxes.add(checkBox);
 		nick.setText(user.getNickname());
 
 		return row;

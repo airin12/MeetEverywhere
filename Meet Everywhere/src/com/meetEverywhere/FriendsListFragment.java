@@ -70,6 +70,7 @@ public class FriendsListFragment extends Activity {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				debugFun();
 				CheckBox checkBox = (CheckBox) view
 						.findViewById(R.id.friends_list_checkbox);
 				checkBox.toggle();
@@ -77,6 +78,12 @@ public class FriendsListFragment extends Activity {
 						.toggle(position);
 			}
 		});
+	}
+	
+	private void debugFun(){
+		String name = "";
+		name = "12";
+		name.length();
 	}
 	
 	@Override
