@@ -42,7 +42,7 @@ public abstract class UsersAbstractFactory {
 			boolean isAcquaintance, boolean isBlocked, boolean isInvited,
 			String incomingInvitationMessage, boolean isSyncedWithServer) {
 
-		if (cachedUsers.values().contains(userID)) {
+		if (cachedUsers.keySet().contains(userID)) {
 			User user = cachedUsers.get(userID);
 
 			/* TODO: dodaæ tutaj sprawdzanie wersji */

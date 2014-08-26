@@ -10,21 +10,20 @@ import android.widget.Toast;
 
 import com.meetEverywhere.common.Configuration;
 
-
-public class BluetoothDeviceSearchService extends Service implements Runnable{
+public class BluetoothDeviceSearchService extends Service implements Runnable {
 
 	private BluetoothDispatcher dispatcher;
 	private BluetoothAdapter bluetoothAdapter;
 	private Configuration configuration;
 	private BluetoothListAdapter adapter;
 	private BroadcastReceiverImpl broadcastReceiver;
-	
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		// Implementacja nie jest konieczna.
 		return null;
 	}
-	
+
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		onStart(intent, startId);
 		return START_STICKY;
@@ -36,31 +35,31 @@ public class BluetoothDeviceSearchService extends Service implements Runnable{
 		configuration = Configuration.getInstance();
 		adapter = BluetoothDispatcher.getInstance().getBluetoothListAdapter();
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		
-		
+
 		broadcastReceiver = new BroadcastReceiverImpl(adapter);
-		setStartRefreshingImmediately(false);
-		IntentFilter ifilter = new IntentFilter(
-				BluetoothDevice.ACTION_FOUND);
+		IntentFilter ifilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		ifilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 		this.registerReceiver(broadcastReceiver, ifilter);
 		(new Thread(this)).start();
-		
+
 	}
 
 	public void run() {
 		long counter = 0;
 		while (true) {
 			dispatcher.setFlagDiscoveryFinished(false);
-			while(!bluetoothAdapter.startDiscovery()){ 
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-				}
-//				showToast("B³¹d uruchamiania wyszukiwania!");
+
+			bluetoothAdapter.startDiscovery();
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-			
-			while(!dispatcher.isFlagDiscoveryFinished()){
+			if (!bluetoothAdapter.isDiscovering()) {
+				continue;
+			}
+
+			while (!dispatcher.isFlagDiscoveryFinished()) {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -68,9 +67,8 @@ public class BluetoothDeviceSearchService extends Service implements Runnable{
 				}
 			}
 			counter = 0;
-			while (!isStartRefreshingImmediately()
-					&& counter < configuration
-							.getBluetoothSecsTimeBetweenRefreshing()) {
+			while (counter < configuration
+					.getBluetoothSecsTimeBetweenRefreshing() * 1000) {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -78,17 +76,8 @@ public class BluetoothDeviceSearchService extends Service implements Runnable{
 				}
 				counter += 1000;
 			}
-			setStartRefreshingImmediately(false);
 		}
-		
-	}
-	
-	private void setStartRefreshingImmediately(boolean b) {
-		dispatcher.setFlagStartDiscoveryImmediateliy(b);		
-	}
 
-	private boolean isStartRefreshingImmediately() {
-		return dispatcher.isFlagStartDiscoveryImmediateliy();
 	}
 
 	public void showToast(final String text) {
@@ -101,6 +90,3 @@ public class BluetoothDeviceSearchService extends Service implements Runnable{
 	}
 
 }
-
-
-

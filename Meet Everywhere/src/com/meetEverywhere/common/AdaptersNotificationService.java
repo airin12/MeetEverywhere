@@ -10,7 +10,10 @@ public abstract class AdaptersNotificationService {
 	private static List<ArrayAdapter> adapters = new ArrayList<ArrayAdapter>();
 	
 	public static boolean register(ArrayAdapter adapter){
-		return adapters.add(adapter);
+		if(!adapters.contains(adapters)){
+			return adapters.add(adapter);
+		}
+		return false;
 	}
 	
 	public static void notifyAdapters(){
@@ -19,7 +22,7 @@ public abstract class AdaptersNotificationService {
 		}
 	}
 	
-	public boolean unregister(ArrayAdapter adapter){
+	public static boolean unregister(ArrayAdapter adapter){
 		return adapters.remove(adapter);
 	}
 	

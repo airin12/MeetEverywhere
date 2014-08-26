@@ -1,7 +1,6 @@
 package com.meetEverywhere;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,12 +11,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.ListView;
 
+import com.meetEverywhere.common.AdaptersNotificationService;
 import com.meetEverywhere.common.Configuration;
-import com.meetEverywhere.common.InvitationMessage;
 import com.meetEverywhere.common.User;
 
 public class InvitationsSentActivity extends Activity {
-
+	
+	private InvitationsListAdapter adapter;
 	private ListView listView;
 
 	@Override
@@ -27,17 +27,9 @@ public class InvitationsSentActivity extends Activity {
 
 		listView = (ListView) findViewById(R.id.invitations_sent_list);
 		
-/*		
-		List<InvitationMessage> invites = Configuration.getInstance()
-				.getInvitationMessagesSent();
-		invites.add(new InvitationMessage("hejka", "magik", "marek", "asad112"));
-		invites.add(new InvitationMessage(
-				"hejka baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-				"magik12", "marek", "asad112"));
-*/		
 		ArrayList<User> invitedUsers = Configuration.getInstance().getInvitedUsers();
 		
-		InvitationsListAdapter adapter = new InvitationsListAdapter(
+		adapter = new InvitationsListAdapter(
 				getApplicationContext(), R.id.invitations_sent_list, invitedUsers, false);
 
 		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -55,6 +47,24 @@ public class InvitationsSentActivity extends Activity {
 		listView.setAdapter(adapter);
 		
 		registerForContextMenu(listView);
+		AdaptersNotificationService.register(adapter);
 	}
-
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		AdaptersNotificationService.register(adapter);
+	}
+	
+	@Override
+	protected void onPause() {
+		AdaptersNotificationService.unregister(adapter);
+		super.onPause();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		AdaptersNotificationService.unregister(adapter);
+		super.onDestroy();
+	}
 }

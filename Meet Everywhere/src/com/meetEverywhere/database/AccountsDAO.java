@@ -6,6 +6,7 @@ import java.util.List;
 import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.User;
+import com.meetEverywhere.common.UsersAbstractFactory;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -167,7 +168,9 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 
 				Configuration config = Configuration.getInstance();
 				config.setUser(user);
-
+				
+				mock_loader();
+				
 //@formatter:off			
 			String configQuery = "SELECT * FROM " + TABLE_CONFIG + " WHERE "
 					+ COL_CONFIG_TOKEN + "='" + userToken + "'";
@@ -222,6 +225,19 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 		}
 	}
 
+	private void mock_loader(){
+		List<Tag> emptyHashtags = new ArrayList<Tag>();
+		List<Tag> wojtusOneTag = new ArrayList<Tag>();
+		wojtusOneTag.add(new Tag("czaderski", "wojtkoweID"));
+		
+		GenericUsersDBArrayList list = Configuration.getInstance().getAllKnownUsers();
+		
+		list.add(UsersAbstractFactory.createOrGetUser("mietek", emptyHashtags, "mieczys³aw pozdrawia!", null, null, "mietkoweID", null, true, false, false, null, true));
+		list.add(UsersAbstractFactory.createOrGetUser("wojtek", wojtusOneTag, "elo", null, null, "wojtkoweID", null, false, false, true, "Idziemy na piwo?", true));
+		list.add(UsersAbstractFactory.createOrGetUser("romek", emptyHashtags, "weso³y romek", null, null, "romkoweID", null, false, true, false, "jestem weso³y romek", true));
+	}
+	
+	
 	public boolean register(User user) {
 
 		ContentValues account = new ContentValues();

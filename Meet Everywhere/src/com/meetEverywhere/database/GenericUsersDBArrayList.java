@@ -2,7 +2,6 @@ package com.meetEverywhere.database;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle.Control;
 
 import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.User;
@@ -18,17 +17,6 @@ public class GenericUsersDBArrayList extends ArrayList<User> {
 	
 	private void loadData() {
 		addAll(UsersDAO.getInstance(null).getAllUsers());
-		mock_loader();
-	}
-
-	private void mock_loader(){
-		List<Tag> emptyHashtags = new ArrayList<Tag>();
-		List<Tag> wojtusOneTag = new ArrayList<Tag>();
-		wojtusOneTag.add(new Tag("czaderski", "wojtkoweID"));
-		
-		add(UsersAbstractFactory.createOrGetUser("mietek", emptyHashtags, "mieczys³aw pozdrawia!", null, null, "mietkoweID", null, true, false, false, null, true));
-		add(UsersAbstractFactory.createOrGetUser("wojtek", wojtusOneTag, "elo", null, null, "wojtkoweID", null, false, false, true, "Idziemy na piwo?", true));
-		add(UsersAbstractFactory.createOrGetUser("romek", emptyHashtags, "weso³y romek", null, null, "romkoweID", null, false, true, false, "jestem weso³y romek", true));
 	}
 	
 	@Override

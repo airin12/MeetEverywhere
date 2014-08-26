@@ -56,15 +56,6 @@ public class MeetEverywhere extends Activity {
         setContentView(R.layout.main_layout);
         refreshDisplayedUserNameAndDescription();
 
-        
-/*        
-		Authenticator.setDefault (new Authenticator() {
-		    protected PasswordAuthentication getPasswordAuthentication() {
-		        return new PasswordAuthentication (userName, password.toCharArray());
-		    }
-		});
-*/
-
         ((FrameLayout)findViewById(R.id.bluetooth_button)).setOnClickListener(new OnClickListener() {
 	        //@Override
 	        public void onClick(View arg0) {
@@ -100,42 +91,7 @@ public class MeetEverywhere extends Activity {
 */        
         userImage = (ImageView)findViewById(R.id.userImage);
         userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
-        
-        
-//        userImage.setOnClickListener(userSettingsOnClickListener);
-//        ((TextView)findViewById(R.id.userDescription)).setOnClickListener(userSettingsOnClickListener);
-//        
-//        ((FrameLayout)findViewById(R.id.profile_edition_button)).setOnClickListener(new OnClickListener() {
-//	        //@Override
-//	        public void onClick(View arg0) {
-//	        	startActivity(new Intent(MeetEverywhere.this, TagsEdition.class));
-//	        }
-//	    });
-        
-        /*
-        ((Button)findViewById(R.id.searchTagListsEdit)).setOnClickListener(new OnClickListener() {
-	        //@Override
-	        public void onClick(View arg0) {
-	        	startActivity(new Intent(MeetEverywhere.this, SearchTagsEdition.class));
-	        }
-	    });
-        
-        */
-        /*
-        ((Button)findViewById(R.id.friendsListEdit)).setOnClickListener(new OnClickListener() {
-	        //@Override
-	        public void onClick(View arg0) {
-	        	startActivity(new Intent(MeetEverywhere.this, FriendsEdition.class));
-	        }
-	    });
-        */
-        
-//        userSettings = getSharedPreferences(SharedPreferencesKeys.preferencesName, Activity.MODE_PRIVATE);
-//        boolean initialized = userSettings.getBoolean(SharedPreferencesKeys.initialization, false);
-        
-        //if(!initialized)
-        //	startActivity(new Intent(MeetEverywhere.this, ProfileEdition.class));
-            
+                
         /* Wystartuj us³ugê Bluetooth. */
         startService(new Intent(MeetEverywhere.this, BluetoothService.class));
         
@@ -146,7 +102,7 @@ public class MeetEverywhere extends Activity {
 		
 		if (dispatcher.isDiscoveringServiceActivated() == false) {
 			dispatcher.setDiscoveringServiceActivated(true);
-			dispatcher.setFlagDiscoveryFinished(true);
+			//dispatcher.setFlagDiscoveryFinished(true);
 			startService(new Intent(MeetEverywhere.this,
 					BluetoothDeviceSearchService.class));
 		}

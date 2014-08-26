@@ -2,8 +2,6 @@ package com.meetEverywhere.bluetooth;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.UUID;
 
 import com.meetEverywhere.MyUsersListAdapter;
@@ -37,9 +35,8 @@ public class BluetoothDispatcher {
 	private BluetoothSocket tempSocketHolder;
 	private Context tempServiceContextHolder;
 	private User tempUserHolder;
-	private List<BluetoothDevice> devicesUnabledToConnect;
+	//private List<BluetoothDevice> devicesUnabledToConnect;
 	private boolean flagDiscoveryFinished;
-	private boolean flagStartDiscoveryImmediateliy;
 	private final UUID ownUUID = UUID
 			.fromString("00001101-0000-1000-8000-00805f9b34fb");
 	private final LinkedHashMap<BluetoothDevice, BluetoothConnection> connections;
@@ -52,7 +49,7 @@ public class BluetoothDispatcher {
 	private BluetoothDispatcher() {
 		connections = new LinkedHashMap<BluetoothDevice, BluetoothConnection>();
 		configuration = Configuration.getInstance();
-		devicesUnabledToConnect = new LinkedList<BluetoothDevice>();
+		//devicesUnabledToConnect = new LinkedList<BluetoothDevice>();
 		setFlagDiscoveryFinished(false);
 	}
 
@@ -179,26 +176,13 @@ public class BluetoothDispatcher {
 			BluetoothListAdapter bluetoothListAdapter) {
 		this.bluetoothListAdapter = bluetoothListAdapter;
 	}
-
-	public List<BluetoothDevice> getDevicesUnabledToConnect() {
-		return devicesUnabledToConnect;
-	}
-
+	
 	public boolean isFlagDiscoveryFinished() {
 		return flagDiscoveryFinished;
 	}
 
 	public synchronized void setFlagDiscoveryFinished(boolean flagDiscoveryFinished) {
 		this.flagDiscoveryFinished = flagDiscoveryFinished;
-	}
-
-	public boolean isFlagStartDiscoveryImmediateliy() {
-		return flagStartDiscoveryImmediateliy;
-	}
-
-	public void setFlagStartDiscoveryImmediateliy(
-			boolean flagStartDiscoveryImmediateliy) {
-		this.flagStartDiscoveryImmediateliy = flagStartDiscoveryImmediateliy;
 	}
 
 	public void setTempServiceContextHolder(Context applicationContext) {

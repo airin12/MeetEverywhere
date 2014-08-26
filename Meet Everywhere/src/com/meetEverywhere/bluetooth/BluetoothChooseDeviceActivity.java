@@ -25,7 +25,6 @@ public class BluetoothChooseDeviceActivity extends Activity {
 	private BluetoothAdapter bluetoothAdapter;
 	private ListView listView;
 	private BluetoothListAdapter adapter;
-
 	public void addToList(BluetoothConnection connection) {
 		adapter.add(connection);
 	}
@@ -82,11 +81,8 @@ public class BluetoothChooseDeviceActivity extends Activity {
 		}
 		if (dispatcher.isDiscoveringServiceActivated() == false) {
 			dispatcher.setDiscoveringServiceActivated(true);
-			dispatcher.setFlagDiscoveryFinished(true);
 			startService(new Intent(BluetoothChooseDeviceActivity.this,
 					BluetoothDeviceSearchService.class));
-		} else {
-			setStartRefreshingImmediately(true);
 		}
 	}
 
@@ -98,12 +94,6 @@ public class BluetoothChooseDeviceActivity extends Activity {
 			}
 		});
 	}
-
-	public void setStartRefreshingImmediately(boolean startRefreshingImmediately) {
-		dispatcher
-				.setFlagStartDiscoveryImmediateliy(startRefreshingImmediately);
-	}
-
 }
 
 class BroadcastReceiverImpl extends BroadcastReceiver {
@@ -112,9 +102,11 @@ class BroadcastReceiverImpl extends BroadcastReceiver {
 	private final BluetoothListAdapter adapter;
 	private int completedAsyncTasksCounter;
 	private static List<BluetoothDevice> devicesFound = new LinkedList<BluetoothDevice>();
-
+	private final Context context;
+	
 	public BroadcastReceiverImpl(BluetoothListAdapter adapter) {
 		this.adapter = adapter;
+		context = dispatcher.getTempServiceContextHolder();
 	}
 
 	@Override
@@ -138,8 +130,9 @@ class BroadcastReceiverImpl extends BroadcastReceiver {
 						&& dispatcher.getConnections().get(dev).getStatus()
 								.equals(BluetoothConnectionStatus.ACTIVE)) {
 					showToast("Already connected: " + dev.getName());
-				}else{
-				showToast("Attempting to connect: " + dev.getName());}
+				} else {
+					showToast("Attempting to connect: " + dev.getName());
+				}
 				(new AsyncTask<Context, Void, Void>() {
 					BluetoothConnection connection;
 
@@ -179,13 +172,14 @@ class BroadcastReceiverImpl extends BroadcastReceiver {
 											connection.launchConnectionThread();
 											adapter.add(connection);
 											adapter.notifyDataSetChanged();
-											dispatcher.notifyBluetoothDevicesChanged();
+											dispatcher
+													.notifyBluetoothDevicesChanged();
 										}
 									}
 								});
 					}
 
-				}).execute(dispatcher.getTempServiceContextHolder());
+				}).execute(this.context);
 			}
 		}
 	}
