@@ -74,6 +74,8 @@ public class InvitationsListAdapter extends ArrayAdapter<User>{
 			Toast.makeText(context, "Zaakceptowano zaproszenie", Toast.LENGTH_SHORT).show();
 		}
 		
+		toAcceptInvitation.clear();
+		
 		notifyDataSetChanged();
 	}
 	

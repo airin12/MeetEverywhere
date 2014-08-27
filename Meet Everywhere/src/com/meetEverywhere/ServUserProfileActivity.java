@@ -19,17 +19,24 @@ public class ServUserProfileActivity extends Activity {
 
 	private EditText inviteMessage;
 	private ImageView image;
-	private LinearLayout layout;
+	private LinearLayout inviteIconLayout;
 	private User user;
 	private boolean visible;
 	private BluetoothDispatcher dispatcher = BluetoothDispatcher.getInstance();
+	LinearLayout friendLayout;
+	LinearLayout inviteLayout;
+	LinearLayout deleteLayout;
+	LinearLayout blockLayout;
+	LinearLayout unlockLayout;
+	private LinearLayout blockIconLayout;
 
 	@Override
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setContentView(R.layout.serv_user_profile_layout);
 		user = dispatcher.getTempUserHolder();
-		layout = (LinearLayout) findViewById(R.id.invited_layout);
+		inviteIconLayout = (LinearLayout) findViewById(R.id.invited_layout);
+		blockIconLayout = (LinearLayout) findViewById(R.id.block_icon_layout);
 
 		image = (ImageView) findViewById(R.id.send_icon2_profile);
 		inviteMessage = (EditText) findViewById(R.id.invite_message);
@@ -38,18 +45,13 @@ public class ServUserProfileActivity extends Activity {
 		TextView nickname = (TextView) findViewById(R.id.nickname_profile);
 		nickname.setText(user.getNickname());
 
-		LinearLayout friendLayout = (LinearLayout) findViewById(R.id.friend_layout);
-		LinearLayout inviteLayout = (LinearLayout) findViewById(R.id.invite_friend);
+		friendLayout = (LinearLayout) findViewById(R.id.friend_layout);
+		inviteLayout = (LinearLayout) findViewById(R.id.invite_friend);
+		deleteLayout = (LinearLayout) findViewById(R.id.delete_friend_row);
+		blockLayout = (LinearLayout) findViewById(R.id.block_user_row);
+		unlockLayout = (LinearLayout) findViewById(R.id.unlock_user_row);
 
-		if (user.isAcquaintance()) {
-			friendLayout.setVisibility(LinearLayout.VISIBLE);
-			inviteLayout.setVisibility(LinearLayout.GONE);
-		}
-
-		if (user.isInvited())
-			layout.setVisibility(ImageView.VISIBLE);
-		else
-			layout.setVisibility(ImageView.GONE);
+		refreshLayout();
 
 		TextView text = (TextView) findViewById(R.id.user_desc_profile);
 		text.setText(user.getDescription());
@@ -58,14 +60,14 @@ public class ServUserProfileActivity extends Activity {
 		StringBuffer buffer = new StringBuffer();
 
 		boolean start = true;
-		if(user.getHashTags()!=null){
-			for(Tag tag : user.getHashTags()){
-				
-				if(start)
-					start=false;
+		if (user.getHashTags() != null) {
+			for (Tag tag : user.getHashTags()) {
+
+				if (start)
+					start = false;
 				else
 					buffer.append(", ");
-				
+
 				buffer.append(tag.getName());
 			}
 		}
@@ -76,6 +78,64 @@ public class ServUserProfileActivity extends Activity {
 
 	public void backToMainMenu(View view) {
 		finish();
+	}
+
+	public void blockUser(View view) {
+		user.setBlocked(true);
+		refreshLayout();
+		Toast.makeText(getApplicationContext(), "U¿ytkownik zablokowany",
+				Toast.LENGTH_SHORT).show();
+	}
+
+	public void unlockUser(View view) {
+		user.setBlocked(false);
+		refreshLayout();
+		Toast.makeText(getApplicationContext(), "U¿ytkownik odblokowany",
+				Toast.LENGTH_SHORT).show();
+	}
+
+	private void refreshLayout() {
+		if (user.isAcquaintance()) {
+			friendLayout.setVisibility(LinearLayout.VISIBLE);
+			inviteLayout.setVisibility(LinearLayout.GONE);
+			deleteLayout.setVisibility(LinearLayout.VISIBLE);
+			blockLayout.setVisibility(LinearLayout.GONE);
+			unlockLayout.setVisibility(LinearLayout.GONE);
+			inviteIconLayout.setVisibility(LinearLayout.GONE);
+			blockIconLayout.setVisibility(LinearLayout.GONE);
+		} else if (user.isBlocked()) {
+			friendLayout.setVisibility(LinearLayout.GONE);
+			inviteLayout.setVisibility(LinearLayout.GONE);
+			deleteLayout.setVisibility(LinearLayout.GONE);
+			blockLayout.setVisibility(LinearLayout.GONE);
+			unlockLayout.setVisibility(LinearLayout.VISIBLE);
+			inviteIconLayout.setVisibility(LinearLayout.GONE);
+			blockIconLayout.setVisibility(LinearLayout.VISIBLE);
+		} else if (user.isInvited()) {
+			friendLayout.setVisibility(LinearLayout.GONE);
+			inviteLayout.setVisibility(LinearLayout.VISIBLE);
+			deleteLayout.setVisibility(LinearLayout.GONE);
+			blockLayout.setVisibility(LinearLayout.GONE);
+			unlockLayout.setVisibility(LinearLayout.GONE);
+			inviteIconLayout.setVisibility(LinearLayout.VISIBLE);
+			blockIconLayout.setVisibility(LinearLayout.GONE);
+		} else {
+			friendLayout.setVisibility(LinearLayout.GONE);
+			inviteLayout.setVisibility(LinearLayout.VISIBLE);
+			deleteLayout.setVisibility(LinearLayout.GONE);
+			blockLayout.setVisibility(LinearLayout.VISIBLE);
+			unlockLayout.setVisibility(LinearLayout.GONE);
+			inviteIconLayout.setVisibility(LinearLayout.GONE);
+			blockIconLayout.setVisibility(LinearLayout.GONE);
+		}
+	}
+
+	public void deleteFriend(View view) {
+		user.setAcquaintance(false);
+		refreshLayout();
+
+		Toast.makeText(getApplicationContext(), "Usuniêto z listy znajomych",
+				Toast.LENGTH_SHORT).show();
 	}
 
 	public void sendInvite(View view) {
@@ -89,11 +149,13 @@ public class ServUserProfileActivity extends Activity {
 		InvitationMessage invite = new InvitationMessage(inviteMessage
 				.getText().toString(), dispatcher.getOwnData().getNickname(),
 				dispatcher.getOwnData().getUserID(), user.getUserID());
-//		Configuration.getInstance().getInvitationMessagesSent().add(invite);
-		
+		// Configuration.getInstance().getInvitationMessagesSent().add(invite);
+
 		user.setInvitationMessage(inviteMessage.getText().toString());
-		
-		user.sendInvitation(invite, layout, inviteMessage, image, user);
+
+		user.sendInvitation(invite, inviteIconLayout, inviteMessage, image,
+				user);
+		user.setInvited(true);
 		/*
 		 * DAO dao = new DAO(); dao.sendInvite(user.getId(),
 		 * inviteMessage.getText().toString());

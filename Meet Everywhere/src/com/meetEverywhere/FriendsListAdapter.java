@@ -79,6 +79,8 @@ public class FriendsListAdapter extends ArrayAdapter<User> {
 			Toast.makeText(context, "Usuniêto z listy znajomych", Toast.LENGTH_SHORT).show();
 		}
 		
+		toDeledeFriends.clear();
+		
 		notifyDataSetChanged();
 	}
 	

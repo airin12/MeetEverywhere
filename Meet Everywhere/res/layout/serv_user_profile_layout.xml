@@ -72,6 +72,32 @@
     </LinearLayout>
     
     <LinearLayout 
+        android:id="@+id/block_icon_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    
+    <ImageView
+            android:id="@+id/block_icon_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="right"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/block_icon" />
+    
+    <TextView
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/msg_user_blocked"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:textSize="20sp"/>
+     
+    </LinearLayout>
+    
+    <LinearLayout 
         android:id="@+id/friend_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -193,7 +219,95 @@
       </LinearLayout>
       
        
-       
+      <LinearLayout
+      android:id="@+id/delete_friend_row"
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="deleteFriend"
+      android:layout_marginBottom="5dp"
+      android:layout_marginTop="5dp"
+      android:visibility="gone">
+      
+       <ImageView
+            android:id="@+id/delete_friend_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/delete_icon" />
+     
+      <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/delete_profile_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      
+      </LinearLayout>
+      
+       <LinearLayout
+      android:id="@+id/block_user_row"
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="blockUser"
+      android:layout_marginBottom="5dp"
+      android:layout_marginTop="5dp"
+      android:visibility="visible">
+      
+       <ImageView
+            android:id="@+id/block_user_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/block_icon" />
+     
+      <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/block_user_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      
+      </LinearLayout>
+      
+        <LinearLayout
+      android:id="@+id/unlock_user_row"
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="unlockUser"
+      android:layout_marginBottom="5dp"
+      android:layout_marginTop="5dp"
+      android:visibility="gone">
+      
+       <ImageView
+            android:id="@+id/unlock_user_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/unlock_icon" />
+     
+      <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/unlock_user_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      
+      </LinearLayout>
       
       <LinearLayout
       android:orientation="horizontal" 
@@ -222,6 +336,8 @@
             android:textStyle="bold" />
       
       </LinearLayout>
+      
+     
       
 </LinearLayout>
 
