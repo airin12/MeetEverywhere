@@ -23,12 +23,14 @@ public class ServUserProfileActivity extends Activity {
 	private User user;
 	private boolean visible;
 	private BluetoothDispatcher dispatcher = BluetoothDispatcher.getInstance();
-	LinearLayout friendLayout;
-	LinearLayout inviteLayout;
-	LinearLayout deleteLayout;
-	LinearLayout blockLayout;
-	LinearLayout unlockLayout;
+	private LinearLayout friendLayout;
+	private LinearLayout inviteLayout;
+	private LinearLayout deleteLayout;
+	private LinearLayout blockLayout;
+	private LinearLayout unlockLayout;
 	private LinearLayout blockIconLayout;
+	private LinearLayout invitationReceivedLayout;
+	private LinearLayout confirmInviteLayout;
 
 	@Override
 	public void onCreate(Bundle bundle) {
@@ -50,6 +52,8 @@ public class ServUserProfileActivity extends Activity {
 		deleteLayout = (LinearLayout) findViewById(R.id.delete_friend_row);
 		blockLayout = (LinearLayout) findViewById(R.id.block_user_row);
 		unlockLayout = (LinearLayout) findViewById(R.id.unlock_user_row);
+		invitationReceivedLayout = (LinearLayout) findViewById(R.id.invitation_icon_layout);
+		confirmInviteLayout = (LinearLayout) findViewById(R.id.confirm_button_row);
 
 		refreshLayout();
 
@@ -103,6 +107,8 @@ public class ServUserProfileActivity extends Activity {
 			unlockLayout.setVisibility(LinearLayout.GONE);
 			inviteIconLayout.setVisibility(LinearLayout.GONE);
 			blockIconLayout.setVisibility(LinearLayout.GONE);
+			invitationReceivedLayout.setVisibility(LinearLayout.GONE);
+			confirmInviteLayout.setVisibility(LinearLayout.GONE);
 		} else if (user.isBlocked()) {
 			friendLayout.setVisibility(LinearLayout.GONE);
 			inviteLayout.setVisibility(LinearLayout.GONE);
@@ -111,6 +117,8 @@ public class ServUserProfileActivity extends Activity {
 			unlockLayout.setVisibility(LinearLayout.VISIBLE);
 			inviteIconLayout.setVisibility(LinearLayout.GONE);
 			blockIconLayout.setVisibility(LinearLayout.VISIBLE);
+			invitationReceivedLayout.setVisibility(LinearLayout.GONE);
+			confirmInviteLayout.setVisibility(LinearLayout.GONE);
 		} else if (user.isInvited()) {
 			friendLayout.setVisibility(LinearLayout.GONE);
 			inviteLayout.setVisibility(LinearLayout.VISIBLE);
@@ -119,6 +127,21 @@ public class ServUserProfileActivity extends Activity {
 			unlockLayout.setVisibility(LinearLayout.GONE);
 			inviteIconLayout.setVisibility(LinearLayout.VISIBLE);
 			blockIconLayout.setVisibility(LinearLayout.GONE);
+			invitationReceivedLayout.setVisibility(LinearLayout.GONE);
+			confirmInviteLayout.setVisibility(LinearLayout.GONE);
+		} else if (user.getInvitationMessage() != null) {
+			friendLayout.setVisibility(LinearLayout.GONE);
+			inviteLayout.setVisibility(LinearLayout.GONE);
+			deleteLayout.setVisibility(LinearLayout.GONE);
+			blockLayout.setVisibility(LinearLayout.VISIBLE);
+			unlockLayout.setVisibility(LinearLayout.GONE);
+			inviteIconLayout.setVisibility(LinearLayout.GONE);
+			blockIconLayout.setVisibility(LinearLayout.GONE);
+			invitationReceivedLayout.setVisibility(LinearLayout.VISIBLE);
+			confirmInviteLayout.setVisibility(LinearLayout.VISIBLE);
+			((TextView) invitationReceivedLayout
+					.findViewById(R.id.invitation_received_text)).setText(user
+					.getInvitationMessage());
 		} else {
 			friendLayout.setVisibility(LinearLayout.GONE);
 			inviteLayout.setVisibility(LinearLayout.VISIBLE);
@@ -127,6 +150,8 @@ public class ServUserProfileActivity extends Activity {
 			unlockLayout.setVisibility(LinearLayout.GONE);
 			inviteIconLayout.setVisibility(LinearLayout.GONE);
 			blockIconLayout.setVisibility(LinearLayout.GONE);
+			invitationReceivedLayout.setVisibility(LinearLayout.GONE);
+			confirmInviteLayout.setVisibility(LinearLayout.GONE);
 		}
 	}
 
@@ -166,6 +191,15 @@ public class ServUserProfileActivity extends Activity {
 		Intent intent = new Intent(this, GeneralChat.class);
 		intent.putExtra("nick", user.getNickname());
 		startActivity(intent);
+	}
+
+	public void acceptInvite(View view) {
+		user.setAcquaintance(true);
+		user.setInvitationMessage(null);
+		refreshLayout();
+		Toast.makeText(getApplicationContext(), "Zaakceptowano zaproszenie",
+				Toast.LENGTH_SHORT).show();
+
 	}
 
 	public void showMoreFromView(View view) {

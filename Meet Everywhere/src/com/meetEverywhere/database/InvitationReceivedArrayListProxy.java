@@ -29,7 +29,7 @@ public class InvitationReceivedArrayListProxy extends ArrayList<User> {
 	private void refreshInvitedUsersList() {
 		invitationReceivedUsers.clear();
 		for (User u : genericList) {
-			if (u.getInvitationMessage() != null) {
+			if (u.getInvitationMessage() != null && !u.isBlocked()) {
 				invitationReceivedUsers.add(u);
 			}
 		}

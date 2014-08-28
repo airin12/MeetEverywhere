@@ -98,6 +98,32 @@
     </LinearLayout>
     
     <LinearLayout 
+        android:id="@+id/invitation_icon_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    
+    <ImageView
+            android:id="@+id/invitation_icon_profile"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="right"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/invitation" />
+    
+    <TextView
+        android:id="@+id/invitation_received_text"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:textSize="20sp"/>
+     
+    </LinearLayout>
+    
+    <LinearLayout 
         android:id="@+id/friend_layout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -138,6 +164,36 @@
         android:layout_marginBottom="15dp"
         android:layout_height="wrap_content"
         android:textSize="20sp"/>
+     
+     <LinearLayout
+      android:id="@+id/confirm_button_row"
+      android:orientation="horizontal" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="acceptInvite"
+      android:layout_marginBottom="5dp"
+      android:layout_marginTop="5dp">
+      
+       <ImageView
+            android:id="@+id/delete_friend_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/bt_icon"
+            android:src="@drawable/accept_icon" />
+     
+      <TextView
+            android:id="@+id/delete_friend_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="75dp"
+            android:text="@string/confirm_accept_invitation_text"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      
+      </LinearLayout>
      
         <LinearLayout
       android:id="@+id/invite_friend"

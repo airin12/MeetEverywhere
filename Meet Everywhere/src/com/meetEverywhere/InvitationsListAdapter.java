@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ public class InvitationsListAdapter extends ArrayAdapter<User>{
 	private List<User> users;
 	private Context context;
 	private List<User> toAcceptInvitation;
+	private int actualMode;
 	
 	public InvitationsListAdapter(Context context, int resource, List<User> users, boolean incomingInvitations) {
 		super(context, resource, users);
@@ -45,6 +47,13 @@ public class InvitationsListAdapter extends ArrayAdapter<User>{
 
 		TextView nick = (TextView) row.findViewById(R.id.invitation_nick);
 		TextView msg = (TextView) row.findViewById(R.id.invitation_message);
+		
+		CheckBox checkBox = (CheckBox) row.findViewById(R.id.invites_check_box);
+		if(actualMode==InvitationsReceivedActivity.NORMAL_MODE)
+			checkBox.setVisibility(CheckBox.GONE);
+		else if(actualMode==InvitationsReceivedActivity.ACCEPT_MODE)
+			checkBox.setVisibility(CheckBox.VISIBLE);
+		
 		nick.setText(user.getNickname());
 		if(incomingInvitationsMode){
 		msg.setText(user.getInvitationMessage());
@@ -71,6 +80,7 @@ public class InvitationsListAdapter extends ArrayAdapter<User>{
 	public void removeSelected(){
 		for(User u: toAcceptInvitation){
 			u.setAcquaintance(true);
+			u.setInvitationMessage(null);
 			Toast.makeText(context, "Zaakceptowano zaproszenie", Toast.LENGTH_SHORT).show();
 		}
 		
@@ -79,6 +89,12 @@ public class InvitationsListAdapter extends ArrayAdapter<User>{
 		notifyDataSetChanged();
 	}
 	
-
+	public void setMode(int mode){
+		actualMode=mode;
+	}
+	
+	public List<User> getUsers(){
+		return users;
+	}
 
 }
