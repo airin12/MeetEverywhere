@@ -40,26 +40,47 @@ public class User implements Comparable<User> {
 	private String nickname;
 	private final String userToken;
 	private final String userID;
-	private List<Tag> hashTags;
+	private List<Tag> hashTags = new ArrayList<Tag>();
 	private String description;
 	private byte[] picture;
 	private String password;
 
-	private boolean isAcquaintance;
-	private boolean isBlocked;
-	private boolean isInvited;
+	private boolean isAcquaintance = false;
+	private boolean isBlocked = false;
+	private boolean isInvited = false;
 
-	private String incomingInvitationMessage;
+	private String incomingInvitationMessage = null;
 	private boolean isSyncedWithServer;
 
 	private BluetoothConnection bluetoothConnection;
-	private ArrayAdapter<TextMessage> messagesArrayAdapter;
+	private ArrayAdapter<TextMessage> messagesArrayAdapter = null;
 	private boolean isSendButtonEnabled;
 	private boolean isChatFocused;
 
 	private Button sendButton;
 	private Configuration config;
 	private LocalDAO localDAO;
+	
+	public User(String nickname, String password, String description, String userToken, boolean isSynced) {
+		config = Configuration.getInstance();
+		this.nickname = nickname;
+		this.description = description;
+		this.userToken = userToken;
+		this.password = password;
+		this.userID = userToken;
+
+		this.isSyncedWithServer = isSynced;
+
+		this.setSendButtonEnabled(true);
+		this.setChatFocused(false);
+		this.setSendButton(null);
+
+		if (userToken == null) {
+			localDAO = UsersDAO.getInstance(userToken);
+		} else {
+			localDAO = AccountsDAO.getInstance(null);
+		}
+	}
 
 	public User(String nickname, List<Tag> hashTags, String description,
 			String userToken, byte[] picture, String userID, String password,

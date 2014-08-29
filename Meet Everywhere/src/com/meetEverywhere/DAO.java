@@ -4,21 +4,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.http.NameValuePair;
-import org.json.JSONObject;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
-import android.widget.TextView;
-
-import com.meetEverywhere.ApiService.HttpType;
-import com.meetEverywhere.common.Configuration;
+import com.meetEverywhere.ApiService.CreateUserQuery;
 import com.meetEverywhere.common.InvitationMessage;
-import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.TextMessage;
 import com.meetEverywhere.common.User;
 
@@ -87,33 +76,19 @@ public class DAO {
 	static List<User> alreadyRegistered = new ArrayList<User>();
 
 	public synchronized User register(String nickname, String password, String description){
-/* <mock> */
-		for(User user : alreadyRegistered){
-			if(user.getNickname().equals(nickname)){
-				return null;
+		User user = null;
+		String token;
+		try {
+			if((token = new CreateUserQuery(nickname,password,description).execute().get()) != null) {
+				user = new User(nickname, password, description, token, true);
+				alreadyRegistered.add(user);
 			}
-		}
-		Random rand = new Random();
-		User user = new User(nickname, new ArrayList<Tag>(), description, "token" + rand.nextInt(100000), null, "userd" + rand.nextInt(1000000), password, false, false, false, null, false);
-		
-		//user.setUserID("userd" + rand.nextInt(1000000));
-		//user.setPassword(password);
-	//	alreadyRegistered.add(user);
-		return user;
-/*</mock> */		
-	}
-	
-	public void createUser(User user){
-		String tokenText;
-        try {
-            tokenText =  new ApiService.CreateUserQuery("UserName").execute().get();
-      //      token.setText(tokenText);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+        	e.printStackTrace();
         } catch (ExecutionException e) {
-            e.printStackTrace();
+        	e.printStackTrace();
         }
-		
+		return user;	
 	}
 	
 	public List<User> getUsersFromServer(List<String> tags2, int percentage) {

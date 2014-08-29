@@ -49,16 +49,18 @@ public class BluetoothDeviceSearchService extends Service implements Runnable {
 		while (true) {
 			dispatcher.setFlagDiscoveryFinished(false);
 
-			bluetoothAdapter.startDiscovery();
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			
+			if (bluetoothAdapter != null) {
+				bluetoothAdapter.startDiscovery();
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				if (!bluetoothAdapter.isDiscovering()) {
+					continue;
+				}
 			}
-			if (!bluetoothAdapter.isDiscovering()) {
-				continue;
-			}
-
 			while (!dispatcher.isFlagDiscoveryFinished()) {
 				try {
 					Thread.sleep(1000);

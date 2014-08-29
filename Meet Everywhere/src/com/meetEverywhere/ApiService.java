@@ -63,19 +63,27 @@ public class ApiService {
     public static class CreateUserQuery extends AsyncTask<Void, Void, String> {
 
     	private String userName;
+    	private String password;
+    	private String description;
     	
-		public CreateUserQuery(String nick) {
+		public CreateUserQuery(String nick, String password, String description) {
 			this.userName = nick;
+			this.password = password;
+			this.description = description;
 		}
     	
     	@Override
 		protected String doInBackground(Void... voids) {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
             nameValuePairs.add(new BasicNameValuePair("user[name]", userName));
+            nameValuePairs.add(new BasicNameValuePair("user[password]", password));
+            nameValuePairs.add(new BasicNameValuePair("user[description]", description));
 			JSONObject jsonObject = performQuery(ApiService.USER_HTTP, nameValuePairs, HttpType.POST);
 			try {
-				token = jsonObject.getString("auth_token");
-				return token;
+				if(jsonObject.has("auth_token")) {
+					token = jsonObject.getString("auth_token");
+					return token;
+				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -277,7 +285,9 @@ public class ApiService {
         	if(type != HttpType.GET) {
         		((HttpPost)base).setEntity(new UrlEncodedFormEntity(nameValuePairs));
         	}
-        	base.addHeader(AUTHORIZATION_HEADER_KEY, getAutorizationHeaderValue());
+        	if(token != null && !token.isEmpty()) {
+        		base.addHeader(AUTHORIZATION_HEADER_KEY, getAutorizationHeaderValue());
+        	}
             HttpResponse response = new DefaultHttpClient().execute(base);
             if(response.getEntity() != null) { //TODO: Local Domain Model or backend alterations
                 InputStream stream = response.getEntity().getContent();
