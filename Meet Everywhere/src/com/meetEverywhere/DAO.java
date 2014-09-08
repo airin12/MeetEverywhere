@@ -78,18 +78,28 @@ public class DAO {
 	static List<User> alreadyRegistered = new ArrayList<User>();
 
 	public synchronized User register(String nickname, String password, String description){
+		String jsonString, token = null, id = null;
 		User user = null;
-		String token;
 		try {
-			if((token = new ApiService.CreateUserQuery(nickname,password,description).execute().get()) != null) {
-				user = new User(nickname, password, description, token, true);
+			if((jsonString = new ApiService.CreateUserQuery(nickname,password,description).execute().get()) != null) {
+				JSONObject jsonObject = new JSONObject(jsonString);
+				if(jsonObject.has("auth_token") && jsonObject.has("id") && jsonObject.getJSONObject("id").has("$oid")) {
+					token = jsonObject.getString("auth_token");
+					id = jsonObject.getJSONObject("id").getString("$oid");;
+				} else {
+					return null;
+				}
+				
+				user = new User(id, nickname, password, description, token, true);
 				alreadyRegistered.add(user);
 			}
         } catch (InterruptedException e) {
         	e.printStackTrace();
         } catch (ExecutionException e) {
         	e.printStackTrace();
-        }
+        } catch (JSONException e) {
+			e.printStackTrace();
+		}
 		return user;	
 	}
 	
@@ -100,12 +110,13 @@ public class DAO {
 	 * @return true if is registered, false otherwise
 	 */
 	public synchronized User loginOnExternalServer(String nickname, String password) {
-		String jsonString, token = null, description = null;
+		User user = null;
+		String jsonString, token = null, description = null, id = null;
 		
 		//useful only if problem occurred between server registration and local DAO registration
-		for(User user : alreadyRegistered) {
-			if(user.isCredentialRight(nickname, password)) {
-				return user;
+		for(User usr : alreadyRegistered) {
+			if(usr.isCredentialRight(nickname, password)) {
+				return usr;
 			}
 		}
 		
@@ -113,15 +124,17 @@ public class DAO {
 			if(!"error".equals(jsonString = new ApiService.LoginUserQuery(nickname,password).execute().get())) {
 				JSONObject jsonObject = new JSONObject(jsonString);
 				
-				if(jsonObject.has("auth_token")) {
+				if(jsonObject.has("auth_token") && jsonObject.has("id") && jsonObject.getJSONObject("id").has("$oid")) {
 					token = jsonObject.getString("auth_token");
+					id = jsonObject.getJSONObject("id").getString("$oid");;
 				} else {
-					//if there is no auth_token error must occurred
 					return null;
 				}
+				
 				description = jsonObject.getString("description");
 				
-				return new User(nickname, password, description, token, true);
+				user =  new User(id, nickname, password, description, token, true);
+				alreadyRegistered.add(user);
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -132,7 +145,7 @@ public class DAO {
 		}
 		
 		
-		return null;
+		return user;
 	}
 	
 	public List<User> getUsersFromServer(List<String> tags2, int percentage) {

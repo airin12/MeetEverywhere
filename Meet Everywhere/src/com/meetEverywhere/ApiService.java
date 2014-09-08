@@ -89,14 +89,11 @@ public class ApiService {
             nameValuePairs.add(new BasicNameValuePair(USER_PASSWORD, password));
             nameValuePairs.add(new BasicNameValuePair(USER_DESC, description));
 			JSONObject jsonObject = performQuery(ApiService.USER_HTTP, nameValuePairs, HttpType.POST);
-			try {
-				if(jsonObject.has("auth_token")) {
-					token = jsonObject.getString("auth_token");
-					return token;
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
+			
+			if(jsonObject.has("auth_token")) {
+				return jsonObject.toString();
 			}
+			
 			return null;
     	}
     }

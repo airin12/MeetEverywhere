@@ -22,14 +22,14 @@ public class LoginActivity extends Activity {
 	private EditText usernameEditText;
 	private String username;
 	private String password;
-	private AccountsDAO accountDAO;
+	private AccountsDAO accountsDAO;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
-		accountDAO = AccountsDAO.getInstance(this);
+		accountsDAO = AccountsDAO.getInstance(this);
 		validationManager = new ValidationManager();
 
 		usernameEditText = (EditText) findViewById(R.id.ActivityLogin_userName);
@@ -86,11 +86,15 @@ public class LoginActivity extends Activity {
 		if(errors.isEmpty()) {
 			User user;
 			DAO dao = new DAO();
-			if (accountDAO.logIn(username, password)) {
+			if (accountsDAO.logIn(username, password)) {
 				startActivity(new Intent(this, MeetEverywhere.class));
 			} else if((user = dao.loginOnExternalServer(username, password)) != null) { 
 				//rejestracja w lokalnej bazie danych
-				accountDAO.register(user);
+				accountsDAO.register(user);
+				if (!accountsDAO.logIn(username, password)) {
+					Log.i("DB", "accounts doesnt exist");
+					return;
+				}
 				startActivity(new Intent(this, MeetEverywhere.class));
 			} else {
 				errors.add(new ValidationError(R.string.Validation_loginFailed));
