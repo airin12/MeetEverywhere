@@ -3,14 +3,11 @@ package com.meetEverywhere;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.w3c.dom.Text;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
