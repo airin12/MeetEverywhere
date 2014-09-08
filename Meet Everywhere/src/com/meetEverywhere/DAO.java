@@ -6,7 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import com.meetEverywhere.ApiService.CreateUserQuery;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.meetEverywhere.common.InvitationMessage;
 import com.meetEverywhere.common.TextMessage;
 import com.meetEverywhere.common.User;
@@ -79,7 +81,7 @@ public class DAO {
 		User user = null;
 		String token;
 		try {
-			if((token = new CreateUserQuery(nickname,password,description).execute().get()) != null) {
+			if((token = new ApiService.CreateUserQuery(nickname,password,description).execute().get()) != null) {
 				user = new User(nickname, password, description, token, true);
 				alreadyRegistered.add(user);
 			}
@@ -89,6 +91,48 @@ public class DAO {
         	e.printStackTrace();
         }
 		return user;	
+	}
+	
+	/**
+	 * Method checking if user is registered on server
+	 * @param nickname user nickname
+	 * @param password user password
+	 * @return true if is registered, false otherwise
+	 */
+	public synchronized User loginOnExternalServer(String nickname, String password) {
+		String jsonString, token = null, description = null;
+		
+		//useful only if problem occurred between server registration and local DAO registration
+		for(User user : alreadyRegistered) {
+			if(user.isCredentialRight(nickname, password)) {
+				return user;
+			}
+		}
+		
+		try {
+			if(!"error".equals(jsonString = new ApiService.LoginUserQuery(nickname,password).execute().get())) {
+				JSONObject jsonObject = new JSONObject(jsonString);
+				
+				if(jsonObject.has("auth_token")) {
+					token = jsonObject.getString("auth_token");
+				} else {
+					//if there is no auth_token error must occurred
+					return null;
+				}
+				description = jsonObject.getString("description");
+				
+				return new User(nickname, password, description, token, true);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return null;
 	}
 	
 	public List<User> getUsersFromServer(List<String> tags2, int percentage) {

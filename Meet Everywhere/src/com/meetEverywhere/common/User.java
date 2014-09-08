@@ -115,6 +115,17 @@ public class User implements Comparable<User> {
 		}
 
 	}
+	
+	/**
+	 * Method comparing user credentials with given ones.
+	 * @param nickname user nickname
+	 * @param password user password
+	 * @return true if these are user credentials, false otherwise 
+	 */
+	public boolean isCredentialRight(String nickname, String password) {
+		return this.nickname != null && this.password != null && 
+				this.nickname.equals(nickname) && this.password.equals(password);
+	}
 
 	public void setInvited(boolean isInvited) {
 		this.isInvited = isInvited;
