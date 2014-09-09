@@ -153,6 +153,7 @@ public class RegistrationActivity extends Activity {
 					return;
 				}
 				startActivity(new Intent(this, MeetEverywhere.class));
+				finish();
 			}
 			
 		}

@@ -77,6 +77,7 @@ public class LoginActivity extends Activity {
 
 	public void registerIfNoAccountAction(View view) {
 		startActivity(new Intent(this, RegistrationActivity.class));
+		finish();
 	}
 
 	public void signInAction(View view) {
@@ -88,6 +89,7 @@ public class LoginActivity extends Activity {
 			DAO dao = new DAO();
 			if (accountsDAO.logIn(username, password)) {
 				startActivity(new Intent(this, MeetEverywhere.class));
+				finish();
 			} else if((user = dao.loginOnExternalServer(username, password)) != null) { 
 				//rejestracja w lokalnej bazie danych
 				accountsDAO.register(user);
@@ -96,6 +98,7 @@ public class LoginActivity extends Activity {
 					return;
 				}
 				startActivity(new Intent(this, MeetEverywhere.class));
+				finish();
 			} else {
 				errors.add(new ValidationError(R.string.Validation_loginFailed));
 				ErrorDialog.createDialog(this, errors).show();
