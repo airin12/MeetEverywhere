@@ -15,13 +15,15 @@ import android.widget.ListView;
 
 import com.meetEverywhere.bluetooth.BluetoothDispatcher;
 import com.meetEverywhere.common.Configuration;
+import com.meetEverywhere.common.DataChangedNotificationService;
 import com.meetEverywhere.common.User;
 
 public class FriendsListFragment extends Activity {
 
 	private ListView listView;
 	private LinearLayout confirmButton;
-	public static final int NORMAL_MODE=1;
+	private FriendsListAdapter adapter;
+    public static final int NORMAL_MODE=1;
 	public static final int DELETE_MODE=2;
 	private int actualMode;
 
@@ -42,7 +44,7 @@ public class FriendsListFragment extends Activity {
 		Log.d("friends", friends.size() + "");
 		Log.d("STARTING", "FRIENDS");
 
-		FriendsListAdapter adapter = new FriendsListAdapter(
+		adapter = new FriendsListAdapter(
 				getApplicationContext(), R.layout.friends_list_content_info,
 				friends);
 
@@ -50,8 +52,21 @@ public class FriendsListFragment extends Activity {
 
 		setNormalOnClickListener(listView);
 	}
-	
-	public void setNormalOnClickListener(final ListView listView){
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        DataChangedNotificationService.register(adapter);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        DataChangedNotificationService.unregister(adapter);
+    }
+
+
+    public void setNormalOnClickListener(final ListView listView){
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {

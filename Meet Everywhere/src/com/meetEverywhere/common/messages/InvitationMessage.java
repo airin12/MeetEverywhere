@@ -1,18 +1,13 @@
-package com.meetEverywhere.common;
+package com.meetEverywhere.common.messages;
 
 public class InvitationMessage extends Message {
 
-	private static final long serialVersionUID = 3042786153652017048L;
-	public static final String TYPE = "InvitationMessage";
+    private static final long serialVersionUID = 3042786153652017048L;
+    public static final String TYPE = "InvitationMessage";
 
 	public InvitationMessage(String text, String authorNickname, String from,
 			String recipient) {
 		super(text, authorNickname, from, recipient);
-	}
-
-	@Override
-	public int hashCode() {
-		return getText().hashCode() * getFrom().hashCode();
 	}
 
 	@Override

@@ -15,13 +15,15 @@ import android.widget.ListView;
 
 import com.meetEverywhere.bluetooth.BluetoothDispatcher;
 import com.meetEverywhere.common.Configuration;
+import com.meetEverywhere.common.DataChangedNotificationService;
 import com.meetEverywhere.common.User;
 
 public class InvitationsReceivedActivity extends Activity {
 
 	private ListView listView;
 	private int actualMode;
-	public static final int NORMAL_MODE = 1;
+	private InvitationsListAdapter adapter;
+    public static final int NORMAL_MODE = 1;
 	public static final int ACCEPT_MODE = 2;
 	private LinearLayout confirmRow;
 	
@@ -38,7 +40,7 @@ public class InvitationsReceivedActivity extends Activity {
 		ArrayList<User> invitationReceivedUsers = Configuration.getInstance()
 				.getInvitationReceivedUsers();
 
-		InvitationsListAdapter adapter = new InvitationsListAdapter(
+		adapter = new InvitationsListAdapter(
 				getApplicationContext(), R.id.invitations_received_list,
 				invitationReceivedUsers, true);
 		adapter.setMode(actualMode);
@@ -50,6 +52,18 @@ public class InvitationsReceivedActivity extends Activity {
 
 		registerForContextMenu(listView);
 	}
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        DataChangedNotificationService.register(adapter);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        DataChangedNotificationService.unregister(adapter);
+    }
 
 	public void setListener(final ListView listView) {
 		if (actualMode == NORMAL_MODE) {

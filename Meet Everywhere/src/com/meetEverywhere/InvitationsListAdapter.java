@@ -13,9 +13,10 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.meetEverywhere.common.NotifiableLayoutElement;
 import com.meetEverywhere.common.User;
 
-public class InvitationsListAdapter extends ArrayAdapter<User>{
+public class InvitationsListAdapter extends ArrayAdapter<User> implements NotifiableLayoutElement{
 	private final boolean incomingInvitationsMode;
 	private List<User> users;
 	private Context context;
@@ -97,4 +98,8 @@ public class InvitationsListAdapter extends ArrayAdapter<User>{
 		return users;
 	}
 
+    @Override
+    public void notifyDataChanged() {
+        notifyDataSetChanged();
+    }
 }

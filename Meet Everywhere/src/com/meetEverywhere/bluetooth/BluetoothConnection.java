@@ -7,11 +7,11 @@ import java.io.ObjectOutputStream;
 import org.json.JSONException;
 
 import com.meetEverywhere.R;
-import com.meetEverywhere.common.InvitationMessage;
-import com.meetEverywhere.common.Message;
-import com.meetEverywhere.common.TextMessage;
+import com.meetEverywhere.common.messages.InvitationMessage;
+import com.meetEverywhere.common.messages.Message;
+import com.meetEverywhere.common.messages.TextMessage;
 import com.meetEverywhere.common.User;
-import com.meetEverywhere.common.MessageACK;
+import com.meetEverywhere.common.messages.MessageACK;
 
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
@@ -141,7 +141,7 @@ public class BluetoothConnection implements Runnable {
 			handler.post(new Runnable() {
 				public void run() {
 					Toast.makeText(dispatcher.getTempContextHolder(),
-							"Utracono po³¹czenie z: " + user.getNickname(),
+							"Utracono poï¿½ï¿½czenie z: " + user.getNickname(),
 							Toast.LENGTH_SHORT).show();
 				}
 			});
@@ -183,27 +183,9 @@ public class BluetoothConnection implements Runnable {
 			outputStream.writeObject(new MessageACK(message.hashCode()));
 		}
 
-		if (message instanceof TextMessage) {
-			handler.post(new Runnable() {
-				public void run() {
-					messagesAdapter.add((TextMessage) message);
-				}
-			});
-		}
-
-		if (message instanceof InvitationMessage && !message.isLocal()) {
-			handler.post(new Runnable() {
-				public void run() {
-					Toast.makeText(
-							dispatcher.getTempContextHolder(),
-							message.getAuthorNickname()
-									+ " przes³a³ zaproszenie : "
-									+ message.getText(), Toast.LENGTH_SHORT)
-							.show();
-				}
-			});
-		}
-
+        if(!message.isLocal()) {
+            user.processIncomingMessage(message);
+        }
 	}
 
 	public BluetoothConnectionStatus getStatus() {

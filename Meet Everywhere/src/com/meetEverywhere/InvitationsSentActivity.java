@@ -11,7 +11,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.ListView;
 
-import com.meetEverywhere.common.AdaptersNotificationService;
+import com.meetEverywhere.common.DataChangedNotificationService;
 import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.User;
 
@@ -47,24 +47,24 @@ public class InvitationsSentActivity extends Activity {
 		listView.setAdapter(adapter);
 		
 		registerForContextMenu(listView);
-		AdaptersNotificationService.register(adapter);
+		DataChangedNotificationService.register(adapter);
 	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		AdaptersNotificationService.register(adapter);
+		DataChangedNotificationService.register(adapter);
 	}
 	
 	@Override
 	protected void onPause() {
-		AdaptersNotificationService.unregister(adapter);
+		DataChangedNotificationService.unregister(adapter);
 		super.onPause();
 	}
 	
 	@Override
 	protected void onDestroy() {
-		AdaptersNotificationService.unregister(adapter);
+		DataChangedNotificationService.unregister(adapter);
 		super.onDestroy();
 	}
 }

@@ -13,9 +13,12 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.meetEverywhere.common.Configuration;
+import com.meetEverywhere.common.NotifiableLayoutElement;
 import com.meetEverywhere.common.User;
+import com.meetEverywhere.common.messages.FinishAcquiantanceMessage;
 
-public class FriendsListAdapter extends ArrayAdapter<User> {
+public class FriendsListAdapter extends ArrayAdapter<User> implements NotifiableLayoutElement {
 
 	private List<User> users;
 	private List<User> toDeledeFriends;
@@ -75,17 +78,23 @@ public class FriendsListAdapter extends ArrayAdapter<User> {
 	
 	public void removeFromFriends(){
 		for(User u: toDeledeFriends){
-			u.setAcquaintance(false);
-			Toast.makeText(context, "Usuniêto z listy znajomych", Toast.LENGTH_SHORT).show();
+			//u.setAcquaintance(false);
+            User myselft = Configuration.getInstance().getUser();
+			u.sendMessage(new FinishAcquiantanceMessage("", myselft.getNickname(), myselft.getUserID(), u.getUserID()), null);
+			//Toast.makeText(context, "Usuniï¿½to z listy znajomych", Toast.LENGTH_SHORT).show();
 		}
 		
 		toDeledeFriends.clear();
 		
-		notifyDataSetChanged();
+		//notifyDataSetChanged();
 	}
 	
 	public void changeMode(int mode){
 		actualMode=mode;
 	}
 
+    @Override
+    public void notifyDataChanged() {
+        notifyDataSetChanged();
+    }
 }

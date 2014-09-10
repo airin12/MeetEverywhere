@@ -8,6 +8,7 @@ import com.meetEverywhere.bluetooth.BluetoothConnectionStatus;
 import com.meetEverywhere.bluetooth.BluetoothDispatcher;
 import com.meetEverywhere.common.CompatibilityAlgorithm;
 import com.meetEverywhere.common.Configuration;
+import com.meetEverywhere.common.NotifiableLayoutElement;
 import com.meetEverywhere.common.User;
 
 import android.content.Context;
@@ -20,7 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MyUsersListAdapter extends ArrayAdapter<User> {
+public class MyUsersListAdapter extends ArrayAdapter<User> implements NotifiableLayoutElement {
 
 	private final Context context;
 	private final Configuration config;
@@ -128,4 +129,8 @@ public class MyUsersListAdapter extends ArrayAdapter<User> {
 		}
 	}
 
+    @Override
+    public void notifyDataChanged() {
+        notifyDataSetChanged();
+    }
 }

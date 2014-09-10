@@ -3,7 +3,6 @@ package com.meetEverywhere;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,13 +11,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.ListView;
 
-import com.meetEverywhere.bluetooth.BluetoothDispatcher;
 import com.meetEverywhere.common.Configuration;
+import com.meetEverywhere.common.DataChangedNotificationService;
 import com.meetEverywhere.common.User;
 
 public class BlockedContactsActivity extends Activity{
 
 	private ListView listView;
+    private BlockedUsersListAdapter adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class BlockedContactsActivity extends Activity{
 		
 		List<User> blockedUsers = Configuration.getInstance().getBlockedUsers();
 		
-		BlockedUsersListAdapter adapter = new BlockedUsersListAdapter(getApplicationContext(), 
+		adapter = new BlockedUsersListAdapter(getApplicationContext(),
 				R.layout.blocked_user_content_info, blockedUsers);
 		
 		listView.setAdapter(adapter);
@@ -47,7 +47,19 @@ public class BlockedContactsActivity extends Activity{
 			}
 		});
 	}
-	
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        DataChangedNotificationService.register(adapter);
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        DataChangedNotificationService.unregister(adapter);
+    }
+
 	public void unblockUser(View view) {
 		((BlockedUsersListAdapter) listView.getAdapter()).removeSelected();
 	}

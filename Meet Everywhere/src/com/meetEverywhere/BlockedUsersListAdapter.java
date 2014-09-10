@@ -3,6 +3,7 @@ package com.meetEverywhere;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.meetEverywhere.common.NotifiableLayoutElement;
 import org.w3c.dom.Text;
 
 import android.content.Context;
@@ -17,7 +18,7 @@ import android.widget.Toast;
 
 import com.meetEverywhere.common.User;
 
-public class BlockedUsersListAdapter extends ArrayAdapter<User> {
+public class BlockedUsersListAdapter extends ArrayAdapter<User> implements NotifiableLayoutElement {
 
 	private List<User> blockedUsers;
 	private Context context;
@@ -69,4 +70,9 @@ public class BlockedUsersListAdapter extends ArrayAdapter<User> {
 	public List<User> getUsers() {
 		return blockedUsers;
 	}
+
+    @Override
+    public void notifyDataChanged() {
+        notifyDataSetChanged();
+    }
 }

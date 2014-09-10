@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.meetEverywhere.R;
-import com.meetEverywhere.common.TextMessage;
+import com.meetEverywhere.common.messages.TextMessage;
 
 public class BluetoothChat extends Activity{
 
@@ -37,7 +37,7 @@ public class BluetoothChat extends Activity{
 		
 		messages = dispatcher.getArrayAdapterForDevice(this, actualDevice);
 		if(messages == null){
-			Toast.makeText(getApplicationContext(), "B³¹d tworzenia po³¹czenia!", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Bï¿½ï¿½d tworzenia poï¿½ï¿½czenia!", Toast.LENGTH_SHORT).show();
 			finish();
 		}
 		listView = (ListView) findViewById(R.id.messagesList);
@@ -57,7 +57,7 @@ public class BluetoothChat extends Activity{
 						actualConnection.addMessage(message);
 						text.setText("");
 					} catch (Exception e) {
-						Toast.makeText(getBaseContext(), "Wiadomoœæ nie zosta³a wys³ana!", Toast.LENGTH_SHORT).show();
+						Toast.makeText(getBaseContext(), "Wiadomoï¿½ï¿½ nie zostaï¿½a wysï¿½ana!", Toast.LENGTH_SHORT).show();
 						try {
 							actualConnection.getBluetoothSocket().close();
 						} catch (IOException e1) {

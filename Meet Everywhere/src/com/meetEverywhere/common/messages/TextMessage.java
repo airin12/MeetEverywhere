@@ -1,11 +1,11 @@
-package com.meetEverywhere.common;
+package com.meetEverywhere.common.messages;
 
 public class TextMessage extends Message {
 
 	private static final long serialVersionUID = 2922796847639314334L;
 	public static final String TYPE = "TextMessage";
 
-	public TextMessage(String text, String authorNickname, String from,
+	public TextMessage(String text, String authorNickname,  String from,
 			String recipient) {
 		super(text, authorNickname, from, recipient);
 	}
@@ -17,11 +17,6 @@ public class TextMessage extends Message {
 		} else {
 			return getAuthorNickname() + ": " + getText();
 		}
-	}
-
-	@Override
-	public int hashCode() {
-		return getText().hashCode() * getFrom().hashCode();
 	}
 
 	@Override

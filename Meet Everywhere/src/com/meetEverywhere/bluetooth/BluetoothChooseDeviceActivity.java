@@ -73,6 +73,7 @@ public class BluetoothChooseDeviceActivity extends Activity {
 		if (bluetoothAdapter == null) {
 			Toast.makeText(this, "Brak urz¹dzenia Bluetooth",
 					Toast.LENGTH_SHORT).show();
+			return;
 		}
 		// Uruchom modu³ Bluetooth.
 		if (!bluetoothAdapter.isEnabled()) {

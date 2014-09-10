@@ -1,11 +1,11 @@
-package com.meetEverywhere.common;
+package com.meetEverywhere.common.messages;
 
 import java.io.Serializable;
 
 /**
- * Klasa s³u¿¹ca do potwierdzania dorêczenia wiadomoœci. Bluetooth w androidzie,
- * nie udostêpnia szybkiego wykrywania zerwania po³¹czenia przy wyjœciu z
- * zasiêgu urz¹dzenia.
+ * Klasa sÅ‚uÅ¼Ä…ca do potwierdzania dorÄ™czenia wiadomoÅ›ci. Bluetooth w androidzie,
+ * nie udostÄ™pnia szybkiego wykrywania zerwania poÅ‚Ä…czenia przy wyjÅ›ciu z
+ * zasiÄ™gu urzÄ…dzenia.
  * Pakiet taki jest odpowiednikiem TCP ACK.
  * 
  * @author marekmagik
@@ -26,10 +26,6 @@ public class MessageACK implements Serializable{
 	
 	@Override
 	public boolean equals(Object o1){
-		if(hashcodeOfMessage == ((MessageACK) o1).getHashcodeOfMessage()){
-			return true;
-		}else{
-			return false;
-		}
+        return hashcodeOfMessage == ((MessageACK) o1).getHashcodeOfMessage();
 	}
 }

@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import com.meetEverywhere.bluetooth.BluetoothDispatcher;
 import com.meetEverywhere.common.Configuration;
-import com.meetEverywhere.common.TextMessage;
+import com.meetEverywhere.common.messages.TextMessage;
 import com.meetEverywhere.common.User;
 
 public class GeneralChat extends Activity{
