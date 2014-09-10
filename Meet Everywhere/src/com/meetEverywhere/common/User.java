@@ -24,9 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Klasa User zawiera dane dotycz�ce u�ytkownika. Objekty tej klasy mog� by�
- * serializowane i wysy�ane za pomoc� InsecureRFCOMM lub sk�adowane lokalnie
- * (objekt dotycz�cy w�a�ciciela urz�dzenia).
+ * Klasa User zawiera dane dotyczące użytkownika. Objekty tej klasy mogą być
+ * serializowane i wysyłane za pomocą InsecureRFCOMM lub składowane lokalnie.
  *
  * @author marekmagik
  */
@@ -57,28 +56,6 @@ public class User implements Comparable<User> {
     private Configuration config;
     private LocalDAO localDAO;
 
-    /*
-        public User(String nickname, String password, String description, String userToken, boolean isSynced) {
-            config = Configuration.getInstance();
-            this.nickname = nickname;
-            this.description = description;
-            this.userToken = userToken;
-            this.password = password;
-            this.userID = userToken;
-
-            this.isSyncedWithServer = isSynced;
-
-            this.setSendButtonEnabled(true);
-            this.setChatFocused(false);
-            this.setSendButton(null);
-
-            if (userToken == null) {
-                localDAO = UsersDAO.getInstance(userToken);
-            } else {
-                localDAO = AccountsDAO.getInstance(null);
-            }
-        }
-    */
     public User(String nickname, List<Tag> hashTags, String description,
                 String userToken, byte[] picture, String userID, String password,
                 boolean isAcquaintance, boolean isBlocked, boolean isInvited,
@@ -90,7 +67,6 @@ public class User implements Comparable<User> {
         this.description = description;
         this.userToken = userToken;
         this.picture = picture;
-        //this.myFriendsList = new ArrayList<User>();
         this.messagesArrayAdapter = null;
         this.userID = userID;
         this.password = password;
@@ -472,7 +448,7 @@ public class User implements Comparable<User> {
                     setInvitationMessage(message.getText());
                 }
 
-                if(message instanceof InvitationAcceptedMessage){
+                if (message instanceof InvitationAcceptedMessage) {
                     Toast.makeText(
                             dispatcher.getTempContextHolder(),
                             message.getAuthorNickname()
@@ -482,7 +458,7 @@ public class User implements Comparable<User> {
                     setAcquaintance(true);
                 }
 
-                if(message instanceof InvitationAcceptedMessage){
+                if (message instanceof InvitationAcceptedMessage) {
                     Toast.makeText(
                             dispatcher.getTempContextHolder(),
                             message.getAuthorNickname()
@@ -492,12 +468,12 @@ public class User implements Comparable<User> {
                     setAcquaintance(true);
                 }
 
-                if(message instanceof FinishAcquiantanceMessage){
+                if (message instanceof FinishAcquiantanceMessage) {
                     Toast.makeText(
                             dispatcher.getTempContextHolder(),
                             message.getAuthorNickname()
                                     + " zerwał znajomość"
-                                    , Toast.LENGTH_SHORT).show();
+                            , Toast.LENGTH_SHORT).show();
                     setAcquaintance(false);
                 }
 
@@ -505,53 +481,6 @@ public class User implements Comparable<User> {
             }
         });
     }
-
-/*
-    public void sendInvitation(final InvitationMessage message,
-                               final LinearLayout layout, final EditText inviteMessage,
-                               final ImageView image, final User user) {
-        final Handler handler = BluetoothDispatcher.getInstance().getHandler();
-
-        layout.setVisibility(LinearLayout.VISIBLE);
-        inviteMessage.setVisibility(EditText.GONE);
-        image.setVisibility(EditText.GONE);
-
-        (new Thread(new Runnable() {
-            public void run() {
-                try {
-                    bluetoothConnection.addMessage(message);
-                } catch (Exception e) {
-                    if (!DAO.sendInvite(message)) {
-                        handler.post(new Runnable() {
-                            public void run() {
-                                Toast.makeText(
-                                        BluetoothDispatcher.getInstance()
-                                                .getTempServiceContextHolder(),
-                                        "Wiadomość nie została wysłana!",
-                                        Toast.LENGTH_SHORT).show();
-                                layout.setVisibility(LinearLayout.GONE);
-                            }
-                        });
-                    }
-                }
-
-                handler.post(new Runnable() {
-                    public void run() {
-                        //user.changeInvited();
-                        user.setInvited(true);
-
-                        isSendButtonEnabled = true;
-                        if (isChatFocused) {
-                            sendButton.setEnabled(true);
-                        }
-                    }
-                });
-
-            }
-        })).start();
-
-    }
-*/
 
     public byte[] getPictureAsByteArray() {
         return picture;
@@ -596,5 +525,4 @@ public class User implements Comparable<User> {
             return false;
         }
     }
-
 }

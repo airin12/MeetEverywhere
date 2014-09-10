@@ -45,6 +45,7 @@ public class ApiService {
     private static final String MATCHES_HTTP = SERVER_HTTP + "/matches";
     private static final String TAGS_HTTP = SERVER_HTTP + "/tags";
     private static final String TAG_HTTP = SERVER_HTTP + "/tag";
+    private static final String LOGIN_HTTP = SERVER_HTTP + "/sessions";
     private static final String INVITATIONS_MODULE_HTTP = SERVER_HTTP + "/invitations";
     private static final String INVITE_HTTP = INVITATIONS_MODULE_HTTP + "/invite";
     private static final String ACCEPT_INVITATION_HTTP = INVITATIONS_MODULE_HTTP + "/accept";
@@ -52,6 +53,15 @@ public class ApiService {
     private static final String INCOMING_INVITATIONS_HTTP = INVITATIONS_MODULE_HTTP + "/incoming_invitations";
     private static final String OUTCOMING_INVITATIONS_HTTP = INVITATIONS_MODULE_HTTP + "/outcoming_invitations";
 
+    private static final String USER_NAME = "user[name]";
+    private static final String USER_PASSWORD = "user[password]";
+    private static final String NAME = "name";
+    private static final String PASSWORD = "password";
+    private static final String USER_DESC = "user[description]";
+    private static final String USER_LOCATION = "user[coordinate_attributes][location][]";
+    
+    
+    
     public static class GetMyUserData extends AsyncTask<Void, Void, String> {
     	@Override
 		protected String doInBackground(Void... voids) {
@@ -62,7 +72,7 @@ public class ApiService {
     
     public static class CreateUserQuery extends AsyncTask<Void, Void, String> {
 
-    	private String userName;
+		private String userName;
     	private String password;
     	private String description;
     	
@@ -74,21 +84,48 @@ public class ApiService {
     	
     	@Override
 		protected String doInBackground(Void... voids) {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-            nameValuePairs.add(new BasicNameValuePair("user[name]", userName));
-            nameValuePairs.add(new BasicNameValuePair("user[password]", password));
-            nameValuePairs.add(new BasicNameValuePair("user[description]", description));
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+            nameValuePairs.add(new BasicNameValuePair(USER_NAME, userName));
+            nameValuePairs.add(new BasicNameValuePair(USER_PASSWORD, password));
+            nameValuePairs.add(new BasicNameValuePair(USER_DESC, description));
 			JSONObject jsonObject = performQuery(ApiService.USER_HTTP, nameValuePairs, HttpType.POST);
-			try {
-				if(jsonObject.has("auth_token")) {
-					token = jsonObject.getString("auth_token");
-					return token;
-				}
-			} catch (JSONException e) {
-				e.printStackTrace();
+			
+			if(jsonObject.has("auth_token")) {
+				return jsonObject.toString();
 			}
+			
 			return null;
     	}
+    }
+    
+    /**
+     * Query for checking if user is registered on server
+     * @author Bartosz
+     */
+    public static class LoginUserQuery extends AsyncTask<Void, Void, String> {
+    	
+    	private String userName;
+    	private String password;
+    	
+		public LoginUserQuery(String userName, String password) {
+			this.userName = userName;
+			this.password = password;
+		}
+    	
+    	@Override
+    	protected String doInBackground(Void... voids) {
+    		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+    		nameValuePairs.add(new BasicNameValuePair(NAME, userName));
+    		nameValuePairs.add(new BasicNameValuePair(PASSWORD, password));
+    		JSONObject jsonObject = performQuery(ApiService.LOGIN_HTTP , nameValuePairs, HttpType.POST);
+    		
+			if(!jsonObject.has("error")) {
+				return jsonObject.toString();
+			}
+    		
+    		return "error";
+    	}
+    	
     }
     
     public static class UpdateNickQuery extends AsyncTask<Void, Void, String> {
@@ -103,7 +140,7 @@ public class ApiService {
 		@Override
 		protected String doInBackground(Void... params) {
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-            nameValuePairs.add(new BasicNameValuePair("user[name]", nick));
+            nameValuePairs.add(new BasicNameValuePair(USER_NAME, nick));
             JSONObject jsonObject = performQuery(ApiService.USER_HTTP, nameValuePairs, HttpType.PATCH);
             return jsonObject.toString();
 		}
@@ -122,8 +159,8 @@ public class ApiService {
 		@Override
 		protected String doInBackground(Void... params) {
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-            nameValuePairs.add(new BasicNameValuePair("user[coordinate_attributes][location][]", Double.toString(longitude)));
-            nameValuePairs.add(new BasicNameValuePair("user[coordinate_attributes][location][]", Double.toString(latitude)));
+            nameValuePairs.add(new BasicNameValuePair(USER_LOCATION, Double.toString(longitude)));
+            nameValuePairs.add(new BasicNameValuePair(USER_LOCATION, Double.toString(latitude)));
 			JSONObject jsonObject = performQuery(ApiService.USER_HTTP, nameValuePairs, HttpType.PATCH);
 			return jsonObject.toString();
 		}

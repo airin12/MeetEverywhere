@@ -1,9 +1,7 @@
 package com.meetEverywhere.database;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.User;
 import com.meetEverywhere.common.UsersAbstractFactory;
 

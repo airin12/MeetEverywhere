@@ -2,6 +2,7 @@ package com.meetEverywhere;
 
 import java.util.List;
 
+import com.meetEverywhere.common.User;
 import com.meetEverywhere.database.AccountsDAO;
 
 import android.app.Activity;
@@ -21,14 +22,14 @@ public class LoginActivity extends Activity {
 	private EditText usernameEditText;
 	private String username;
 	private String password;
-	private AccountsDAO accountDAO;
+	private AccountsDAO accountsDAO;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
-		accountDAO = AccountsDAO.getInstance(this);
+		accountsDAO = AccountsDAO.getInstance(this);
 		validationManager = new ValidationManager();
 
 		usernameEditText = (EditText) findViewById(R.id.ActivityLogin_userName);
@@ -76,21 +77,37 @@ public class LoginActivity extends Activity {
 
 	public void registerIfNoAccountAction(View view) {
 		startActivity(new Intent(this, RegistrationActivity.class));
+		finish();
 	}
 
 	public void signInAction(View view) {
 		List<ValidationError> errors = validationManager
 				.validateLoginAndPassword(username, password);
-		if (!errors.isEmpty()) {
-			ErrorDialog.createDialog(this, errors).show();
-		} else {
-			if (accountDAO.logIn(username, password)) {
+		
+		if(errors.isEmpty()) {
+			User user;
+			DAO dao = new DAO();
+			if (accountsDAO.logIn(username, password)) {
 				startActivity(new Intent(this, MeetEverywhere.class));
+				finish();
+			} else if((user = dao.loginOnExternalServer(username, password)) != null) { 
+				//rejestracja w lokalnej bazie danych
+				accountsDAO.register(user);
+				if (!accountsDAO.logIn(username, password)) {
+					Log.i("DB", "accounts doesnt exist");
+					return;
+				}
+				startActivity(new Intent(this, MeetEverywhere.class));
+				finish();
 			} else {
 				errors.add(new ValidationError(R.string.Validation_loginFailed));
 				ErrorDialog.createDialog(this, errors).show();
 				Log.i("login", "login failed");
 			}
+		}
+		
+		if (!errors.isEmpty()) {
+			ErrorDialog.createDialog(this, errors).show();
 		}
 	}
 }

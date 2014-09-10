@@ -3,7 +3,15 @@ package com.meetEverywhere;
 import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.messages.InvitationMessage;
 import com.meetEverywhere.common.messages.Message;
-import com.meetEverywhere.common.messages.TextMessage;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.meetEverywhere.common.User;
 
 import java.util.*;
@@ -42,29 +50,10 @@ public class DAO {
 	 * e); } }
 	 */
 
-
-    //private static TextView token;
-
-
-    static List<User> alreadyRegistered = new ArrayList<User>();
-
-    public static boolean sendInvite(InvitationMessage message) {
-        String result;
-        /*
-        try {
-            result = new ApiService.InviteUserQuery(userID, message.toString()).execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return false;
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            return false;
-        }
-        */
-        return true;
-    }
-
     public static boolean sendMessage(Message message) {
+        //TODO: Zaimplementować wysyłanie danych do serwera.
+
+        //true: wiadomość dotarła do serwera, false wpp
         return false;
     }
 
@@ -92,28 +81,76 @@ public class DAO {
         }
     }
 
-    public synchronized User register(String nickname, String password, String description) {
-        User user = null;
-        String token;
-        /*
+	public synchronized User register(String nickname, String password, String description){
+		String jsonString, token = null, id = null;
+		User user = null;
 		try {
+			if((jsonString = new ApiService.CreateUserQuery(nickname,password,description).execute().get()) != null) {
+				JSONObject jsonObject = new JSONObject(jsonString);
+				if(jsonObject.has("auth_token") && jsonObject.has("id") && jsonObject.getJSONObject("id").has("$oid")) {
+					token = jsonObject.getString("auth_token");
+					id = jsonObject.getJSONObject("id").getString("$oid");;
+				} else {
+					return null;
+				}
 
-			if((token = new CreateUserQuery(nickname,password,description).execute().get()) != null) {
-				user = new User(nickname, password, description, token, true);
-				alreadyRegistered.add(user);
+                    /* tworzenie Usera przez new - w tym przypadku nie korzystamy z fabryki. */
+                user = new User(nickname, new ArrayList<Tag>(), description, token, null, id, password, false, false, false, null, true);
 			}
         } catch (InterruptedException e) {
         	e.printStackTrace();
         } catch (ExecutionException e) {
         	e.printStackTrace();
-        }*/
+        } catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+        /* mock: */
         Random rand = new Random();
         user = new User(nickname, new ArrayList<Tag>(), description, "token" + rand.nextInt(100000), null, "userd" + rand.nextInt(1000000), password, false, false, false, null, false);
 
-
         return user;
-    }
+	}
+	
+	/**
+	 * Method checking if user is registered on server
+	 * @param nickname user nickname
+	 * @param password user password
+	 * @return true if is registered, false otherwise
+	 */
+	public synchronized User loginOnExternalServer(String nickname, String password) {
+		User user = null;
+		String jsonString, token = null, description = null, id = null;
+		
+		//useful only if problem occurred between server registration and local DAO registration
 
+		try {
+			if(!"error".equals(jsonString = new ApiService.LoginUserQuery(nickname,password).execute().get())) {
+				JSONObject jsonObject = new JSONObject(jsonString);
+				
+				if(jsonObject.has("auth_token") && jsonObject.has("id") && jsonObject.getJSONObject("id").has("$oid")) {
+					token = jsonObject.getString("auth_token");
+					id = jsonObject.getJSONObject("id").getString("$oid");;
+				} else {
+					return null;
+				}
+				
+				description = jsonObject.getString("description");
+
+                    /* tworzenie Usera przez new - w tym przypadku nie korzystamy z fabryki. */
+                user = new User(nickname, new ArrayList<Tag>(), description, token, null, id, password, false, false, false, null, true);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return user;
+	}
+	
     public List<User> getUsersFromServer(List<String> tags2, int percentage) {
 
         List<User> result = new LinkedList<User>();

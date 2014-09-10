@@ -58,6 +58,7 @@
     <string name="unlock_user_text">Odblokuj użytkownika</string>
     <string name="msg_user_blocked">Użytkownik zablokowany</string>
     <string name="confirm_accept_invitation_text">Zaakceptuj zaproszenie</string>
+    <string name="image_description">Zdjecie profilowe</string>
 
     <!-- ************************************************************************************************* -->
     <!-- ************************************* Common strings *************************************** -->
