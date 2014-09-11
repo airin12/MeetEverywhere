@@ -234,7 +234,7 @@ public class UsersDAO extends SQLiteOpenHelper implements LocalDAO {
     }
 
 	/*
-	 * TODO: zamieniï¿½ wyraï¿½enie na
+	 * TODO: zamienieæ wyra¿enie na
 	 * !genericAllUsersWithFlagGetter(COL_USERS_SYNCED_WITH_SERVER) public
 	 * List<User> getAllNotSyncedWithServer(){ return
 	 * genericAllUsersWithFlagGetter(COL_USERS_SYNCED_WITH_SERVER); }
@@ -343,8 +343,8 @@ public class UsersDAO extends SQLiteOpenHelper implements LocalDAO {
         }
     }
 
-    // Metoda sprawdzajï¿½ca cachujï¿½ca zapisywane userID, aby nie zapisywaï¿½ Usera
-    // przy kaï¿½dej wiadomoï¿½ci.
+    // Metoda sprawdzaj¹ca cachuj¹ca zapisywane userID, aby nie zapisywaæ Usera
+    // przy ka¿dej wiadomoœci.
     private boolean isUserIdAlreadyInFilterList(User user) {
         if (usersIdSavedInDBInRuntime.contains(user.getUserID())) {
             return true;

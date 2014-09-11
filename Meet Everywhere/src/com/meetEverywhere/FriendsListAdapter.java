@@ -81,7 +81,7 @@ public class FriendsListAdapter extends ArrayAdapter<User> implements Notifiable
 			//u.setAcquaintance(false);
             User myselft = Configuration.getInstance().getUser();
 			u.sendMessage(new FinishAcquiantanceMessage("", myselft.getNickname(), myselft.getUserID(), u.getUserID()), null);
-			//Toast.makeText(context, "Usuniï¿½to z listy znajomych", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "Usuniêto z listy znajomych", Toast.LENGTH_SHORT).show();
 		}
 		
 		toDeledeFriends.clear();
@@ -93,7 +93,6 @@ public class FriendsListAdapter extends ArrayAdapter<User> implements Notifiable
 		actualMode=mode;
 	}
 
-    @Override
     public void notifyDataChanged() {
         notifyDataSetChanged();
     }

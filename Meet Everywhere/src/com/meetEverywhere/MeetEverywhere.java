@@ -22,8 +22,8 @@ import com.meetEverywhere.common.Configuration;
 public class MeetEverywhere extends Activity {
 
 	/*
-	 * TODO : StworzyÄ‡ Service, ktÃ³re bÄ™dzie cyklicznie sprawdzaÄ‡ czy tagi przechowywane lokalnie
-	 * sÄ… zsynchronizowane z serwerem.
+	 * TODO : Stworzyæ Service, który bêdzie cyklicznie sprawdza³ czy tagi przechowywane lokalnie
+	 * s¹ zsynchronizowane z serwerem.
 	 */
 
     private ImageView userImage;
@@ -83,9 +83,11 @@ public class MeetEverywhere extends Activity {
         };
 */
         userImage = (ImageView) findViewById(R.id.userImage);
-        userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
+        
+        if(Configuration.getInstance().getUser().getPicture() != null)
+        	userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
                 
-        /* Wystartuj usï¿½ugï¿½ Bluetooth. */
+        /* Wystartuj us³ugê Bluetooth. */
         startService(new Intent(MeetEverywhere.this, BluetoothService.class));
 
         if (BluetoothDispatcher.getInstance().getBluetoothListAdapter() == null) {
@@ -101,7 +103,7 @@ public class MeetEverywhere extends Activity {
         }
 
 
-        // Position Tracker - czeka na lepsze czasy -> poï¿½ï¿½czenie z serwerem
+        // Position Tracker - czeka na lepsze czasy -> pod³¹czenie z serwerem
 //        if(!isTrackingServiceRunning())
 //        	startService(new Intent(MeetEverywhere.this, PositionTracker.class));
 
@@ -130,7 +132,8 @@ public class MeetEverywhere extends Activity {
     }
 
     public void realoadMeetEveywhere() {
-        userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
+    	if(Configuration.getInstance().getUser().getPicture() != null)
+    		userImage.setImageBitmap(Configuration.getInstance().getUser().getPicture());
     }
 
     public void goToProfileEditionActivityAction(View view) {

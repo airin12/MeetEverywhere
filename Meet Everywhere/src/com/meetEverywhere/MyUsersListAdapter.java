@@ -129,7 +129,6 @@ public class MyUsersListAdapter extends ArrayAdapter<User> implements Notifiable
 		}
 	}
 
-    @Override
     public void notifyDataChanged() {
         notifyDataSetChanged();
     }

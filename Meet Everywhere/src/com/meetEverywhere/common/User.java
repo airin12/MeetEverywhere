@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Klasa User zawiera dane dotyczÄ…ce uÅ¼ytkownika. Objekty tej klasy mogÄ… byÄ‡
- * serializowane i wysyÅ‚ane za pomocÄ… InsecureRFCOMM lub skÅ‚adowane lokalnie.
+ * Klasa User zawiera dane dotycz¹ce u¿ytkownika. Obiekty tej klasy mog¹ byæ
+ * serializowane i wysy³ane za pomoc¹ InsecureRFCOMM lub sk³adowane lokalnie.
  *
  * @author marekmagik
  */
@@ -112,7 +112,7 @@ public class User implements Comparable<User> {
         }
         Bitmap picture = null;
         if (!serializedUser.get("picture").equals(JSONObject.NULL)) {
-            Log.i("BT", "odebrano zdjï¿½cie");
+            Log.i("BT", "odebrano zdjêcie");
             picture = (Bitmap) serializedUser.get("picture");
         }
 
@@ -339,7 +339,7 @@ public class User implements Comparable<User> {
                                 Toast.makeText(
                                         BluetoothDispatcher.getInstance()
                                                 .getTempServiceContextHolder(),
-                                        "WiadomoÅ›Ä‡ nie zostaÅ‚a wysÅ‚ana!",
+                                        "Wiadomoœæ nie zosta³a wys³ana!",
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -375,7 +375,7 @@ public class User implements Comparable<User> {
                                 Toast.makeText(
                                         BluetoothDispatcher.getInstance()
                                                 .getTempServiceContextHolder(),
-                                        "WiadomoÅ›Ä‡ nie zostaÅ‚a wysÅ‚ana!",
+                                        "Wiadomoœæ nie zosta³a wys³ana!",
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -405,14 +405,14 @@ public class User implements Comparable<User> {
                         if (message instanceof InvitationAcceptedMessage) {
                             setAcquaintance(true);
                             setInvitationMessage(null);
-                            Log.i("Message sent", " WysÅ‚ano ackeptacjÄ™ zaproszenia do : " + message.getRecipient());
+                            Log.i("Message sent", " Wys³ano ackeptacjê zaproszenia do : " + message.getRecipient());
                             Toast.makeText(BluetoothDispatcher.getInstance().getTempContextHolder(), "Zaakceptowano zaproszenie",
                                     Toast.LENGTH_SHORT).show();
                         }
 
                         if (message instanceof FinishAcquiantanceMessage) {
                             setAcquaintance(false);
-                            Log.i("Message sent", " WysÅ‚ano wiadomoÅ›Ä‡ o zerwaniu znajomoÅ›ci do : " + message.getRecipient());
+                            Log.i("Message sent", " Wys³ano wiadomoœæ o zerwaniu znajomoœci do : " + message.getRecipient());
                         }
 
                         DataChangedNotificationService.notifyAdapters();
@@ -432,7 +432,6 @@ public class User implements Comparable<User> {
         final Handler handler = dispatcher.getHandler();
 
         handler.post(new Runnable() {
-            @Override
             public void run() {
                 if (message instanceof TextMessage) {
                     messagesArrayAdapter.add((TextMessage) message);
@@ -442,7 +441,7 @@ public class User implements Comparable<User> {
                     Toast.makeText(
                             dispatcher.getTempContextHolder(),
                             message.getAuthorNickname()
-                                    + " przesÅ‚aÅ‚ zaproszenie : "
+                                    + " przes³a³ zaproszenie : "
                                     + message.getText(), Toast.LENGTH_SHORT)
                             .show();
                     setInvitationMessage(message.getText());
@@ -452,7 +451,7 @@ public class User implements Comparable<User> {
                     Toast.makeText(
                             dispatcher.getTempContextHolder(),
                             message.getAuthorNickname()
-                                    + " zaakceptowaÅ‚ zaproszenie : "
+                                    + " zaakceptowa³ zaproszenie : "
                                     + message.getText(), Toast.LENGTH_SHORT)
                             .show();
                     setAcquaintance(true);
@@ -462,7 +461,7 @@ public class User implements Comparable<User> {
                     Toast.makeText(
                             dispatcher.getTempContextHolder(),
                             message.getAuthorNickname()
-                                    + " zaakceptowaÅ‚ zaproszenie : "
+                                    + " zaakceptowa³ zaproszenie : "
                                     + message.getText(), Toast.LENGTH_SHORT)
                             .show();
                     setAcquaintance(true);
@@ -472,7 +471,7 @@ public class User implements Comparable<User> {
                     Toast.makeText(
                             dispatcher.getTempContextHolder(),
                             message.getAuthorNickname()
-                                    + " zerwaÅ‚ znajomoÅ›Ä‡"
+                                    + " zerwa³ znajomoœæ"
                             , Toast.LENGTH_SHORT).show();
                     setAcquaintance(false);
                 }

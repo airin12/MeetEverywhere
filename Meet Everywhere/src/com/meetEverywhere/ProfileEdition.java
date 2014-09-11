@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.meetEverywhere.common.Configuration;
-//import android.provider.MediaStore;
+
 
 
 public class ProfileEdition extends Activity {

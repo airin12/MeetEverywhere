@@ -3,9 +3,9 @@ package com.meetEverywhere.common.messages;
 import java.io.Serializable;
 
 /**
- * Klasa sÅ‚uÅ¼Ä…ca do potwierdzania dorÄ™czenia wiadomoÅ›ci. Bluetooth w androidzie,
- * nie udostÄ™pnia szybkiego wykrywania zerwania poÅ‚Ä…czenia przy wyjÅ›ciu z
- * zasiÄ™gu urzÄ…dzenia.
+ * Klasa s³u¿¹ca do potwierdzania dorêczenia wiadomoœci. Bluetooth w androidzie,
+ * nie udostêpnia szybkiego wykrywania zerwania po³¹czenia przy wyjœciu z
+ * zasiêgu urz¹dzenia.
  * Pakiet taki jest odpowiednikiem TCP ACK.
  * 
  * @author marekmagik

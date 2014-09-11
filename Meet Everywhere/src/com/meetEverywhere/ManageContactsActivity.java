@@ -32,8 +32,8 @@ public class ManageContactsActivity extends TabActivity{
 		
 		Intent invSentList = new Intent().setClass(this, InvitationsSentActivity.class);
 		TabSpec invSentTab = tabHost
-		  .newTabSpec("Wys≈Çane")
-		  .setIndicator("Wys≈Çane zaproszenia")
+		  .newTabSpec("Wys≥ane")
+		  .setIndicator("Wys≥ane zaproszenia")
 		  .setContent(invSentList);
 		
 		Intent invRecvList = new Intent().setClass(this, InvitationsReceivedActivity.class);

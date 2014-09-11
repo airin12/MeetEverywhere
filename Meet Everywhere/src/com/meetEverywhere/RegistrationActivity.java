@@ -34,6 +34,8 @@ public class RegistrationActivity extends Activity {
 	private String password;
 	private String description;
 	private String confirmedPassword;
+	private AccountsDAO accountsDAO;
+	private boolean isAttachingPicture;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +116,7 @@ public class RegistrationActivity extends Activity {
 	public void attachPictureAction(View view) {
 		Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		startActivityForResult(intent, RESULT_LOAD_IMAGE);
+		isAttachingPicture = true;
 	}
 
 	@Override
@@ -135,6 +138,18 @@ public class RegistrationActivity extends Activity {
 			imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 		}
 	}
+	
+	@Override 
+	protected void onPause() {
+		super.onPause();
+		
+		if(accountsDAO == null && !isAttachingPicture) {
+			startActivity(new Intent(this, LoginActivity.class));
+			finish();
+		}
+		
+	}
+
 
 	public void registerUserAction(View view) {
 		List<ValidationError> errors = validationManager
@@ -146,7 +161,7 @@ public class RegistrationActivity extends Activity {
 			if ((user = dao.register(username, password, description)) == null) {
 				errors.add(new ValidationError(R.string.Validation_userAlreadyExists));
 			} else {
-				AccountsDAO accountsDAO = AccountsDAO.getInstance(this);
+				accountsDAO = AccountsDAO.getInstance(this);
 				accountsDAO.register(user);
 				if (!accountsDAO.logIn(username, password)) {
 					Log.i("DB", "accounts doesnt exist");
@@ -161,6 +176,13 @@ public class RegistrationActivity extends Activity {
 		if (!errors.isEmpty()) {
 			ErrorDialog.createDialog(this, errors).show();
 		}
+	}
+	
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		isAttachingPicture = false;
 	}
 
 }

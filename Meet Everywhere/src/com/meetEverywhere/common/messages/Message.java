@@ -8,7 +8,7 @@ public abstract class Message implements Serializable {
 
     private static final long serialVersionUID = 8755360300459840196L;
     private final String text;
-    /* From i recipient zawierajÄ… userID. */
+    /* From i recipient zawieraj¹ userID. */
     private final String from;
     private final String authorNickname;
     private final String recipient;

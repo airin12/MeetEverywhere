@@ -98,7 +98,6 @@ public class InvitationsListAdapter extends ArrayAdapter<User> implements Notifi
 		return users;
 	}
 
-    @Override
     public void notifyDataChanged() {
         notifyDataSetChanged();
     }

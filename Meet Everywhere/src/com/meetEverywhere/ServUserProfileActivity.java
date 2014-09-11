@@ -208,7 +208,6 @@ public class ServUserProfileActivity extends Activity implements NotifiableLayou
         }
     }
 
-    @Override
     public void notifyDataChanged() {
         refreshLayout();
     }

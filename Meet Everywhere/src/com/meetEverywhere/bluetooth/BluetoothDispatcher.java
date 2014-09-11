@@ -19,9 +19,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 /**
- * Klasa BluetoothDispatcher jest gï¿½ï¿½wnym komponentem moduï¿½u do obsï¿½ugi
- * Bluetooth. Jest Singletonem, stanowi kontener na aktywne poï¿½ï¿½czenia, za jego
- * pomocï¿½ sï¿½ przekazywane wartoï¿½ci, ktï¿½rych nie moï¿½na przekazaï¿½ uï¿½ywajï¿½c Intent,
+ * Klasa BluetoothDispatcher jest g³ównym komponentem modu³u do obs³ugi
+ * Bluetooth. Jest Singletonem, stanowi kontener na aktywne po³¹czenia, za jego
+ * pomoc¹ przekazywane wartoœci, których nie mo¿na przekazaæ u¿ywaj¹c Intent,
  * podczas otwierania nowego Activity (pola nazwane: (...)Holder).
  * 
  * @author marekmagik
@@ -94,11 +94,11 @@ public class BluetoothDispatcher {
 			socket = device.createInsecureRfcommSocketToServiceRecord(ownUUID);
 			socket.connect();
 		}
-		Log.i("socket", " socket podï¿½ï¿½czony");
+		Log.i("socket", " socket pod³¹czony");
 		BluetoothConnection connection = new BluetoothConnection(context,
 				socket);
 
-		showToast("Nawiï¿½zano poï¿½ï¿½czenie z: "
+		showToast("Nawi¹zano po³¹czenie z: "
 				+ connection.getUser().getNickname());
 		addConnection(context, device, connection);
 		return connection;
@@ -113,7 +113,7 @@ public class BluetoothDispatcher {
 			socket.connect();
 		}
 		connection.setReconnectedSocket(socket);
-		showToast("Przywrï¿½cono poï¿½ï¿½czenie z: "
+		showToast("Przywrócono po³¹czenie z: "
 				+ connection.getUser().getNickname());
 
 	}

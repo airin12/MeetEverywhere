@@ -51,9 +51,9 @@ public class DAO {
 	 */
 
     public static boolean sendMessage(Message message) {
-        //TODO: ZaimplementowaÄ‡ wysyÅ‚anie danych do serwera.
+        //TODO: Zaimplementowaæ wysy³anie danych do serwera.
 
-        //true: wiadomoÅ›Ä‡ dotarÅ‚a do serwera, false wpp
+        //true: wiadomoœæ dotar³a do serwera, false wpp
         return false;
     }
 

@@ -58,7 +58,7 @@ public class BlockedUsersListAdapter extends ArrayAdapter<User> implements Notif
 	public void removeSelected() {
 		for(User user : usersToUnblock) {
 			user.setBlocked(false);
-			Toast.makeText(context, "UÂ¿ytownik " + user.getNickname() + " zostal odblokowany", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "U¿ytownik " + user.getNickname() + " zosta³ odblokowany", Toast.LENGTH_SHORT).show();
 		}
 		
 		notifyDataSetChanged();
@@ -68,7 +68,6 @@ public class BlockedUsersListAdapter extends ArrayAdapter<User> implements Notif
 		return blockedUsers;
 	}
 
-    @Override
     public void notifyDataChanged() {
         notifyDataSetChanged();
     }
