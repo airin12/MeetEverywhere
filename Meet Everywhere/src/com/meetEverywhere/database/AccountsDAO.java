@@ -232,11 +232,11 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 		
 		GenericUsersDBArrayList list = Configuration.getInstance().getAllKnownUsers();
 		
-		list.add(UsersAbstractFactory.createOrGetUser("mietek", emptyHashtags, "mieczysï¿½aw pozdrawia!", null, null, "mietkoweID", null, false, true, false, null, true));
+		list.add(UsersAbstractFactory.createOrGetUser("mietek", emptyHashtags, "mieczys³aw pozdrawia!", null, null, "mietkoweID", null, false, true, false, null, true));
 		list.add(UsersAbstractFactory.createOrGetUser("wojtek", wojtusOneTag, "piwo to moje paliwo", null, null, "wojtkoweID", null, false, false, true, null, true));
-		list.add(UsersAbstractFactory.createOrGetUser("romek", emptyHashtags, "wesoï¿½y romek", null, null, "romkoweID", null, false, false, false, "jestem wesoï¿½y romek", true));
+		list.add(UsersAbstractFactory.createOrGetUser("romek", emptyHashtags, "weso³y romek", null, null, "romkoweID", null, false, false, false, "jestem weso³y romek", true));
 		list.add(UsersAbstractFactory.createOrGetUser("marekmagik", emptyHashtags, "jestem magik", null, null, "markoweID", null, true, false, false, null, true));
-		list.add(UsersAbstractFactory.createOrGetUser("bartek", emptyHashtags, "wWielki szef", null, null, "bartkoweID", null, false, false, false, "Witam kolege z Comarchu", true));
+		list.add(UsersAbstractFactory.createOrGetUser("bartek", emptyHashtags, "Wielki szef", null, null, "bartkoweID", null, false, false, false, "Witam kolege z Comarchu", true));
 	}
 	
 	
