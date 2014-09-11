@@ -11,6 +11,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -34,7 +35,8 @@ public class ApiService {
 	public enum HttpType {
 		GET,
 		POST,
-		PATCH
+		PATCH,
+		DELETE
 	}
 	
 	private static String token = "";
@@ -52,11 +54,13 @@ public class ApiService {
     private static final String REJECT_INVITATION_HTTP = INVITATIONS_MODULE_HTTP + "/reject";
     private static final String INCOMING_INVITATIONS_HTTP = INVITATIONS_MODULE_HTTP + "/incoming_invitations";
     private static final String OUTCOMING_INVITATIONS_HTTP = INVITATIONS_MODULE_HTTP + "/outcoming_invitations";
+    private static final String BLOCK_USER_HTTP = SERVER_HTTP + "/block_user";
 
     private static final String USER_NAME = "user[name]";
     private static final String USER_PASSWORD = "user[password]";
     private static final String NAME = "name";
     private static final String PASSWORD = "password";
+    private static final String USER_ID = "user_id";
     private static final String USER_DESC = "user[description]";
     private static final String USER_LOCATION = "user[coordinate_attributes][location][]";
     
@@ -352,11 +356,84 @@ public class ApiService {
     		case GET: return new HttpGet(httpAddress);
     		case POST: return new HttpPost(httpAddress);
     		case PATCH: return new HttpPatch(httpAddress);
+    		case DELETE: return new HttpDelete(httpAddress);
     	}
     	return null;
     }
     
     private static String getAutorizationHeaderValue() {
     	return AUTHORIZATION_HEADER_VALUE + token;
+    }
+    
+    public static class AcceptInvitatinoByUserIdQuery extends AsyncTask<Void, Void, String> {
+
+    	private String userId;
+    	
+		public AcceptInvitatinoByUserIdQuery(String userId) {
+			super();
+			this.userId = userId;
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+            nameValuePairs.add(new BasicNameValuePair(USER_ID, userId));
+            JSONObject jsonObject = performQuery(ApiService.ACCEPT_INVITATION_HTTP, nameValuePairs, HttpType.PATCH);
+            return jsonObject.toString();
+		}
+    }
+    
+    public static class RejectInvitatinoByUserIdQuery extends AsyncTask<Void, Void, String> {
+
+    	private String userId;
+    	
+		public RejectInvitatinoByUserIdQuery(String userId) {
+			super();
+			this.userId = userId;
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+            nameValuePairs.add(new BasicNameValuePair(USER_ID, userId));
+            JSONObject jsonObject = performQuery(ApiService.REJECT_INVITATION_HTTP, nameValuePairs, HttpType.PATCH);
+            return jsonObject.toString();
+		}
+    }
+    
+    public static class BlockUserQuery extends AsyncTask<Void, Void, String> {
+
+    	private String userId;
+    	
+		public BlockUserQuery(String userId) {
+			super();
+			this.userId = userId;
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+            nameValuePairs.add(new BasicNameValuePair(USER_ID, userId));
+            JSONObject jsonObject = performQuery(ApiService.BLOCK_USER_HTTP, nameValuePairs, HttpType.POST);
+            return jsonObject.toString();
+		}
+    }
+    
+    public static class UnblockUserQuery extends AsyncTask<Void, Void, String> {
+
+    	private String userId;
+    	
+		public UnblockUserQuery(String userId) {
+			super();
+			this.userId = userId;
+		}
+
+		@Override
+		protected String doInBackground(Void... params) {
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+            nameValuePairs.add(new BasicNameValuePair(USER_ID, userId));
+            JSONObject jsonObject = performQuery(ApiService.BLOCK_USER_HTTP, nameValuePairs, HttpType.DELETE);
+            return jsonObject.toString();
+		}
     }
 }
