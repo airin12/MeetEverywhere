@@ -88,17 +88,20 @@ public class ApiService {
     	
     	@Override
 		protected String doInBackground(Void... voids) {
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-            nameValuePairs.add(new BasicNameValuePair(USER_NAME, userName));
-            nameValuePairs.add(new BasicNameValuePair(USER_PASSWORD, password));
-            nameValuePairs.add(new BasicNameValuePair(USER_DESC, description));
-			JSONObject jsonObject = performQuery(ApiService.USER_HTTP, nameValuePairs, HttpType.POST);
-			
-			if(jsonObject.has("auth_token")) {
-				return jsonObject.toString();
-			}
-			
-			return null;
+    		try {
+    			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+    			nameValuePairs.add(new BasicNameValuePair(USER_NAME, userName));
+    			nameValuePairs.add(new BasicNameValuePair(USER_PASSWORD, password));
+    			nameValuePairs.add(new BasicNameValuePair(USER_DESC, description));
+    			JSONObject jsonObject = performQuery(ApiService.USER_HTTP, nameValuePairs, HttpType.POST);
+    			
+    			if (jsonObject.has("auth_token")) {
+    				return jsonObject.toString();
+    			}
+    			return null;
+    		}catch(NullPointerException e){
+    			return null;
+    		}
     	}
     }
     
@@ -118,16 +121,19 @@ public class ApiService {
     	
     	@Override
     	protected String doInBackground(Void... voids) {
-    		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-    		nameValuePairs.add(new BasicNameValuePair(NAME, userName));
-    		nameValuePairs.add(new BasicNameValuePair(PASSWORD, password));
-    		JSONObject jsonObject = performQuery(ApiService.LOGIN_HTTP , nameValuePairs, HttpType.POST);
-    		
-			if(!jsonObject.has("error")) {
-				return jsonObject.toString();
-			}
-    		
-    		return "error";
+    		try {
+    			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+    			nameValuePairs.add(new BasicNameValuePair(NAME, userName));
+    			nameValuePairs.add(new BasicNameValuePair(PASSWORD, password));
+    			JSONObject jsonObject = performQuery(ApiService.LOGIN_HTTP, nameValuePairs, HttpType.POST);
+    			
+    			if (!jsonObject.has("error")) {
+    				return jsonObject.toString();
+    			}
+    			return "error";
+    		}catch(NullPointerException e){
+    			return "error";
+    		}
     	}
     	
     }

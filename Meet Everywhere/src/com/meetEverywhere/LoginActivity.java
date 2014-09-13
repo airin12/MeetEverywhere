@@ -101,7 +101,6 @@ public class LoginActivity extends Activity {
 				finish();
 			} else {
 				errors.add(new ValidationError(R.string.Validation_loginFailed));
-				ErrorDialog.createDialog(this, errors).show();
 				Log.i("login", "login failed");
 			}
 		}

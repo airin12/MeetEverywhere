@@ -74,14 +74,8 @@ public class MeetEverywhere extends Activity {
                 finish();
             }
         });
-/*        
-        OnClickListener userSettingsOnClickListener = new OnClickListener() {
-	        //@Override
-	        public void onClick(View arg0) {
-	        	startActivity(new Intent(MeetEverywhere.this, ProfileEdition.class));
-	        }
-        };
-*/
+
+        
         userImage = (ImageView) findViewById(R.id.userImage);
         
         if(Configuration.getInstance().getUser().getPicture() != null)
