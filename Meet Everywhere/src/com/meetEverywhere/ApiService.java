@@ -11,7 +11,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -64,9 +63,15 @@ public class ApiService {
     private static final String USER_DESC = "user[description]";
     private static final String USER_LOCATION = "user[coordinate_attributes][location][]";
     
-    
-    
-    public static class GetMyUserData extends AsyncTask<Void, Void, String> {
+    public static final String getToken() {
+		return token;
+	}
+
+	public static final void setToken(String token) {
+		ApiService.token = token;
+	}
+
+	public static class GetMyUserData extends AsyncTask<Void, Void, String> {
     	@Override
 		protected String doInBackground(Void... voids) {
 			JSONObject jsonObject = performQuery(ApiService.USER_HTTP, new ArrayList<NameValuePair>(), HttpType.GET);
@@ -130,9 +135,9 @@ public class ApiService {
     			if (!jsonObject.has("error")) {
     				return jsonObject.toString();
     			}
-    			return "error";
+    			return null;
     		}catch(NullPointerException e){
-    			return "error";
+    			return null;
     		}
     	}
     	
@@ -318,6 +323,78 @@ public class ApiService {
 		}
     }
     
+    public static class AcceptInvitationByUserIdQuery extends AsyncTask<Void, Void, String> {
+    	
+    	private String userId;
+    	
+    	public AcceptInvitationByUserIdQuery(String userId) {
+    		super();
+    		this.userId = userId;
+    	}
+    	
+    	@Override
+    	protected String doInBackground(Void... params) {
+    		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+    		nameValuePairs.add(new BasicNameValuePair(USER_ID, userId));
+    		JSONObject jsonObject = performQuery(ApiService.ACCEPT_INVITATION_HTTP, nameValuePairs, HttpType.PATCH);
+    		return jsonObject.toString();
+    	}
+    }
+    
+    public static class RejectInvitatinoByUserIdQuery extends AsyncTask<Void, Void, String> {
+    	
+    	private String userId;
+    	
+    	public RejectInvitatinoByUserIdQuery(String userId) {
+    		super();
+    		this.userId = userId;
+    	}
+    	
+    	@Override
+    	protected String doInBackground(Void... params) {
+    		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+    		nameValuePairs.add(new BasicNameValuePair(USER_ID, userId));
+    		JSONObject jsonObject = performQuery(ApiService.REJECT_INVITATION_HTTP, nameValuePairs, HttpType.PATCH);
+    		return jsonObject.toString();
+    	}
+    }
+    
+    public static class BlockUserQuery extends AsyncTask<Void, Void, String> {
+    	
+    	private String userId;
+    	
+    	public BlockUserQuery(String userId) {
+    		super();
+    		this.userId = userId;
+    	}
+    	
+    	@Override
+    	protected String doInBackground(Void... params) {
+    		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+    		nameValuePairs.add(new BasicNameValuePair(USER_ID, userId));
+    		JSONObject jsonObject = performQuery(ApiService.BLOCK_USER_HTTP, nameValuePairs, HttpType.POST);
+    		return jsonObject.toString();
+    	}
+    }
+    
+    public static class UnblockUserQuery extends AsyncTask<Void, Void, String> {
+    	
+    	private String userId;
+    	
+    	public UnblockUserQuery(String userId) {
+    		super();
+    		this.userId = userId;
+    	}
+    	
+    	@Override
+    	protected String doInBackground(Void... params) {
+    		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+    		nameValuePairs.add(new BasicNameValuePair(USER_ID, userId));
+    		JSONObject jsonObject = performQuery(ApiService.BLOCK_USER_HTTP, nameValuePairs, HttpType.DELETE);
+    		return jsonObject.toString();
+    	}
+    }
+    
     /**
      * If error return null; -- For now {"nojson"=";("} (todo in future alteration)
      * 
@@ -343,7 +420,11 @@ public class ApiService {
                 while((code = stream.read()) != -1) {
                     builder.append((char)code);
                 }
-                jsonObject = new JSONObject(builder.toString());
+                if(builder.toString().trim().isEmpty()) {
+                	jsonObject = new JSONObject("{\"status\"=\"" + response.getStatusLine().getStatusCode() + "\"}");
+                } else {
+                	jsonObject = new JSONObject(builder.toString());                	
+                }
             } else {
             	jsonObject = new JSONObject("{\"nojson\"=\";(\"}");
             }
@@ -371,75 +452,4 @@ public class ApiService {
     	return AUTHORIZATION_HEADER_VALUE + token;
     }
     
-    public static class AcceptInvitatinoByUserIdQuery extends AsyncTask<Void, Void, String> {
-
-    	private String userId;
-    	
-		public AcceptInvitatinoByUserIdQuery(String userId) {
-			super();
-			this.userId = userId;
-		}
-
-		@Override
-		protected String doInBackground(Void... params) {
-			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-            nameValuePairs.add(new BasicNameValuePair(USER_ID, userId));
-            JSONObject jsonObject = performQuery(ApiService.ACCEPT_INVITATION_HTTP, nameValuePairs, HttpType.PATCH);
-            return jsonObject.toString();
-		}
-    }
-    
-    public static class RejectInvitatinoByUserIdQuery extends AsyncTask<Void, Void, String> {
-
-    	private String userId;
-    	
-		public RejectInvitatinoByUserIdQuery(String userId) {
-			super();
-			this.userId = userId;
-		}
-
-		@Override
-		protected String doInBackground(Void... params) {
-			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-            nameValuePairs.add(new BasicNameValuePair(USER_ID, userId));
-            JSONObject jsonObject = performQuery(ApiService.REJECT_INVITATION_HTTP, nameValuePairs, HttpType.PATCH);
-            return jsonObject.toString();
-		}
-    }
-    
-    public static class BlockUserQuery extends AsyncTask<Void, Void, String> {
-
-    	private String userId;
-    	
-		public BlockUserQuery(String userId) {
-			super();
-			this.userId = userId;
-		}
-
-		@Override
-		protected String doInBackground(Void... params) {
-			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-            nameValuePairs.add(new BasicNameValuePair(USER_ID, userId));
-            JSONObject jsonObject = performQuery(ApiService.BLOCK_USER_HTTP, nameValuePairs, HttpType.POST);
-            return jsonObject.toString();
-		}
-    }
-    
-    public static class UnblockUserQuery extends AsyncTask<Void, Void, String> {
-
-    	private String userId;
-    	
-		public UnblockUserQuery(String userId) {
-			super();
-			this.userId = userId;
-		}
-
-		@Override
-		protected String doInBackground(Void... params) {
-			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-            nameValuePairs.add(new BasicNameValuePair(USER_ID, userId));
-            JSONObject jsonObject = performQuery(ApiService.BLOCK_USER_HTTP, nameValuePairs, HttpType.DELETE);
-            return jsonObject.toString();
-		}
-    }
 }

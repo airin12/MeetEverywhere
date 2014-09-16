@@ -79,14 +79,18 @@ public class InvitationsListAdapter extends ArrayAdapter<User> implements Notifi
 	}
 	
 	public void removeSelected(){
-		for(User u: toAcceptInvitation){
-			u.setAcquaintance(true);
-			u.setInvitationMessage(null);
-			Toast.makeText(context, "Zaakceptowano zaproszenie", Toast.LENGTH_SHORT).show();
+		DAO dao = new DAO();
+		for(User user: toAcceptInvitation){
+			//if (dao.acceptInvitaion(user.getUserID())) {
+	            user.setAcquaintance(true);
+	            user.setInvitationMessage(null);
+	            Toast.makeText(context, "Zaakceptowano zaproszenie", Toast.LENGTH_SHORT).show();
+            //} else {
+			//	Toast.makeText(context, "Wyst¹pi³ b³¹d.", Toast.LENGTH_SHORT).show();
+            //}
 		}
 		
 		toAcceptInvitation.clear();
-		
 		notifyDataSetChanged();
 	}
 	

@@ -1,21 +1,18 @@
 package com.meetEverywhere;
 
-import com.meetEverywhere.common.Tag;
-import com.meetEverywhere.common.messages.InvitationMessage;
-import com.meetEverywhere.common.messages.Message;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.User;
-
-import java.util.*;
-import java.util.concurrent.ExecutionException;
+import com.meetEverywhere.common.messages.Message;
 
 /**
  * Klasa stanowi Data Access Object do komunikacji z serwerem.
@@ -50,7 +47,9 @@ public class DAO {
 	 * e); } }
 	 */
 
-    public static boolean sendMessage(Message message) {
+    private static final String RESPONSE_STATUS = "status";
+
+	public static boolean sendMessage(Message message) {
         //TODO: Zaimplementowaæ wysy³anie danych do serwera.
 
         //true: wiadomoœæ dotar³a do serwera, false wpp
@@ -113,6 +112,102 @@ public class DAO {
 	}
 	
 	/**
+	 * Method for unblocking user
+	 * @param userId id of user to unblock
+	 * @return true if unblocked, false if error occurred
+	 */
+	public synchronized boolean unblockUser(String userId) {
+		String jsonString;
+		try {
+			if((jsonString = new ApiService.UnblockUserQuery(userId).execute().get()) != null) {
+				JSONObject jsonObject = new JSONObject(jsonString);
+				if(jsonObject.has(RESPONSE_STATUS)) {
+					return "200".equals(jsonObject.get(RESPONSE_STATUS));
+				}
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	/**
+	 * Method for blocking user
+	 * @param userId id of user to block
+	 * @return true if blocked, false if error occurred
+	 */
+	public synchronized boolean blockUser(String userId) {
+		String jsonString;
+		try {
+			if((jsonString = new ApiService.UnblockUserQuery(userId).execute().get()) != null) {
+				JSONObject jsonObject = new JSONObject(jsonString);
+				if(jsonObject.has(RESPONSE_STATUS)) {
+					return "200".equals(jsonObject.get(RESPONSE_STATUS));
+				}
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * Method for rejecting invitation
+	 * @param userId id of user which send invitation
+	 * @return true if unblocked, false if error occurred
+	 */
+	public synchronized boolean rejectInvitaion(String userId) {
+		String jsonString;
+		try {
+			if((jsonString = new ApiService.RejectInvitatinoByUserIdQuery(userId).execute().get()) != null) {
+				JSONObject jsonObject = new JSONObject(jsonString);
+				if(jsonObject.has(RESPONSE_STATUS)) {
+					return "200".equals(jsonObject.get(RESPONSE_STATUS));
+				}
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * Method for accepting invitation
+	 * @param userId id of user which send invitation
+	 * @return true if unblocked, false if error occurred
+	 */
+	public synchronized boolean acceptInvitaion(String userId) {
+		String jsonString;
+		try {
+			if((jsonString = new ApiService.AcceptInvitationByUserIdQuery(userId).execute().get()) != null) {
+				JSONObject jsonObject = new JSONObject(jsonString);
+				if(jsonObject.has(RESPONSE_STATUS)) {
+					return "200".equals(jsonObject.get(RESPONSE_STATUS));
+				}
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
 	 * Method checking if user is registered on server
 	 * @param nickname user nickname
 	 * @param password user password
@@ -122,8 +217,6 @@ public class DAO {
 		User user = null;
 		String jsonString, token = null, description = null, id = null;
 		
-		//useful only if problem occurred between server registration and local DAO registration
-
 		try {
 			if(!"error".equals(jsonString = new ApiService.LoginUserQuery(nickname,password).execute().get())) {
 				JSONObject jsonObject = new JSONObject(jsonString);

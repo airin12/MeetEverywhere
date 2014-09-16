@@ -20,55 +20,61 @@ public class BlockedUsersListAdapter extends ArrayAdapter<User> implements Notif
 	private List<User> blockedUsers;
 	private Context context;
 	private List<User> usersToUnblock;
-	
-	public BlockedUsersListAdapter(Context context, int resource,  List<User> blockedUsers) {
+
+	public BlockedUsersListAdapter(Context context, int resource, List<User> blockedUsers) {
 		super(context, resource, blockedUsers);
 		this.blockedUsers = blockedUsers;
 		this.context = context;
 		usersToUnblock = new ArrayList<User>();
 	}
-	
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		
-		if(position >= blockedUsers.size()) {
+
+		if (position >= blockedUsers.size()) {
 			return null;
 		}
-		
+
 		User blockedUser = blockedUsers.get(position);
-		LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View row = inflater.inflate(R.layout.blocked_user_content_info, null);
-		
-		TextView nick = (TextView)row.findViewById(R.id.blockedUserNick);
+
+		TextView nick = (TextView) row.findViewById(R.id.blockedUserNick);
 		nick.setText(blockedUser.getNickname());
 		nick.setTextColor(Color.BLACK);
-		
+
 		return row;
 	}
-	
+
 	public void toogle(int position) {
 		User user = blockedUsers.get(position);
-		if(usersToUnblock.contains(user)) {
+		if (usersToUnblock.contains(user)) {
 			blockedUsers.remove(user);
 		} else {
 			usersToUnblock.add(user);
 		}
 	}
-	
-	public void removeSelected() {
-		for(User user : usersToUnblock) {
-			user.setBlocked(false);
-			Toast.makeText(context, "U¿ytownik " + user.getNickname() + " zosta³ odblokowany", Toast.LENGTH_SHORT).show();
+
+	public void unblockUsers() {
+		DAO dao = new DAO();
+		for (User user : usersToUnblock) {
+			if (dao.unblockUser(user.getUserID())) {
+				user.setBlocked(false);
+				Toast.makeText(context, "U¿ytownik " + user.getNickname() + " zosta³ odblokowany", Toast.LENGTH_SHORT)
+				        .show();
+			} else {
+				Toast.makeText(context, "Wyst¹pi³ b³¹d.", Toast.LENGTH_SHORT).show();
+			}
 		}
-		
+
 		notifyDataSetChanged();
 	}
-	
+
 	public List<User> getUsers() {
 		return blockedUsers;
 	}
 
-    public void notifyDataChanged() {
-        notifyDataSetChanged();
-    }
+	public void notifyDataChanged() {
+		notifyDataSetChanged();
+	}
 }

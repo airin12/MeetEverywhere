@@ -3,6 +3,7 @@ package com.meetEverywhere.database;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.meetEverywhere.ApiService;
 import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.Tag;
 import com.meetEverywhere.common.User;
@@ -168,6 +169,8 @@ public class AccountsDAO extends SQLiteOpenHelper implements LocalDAO{
 
 				Configuration config = Configuration.getInstance();
 				config.setUser(user);
+				
+				ApiService.setToken(userToken);
 				
 				mock_loader();
 				

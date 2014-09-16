@@ -28,9 +28,9 @@ public class FriendsListAdapter extends ArrayAdapter<User> implements Notifiable
 	public FriendsListAdapter(Context context, int resource, List<User> users) {
 		super(context, resource, users);
 		this.users = users;
-		this.context = context;	
+		this.context = context;
 		toDeledeFriends = new LinkedList<User>();
-		actualMode=FriendsListFragment.NORMAL_MODE;
+		actualMode = FriendsListFragment.NORMAL_MODE;
 	}
 
 	@Override
@@ -44,18 +44,17 @@ public class FriendsListAdapter extends ArrayAdapter<User> implements Notifiable
 
 		User user = users.get(position);
 
-		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View row = inflater.inflate(R.layout.friends_list_content_info, null);
-		
+
 		TextView nick = (TextView) row.findViewById(R.id.friends_list_username);
 		CheckBox checkBox = (CheckBox) row.findViewById(R.id.friends_list_checkbox);
-		
-		if(actualMode==FriendsListFragment.DELETE_MODE)
+
+		if (actualMode == FriendsListFragment.DELETE_MODE)
 			checkBox.setVisibility(CheckBox.VISIBLE);
-		else if(actualMode==FriendsListFragment.NORMAL_MODE)
+		else if (actualMode == FriendsListFragment.NORMAL_MODE)
 			checkBox.setVisibility(CheckBox.GONE);
-		
+
 		nick.setText(user.getNickname());
 
 		return row;
@@ -65,35 +64,36 @@ public class FriendsListAdapter extends ArrayAdapter<User> implements Notifiable
 	public List<User> getUsers() {
 		return users;
 	}
-	
+
 	public void toggle(int position) {
-		
+
 		User user = users.get(position);
-		if(toDeledeFriends.contains(user)){
+		if (toDeledeFriends.contains(user)) {
 			toDeledeFriends.remove(user);
-		}else{
+		} else {
 			toDeledeFriends.add(user);
 		}
 	}
-	
-	public void removeFromFriends(){
-		for(User u: toDeledeFriends){
-			//u.setAcquaintance(false);
-            User myselft = Configuration.getInstance().getUser();
-			u.sendMessage(new FinishAcquiantanceMessage("", myselft.getNickname(), myselft.getUserID(), u.getUserID()), null);
+
+	public void removeFromFriends() {
+		DAO dao = new DAO();
+		for (User user : toDeledeFriends) {
+			// u.setAcquaintance(false);
+			User myself = Configuration.getInstance().getUser();
+			user.sendMessage(
+			        new FinishAcquiantanceMessage("", myself.getNickname(), myself.getUserID(), user.getUserID()), null);
 			Toast.makeText(context, "Usuniêto z listy znajomych", Toast.LENGTH_SHORT).show();
 		}
-		
-		toDeledeFriends.clear();
-		
-		//notifyDataSetChanged();
-	}
-	
-	public void changeMode(int mode){
-		actualMode=mode;
+
+		// toDeledeFriends.clear();
+		notifyDataSetChanged();
 	}
 
-    public void notifyDataChanged() {
-        notifyDataSetChanged();
-    }
+	public void changeMode(int mode) {
+		actualMode = mode;
+	}
+
+	public void notifyDataChanged() {
+		notifyDataSetChanged();
+	}
 }

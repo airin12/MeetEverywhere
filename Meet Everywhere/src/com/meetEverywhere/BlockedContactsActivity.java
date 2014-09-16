@@ -61,7 +61,7 @@ public class BlockedContactsActivity extends Activity{
     }
 
 	public void unblockUser(View view) {
-		((BlockedUsersListAdapter) listView.getAdapter()).removeSelected();
+		((BlockedUsersListAdapter) listView.getAdapter()).unblockUsers();
 	}
 	
 }
