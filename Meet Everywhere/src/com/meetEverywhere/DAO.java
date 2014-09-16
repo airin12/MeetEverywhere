@@ -160,6 +160,30 @@ public class DAO {
 	}
 	
 	/**
+	 * Method for removing user from friends list.
+	 * @param userId id of user you want to remove
+	 * @return true if remove, false otherwise
+	 */
+	public synchronized boolean removeFriend(String userId) {
+		String jsonString;
+		try {
+	        if((jsonString = new ApiService.RemoveFriendQuery(userId).execute().get()) != null) {
+	        	JSONObject jsonObject = new JSONObject(jsonString);
+	        	if(jsonObject.has(RESPONSE_STATUS)) {
+	        		return "200".equals(jsonObject.get(RESPONSE_STATUS));
+	        	}
+	        }
+        } catch (InterruptedException e) {
+	        e.printStackTrace();
+        } catch (ExecutionException e) {
+	        e.printStackTrace();
+        } catch (JSONException e) {
+	        e.printStackTrace();
+        }
+		return false;
+	}
+	
+	/**
 	 * Method for rejecting invitation
 	 * @param userId id of user which send invitation
 	 * @return true if unblocked, false if error occurred
@@ -170,7 +194,7 @@ public class DAO {
 			if((jsonString = new ApiService.RejectInvitatinoByUserIdQuery(userId).execute().get()) != null) {
 				JSONObject jsonObject = new JSONObject(jsonString);
 				if(jsonObject.has(RESPONSE_STATUS)) {
-					return "200".equals(jsonObject.get(RESPONSE_STATUS));
+					return "204".equals(jsonObject.get(RESPONSE_STATUS));
 				}
 			}
 		} catch (InterruptedException e) {
@@ -194,7 +218,7 @@ public class DAO {
 			if((jsonString = new ApiService.AcceptInvitationByUserIdQuery(userId).execute().get()) != null) {
 				JSONObject jsonObject = new JSONObject(jsonString);
 				if(jsonObject.has(RESPONSE_STATUS)) {
-					return "200".equals(jsonObject.get(RESPONSE_STATUS));
+					return "204".equals(jsonObject.get(RESPONSE_STATUS));
 				}
 			}
 		} catch (InterruptedException e) {

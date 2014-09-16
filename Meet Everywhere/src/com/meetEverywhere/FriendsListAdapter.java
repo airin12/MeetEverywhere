@@ -78,11 +78,15 @@ public class FriendsListAdapter extends ArrayAdapter<User> implements Notifiable
 	public void removeFromFriends() {
 		DAO dao = new DAO();
 		for (User user : toDeledeFriends) {
+			//if(dao.removeFriend(user.getUserID())) {
 			// u.setAcquaintance(false);
-			User myself = Configuration.getInstance().getUser();
-			user.sendMessage(
-			        new FinishAcquiantanceMessage("", myself.getNickname(), myself.getUserID(), user.getUserID()), null);
-			Toast.makeText(context, "Usuniêto z listy znajomych", Toast.LENGTH_SHORT).show();
+				User myself = Configuration.getInstance().getUser();
+				user.sendMessage(
+				        new FinishAcquiantanceMessage("", myself.getNickname(), myself.getUserID(), user.getUserID()), null);
+				Toast.makeText(context, "Usuniêto z listy znajomych", Toast.LENGTH_SHORT).show();
+			//} else {
+			//	Toast.makeText(context, "Wyst¹pi³ b³¹d.", Toast.LENGTH_SHORT).show();
+			//}
 		}
 
 		// toDeledeFriends.clear();

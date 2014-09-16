@@ -49,6 +49,7 @@ public class ApiService {
     private static final String LOGIN_HTTP = SERVER_HTTP + "/sessions";
     private static final String INVITATIONS_MODULE_HTTP = SERVER_HTTP + "/invitations";
     private static final String INVITE_HTTP = INVITATIONS_MODULE_HTTP + "/invite";
+    private static final String REMOVE_FRIEND_HTTP = INVITATIONS_MODULE_HTTP + "/cancel";
     private static final String ACCEPT_INVITATION_HTTP = INVITATIONS_MODULE_HTTP + "/accept";
     private static final String REJECT_INVITATION_HTTP = INVITATIONS_MODULE_HTTP + "/reject";
     private static final String INCOMING_INVITATIONS_HTTP = INVITATIONS_MODULE_HTTP + "/incoming_invitations";
@@ -111,8 +112,28 @@ public class ApiService {
     }
     
     /**
+     * Query for removing user from friends list.
+     */
+    public static class RemoveFriendQuery extends AsyncTask<Void, Void, String> {
+    	
+    	private String userID;
+
+		public RemoveFriendQuery(String userID) {
+	        this.userID = userID;
+        }
+
+		@Override
+        protected String doInBackground(Void... params) {
+    		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+    		nameValuePairs.add(new BasicNameValuePair(USER_ID, userID));
+    		JSONObject jsonObject = performQuery(ApiService.REMOVE_FRIEND_HTTP, nameValuePairs, HttpType.DELETE);
+    		return jsonObject.toString();
+        }
+    	
+    }
+    
+    /**
      * Query for checking if user is registered on server
-     * @author Bartosz
      */
     public static class LoginUserQuery extends AsyncTask<Void, Void, String> {
     	

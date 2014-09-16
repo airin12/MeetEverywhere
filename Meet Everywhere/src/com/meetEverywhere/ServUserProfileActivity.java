@@ -118,7 +118,7 @@ public class ServUserProfileActivity extends Activity implements NotifiableLayou
 	public void acceptInvite(View view) {
 		DAO dao = new DAO();
 		User myself = Configuration.getInstance().getUser();
-		//if (dao.acceptInvitaion(user.getUserID())) { TODO: odblokowac jak bedzie dzialac accept po userId
+		//if (dao.acceptInvitaion(user.getUserID())) { //TODO: odblokowac jak bedzie dzialac accept po userId
 			user.sendMessage(
 			        new InvitationAcceptedMessage("", myself.getNickname(), myself.getUserID(), user.getUserID()), this);
 		//} else {
@@ -131,6 +131,17 @@ public class ServUserProfileActivity extends Activity implements NotifiableLayou
 		if (!dao.rejectInvitaion(user.getUserID())) {
 			Toast.makeText(getApplicationContext(), "Wyst¹pi³ b³¹d.", Toast.LENGTH_SHORT).show();
 		}
+	}
+	
+	public void deleteFriend(View view) {
+		DAO dao = new DAO();
+		User myself = Configuration.getInstance().getUser();
+		//if(dao.removeFriend(user.getUserID())) {
+			user.sendMessage(new FinishAcquiantanceMessage("", myself.getNickname(), myself.getUserID(), user.getUserID()),
+					this);			
+		//} else {
+		//	Toast.makeText(getApplicationContext(), "Wyst¹pi³ b³¹d.", Toast.LENGTH_SHORT).show();
+		//}
 	}
 
 	public void refreshLayout() {
@@ -191,12 +202,6 @@ public class ServUserProfileActivity extends Activity implements NotifiableLayou
 			invitationReceivedLayout.setVisibility(LinearLayout.GONE);
 			confirmInviteLayout.setVisibility(LinearLayout.GONE);
 		}
-	}
-
-	public void deleteFriend(View view) {
-		User myself = Configuration.getInstance().getUser();
-		user.sendMessage(new FinishAcquiantanceMessage("", myself.getNickname(), myself.getUserID(), user.getUserID()),
-		        this);
 	}
 
 	public void sendInvite(View view) {
