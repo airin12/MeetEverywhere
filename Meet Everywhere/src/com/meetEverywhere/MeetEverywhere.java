@@ -124,6 +124,11 @@ public class MeetEverywhere extends Activity {
         realoadMeetEveywhere();
 
     }
+    
+    public void closeAppAction(View view) {
+    	finish();
+    	System.exit(0);
+    }
 
     public void realoadMeetEveywhere() {
     	if(Configuration.getInstance().getUser().getPicture() != null)
