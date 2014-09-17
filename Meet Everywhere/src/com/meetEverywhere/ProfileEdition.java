@@ -81,6 +81,11 @@ public class ProfileEdition extends Activity {
 		Configuration.getInstance().getUser().setDescription(descriptionText.getText().toString());
 		finish();
 	}
+	
+	
+	public void goToTagsEditionAction(View view) {
+		startActivity(new Intent(this, TagsEdition.class));
+	}
     
     
 }

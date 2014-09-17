@@ -21,7 +21,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.meetEverywhere.common.Configuration;
 import com.meetEverywhere.common.Tag;
+import com.meetEverywhere.common.User;
 
 public abstract class TagsView extends Activity {
 
@@ -33,7 +35,7 @@ public abstract class TagsView extends Activity {
 
 	private List<Tag> getTagsFromDatabase() {
 		List<Tag> list = new ArrayList<Tag>();
-
+		list = Configuration.getInstance().getUser().getHashTags();
 		
 
 		return list;
@@ -147,7 +149,19 @@ public abstract class TagsView extends Activity {
 				(ArrayList<Tag>) tags2);
 
 		tagListView.setAdapter(listAdapter);
-
+		
+		List<String> tags = new ArrayList<String>();
+		
+		for (Tag tag : tags2) {
+			tags.add(tag.getName());
+		}
+		
+		
+		User user = Configuration.getInstance().getUser();
+		user.setHashTags(tags2);
+		
+		//DAO dao = new DAO();
+		//dao.updateMyHashtags(tags);
 	}
 
 	private boolean tagsListContains(String tag) {
